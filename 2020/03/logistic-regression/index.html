@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        逻辑回归模型 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>逻辑回归模型 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="逻辑回归模型" />
+<meta property="og:description" content="1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/03/logistic-regression/" />
+<meta property="article:published_time" content="2020-03-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-03-15T00:00:00+00:00" />
+<meta itemprop="name" content="逻辑回归模型">
+<meta itemprop="description" content="1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例">
+<meta itemprop="datePublished" content="2020-03-15T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-03-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2247">
+
+
+
+<meta itemprop="keywords" content="多元统计,分类算法,r语言," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="逻辑回归模型"/>
+<meta name="twitter:description" content="1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/03/logistic-regression/"
+    >逻辑回归模型</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/03/logistic-regression/" class="article-date">
+  <time datetime="2020-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-03-15</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/"> 分类算法 </a>
+    <a class="article-tag-link" href="/tags/r%E8%AF%AD%E8%A8%80/"> r语言 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/03/logistic-regression/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2247字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="1-线性模型的局限性">1 线性模型的局限性</h2>
+<p>在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。</p>
+<p><img src="/LRmodel/diffnorm.png" alt=""></p>
+<p>例如，在医学诊断中，我们希望通过病人的各项检查数据判断其是否患癌症。这里是否患癌症作为响应变量 $y$ <strong>只有两个可能的取值：患和不患。</strong> 显然，$y$ 不服从正态分布。</p>
+<p>类似的例子还有很多。在气象领域中，通过观测到的气象数据判断是否会下雨；在金融领域中，根据当前的金融指标判断是否抛售股票；在图像领域，综合输入的人脸数据判断是否通过验证&hellip;&hellip;</p>
+<p>上述问题的共同点是，$y$ 的取值是离散的，我们关心的不再是预测具体数值而是变成判断分类。</p>
+<p><strong>为了讨论方便，我们以下考虑二分类问题。</strong></p>
+<p>机灵的同学可能想到，依然对数据建立线性模型，然后再设定一个阈值 $a$，当 $y&gt;a$ 时，预测数据归为一类；当 $y&lt;a$ 时，预测数据归为另一类。</p>
+<p><img src="/LRmodel/lm.png" alt=""></p>
+<p>这么做确实可以得到一个分类模型(上图红实线)。但是，如果我们在原有数据上<strong>额外得到一个新观测且远离原始数据时，</strong> 线性思路得到的新模型就会出现<strong>明显的变动(上图蓝虚线)。</strong></p>
+<h2 id="2-逻辑回归logistic-regression">2 逻辑回归(Logistic Regression)</h2>
+<p>究竟哪里出现问题了呢？我们回忆所学的线性模型的形式：</p>
+<p>$$ y_i = x_i^T\beta + \epsilon_i, \quad\epsilon_i~N(0, \sigma^2) $$</p>
+<p>对模型两边取期望和方差可得：</p>
+<p>$$ E(y_i) = x_i^T\beta, \quad Var(y_i) = \sigma^2 $$</p>
+<p>显然可以看出：(1)线性模型对y的估计，本质是对 $y$ 期望的估计；<strong>(2)线性模型中 $y$ 的期望和方差两者互相独立。</strong></p>
+<p>接着来看二分类问题，一般我们考虑 $y_i$ 独立同分布于成功概率为 $p_i$ 的伯努利分布(Bernouilli Distribution)：</p>
+<p>$$ y_i \overset{iid}{\sim} B(p_i) = p_i^{y_i}(1 - p_i)^{1 - y_i} $$</p>
+<p>两边取期望和方差可得：</p>
+<p>$$ E(y_i) = p_i, \quad Var(y_i) = p_i(1 - p_i) $$</p>
+<p>此时的<strong>期望和方差两者之间存在函数关系且期望取值在 $[0,1]$ 之内。</strong> 因此，在二分类问题中完全套用线性模型的框架显然是有问题。</p>
+<p>该怎么办呢？</p>
+<p>试想 $y_i$ 是一个随机变量，在不知道额外信息的前提下，用它的期望作为估计还是挺合理的。<strong>因此，我们可以继续采用期望估计的思路。</strong> 但是二分类问题中 $y_i$ 的期望有0-1的约束，这就需要我们寻找一种满足该要求的函数。通常，<strong>这样的函数选取成Logistic函数：</strong></p>
+<p>$$ E(y_i) = \frac{1}{1 + \exp(-x_i^T\beta)} $$</p>
+<p>很容易验证Logistic函数满足前面的条件。选取这种函数形式的深层原因，从统计的角度来看，源自于<strong>指数族分布。</strong> 有兴趣的朋友可以翻阅我关于<a href="/2018/06/glm/">广义线性模型相关理论的介绍</a>以及其他参考资料。</p>
+<p>于是，我们终于等到本次的主角——<strong>逻辑回归模型(Logistic Regression Model)：</strong></p>
+<p>$$ y_i \overset{iid}{\sim} B(p_i),\quad  E(y_i) = \frac{1}{1 + exp(-x_i^T\beta)} $$</p>
+<p>我们之所以称其为回归模型，是因为线性回归深入人心，在其之上生长发展的理论便继承了这个名称。事实上，<strong>逻辑回归更多的是面向分类问题。</strong></p>
+<h2 id="3-逻辑回归的求解">3 逻辑回归的求解</h2>
+<h3 id="31-极大似然法">3.1 极大似然法</h3>
+<p>最小二乘常被用来求解线性模型中的系数估计值，这在逻辑回归中失效了——我们无法得到逻辑回归的最小二乘损失函数的具体形式。</p>
+<p>然而我们知道问题的概率分布信息，因此可以得到相应的似然函数：</p>
+<p>$$ \mathscr{L} = \prod_{i = 1}^n \left(\frac{1}{1 + \exp(-x_i^T\hat{\beta})} \right)^{y_i} \left(1 - \frac{1}{1 + \exp(-x_i^T\hat{\beta})} \right)^{1 - y_i}$$</p>
+<p>再进而得到对数似然函数并进行优化即可。不过，与线性模型具有显示解不同，逻辑回归没有解析解，故而需要结合梯度下降法等算法进行求解，可参考<a href="/2018/06/glm/">广义线性模型</a>中的相关方法。限于篇幅，不在赘述。</p>
+<h3 id="32-r求解逻辑回归模型">3.2 R求解逻辑回归模型</h3>
+<p><code>R</code>中内置<code>glm</code>函数可以求解逻辑回归模型，它的使用方式如下所示。</p>
+<pre><code class="language-r{.line-numbers}">logmodel &lt;- glm(formula, data, family = binomial(link = &quot;logit&quot;))
+predict.glm(logmodel, newdata)# 预测模型
+</code></pre>
+<p>与线性模型求解函数<code>lm</code>区别在于，<code>glm</code>需要添加<code>link</code>参数。我们使用该函数对前面的模型再次求解并做图，如下所示。</p>
+<p><img src="/LRmodel/log.png" alt=""></p>
+<p>可见，逻辑回归很好的刻画了模型的主要特征，且不会因为新数据的出现模型发生巨大变动。</p>
+<h2 id="4-案例分析">4 案例分析</h2>
+<h3 id="41-数据描述">4.1 数据描述</h3>
+<p>我们从<a href="http://archive.ics.uci.edu/ml/index.php">UCI机器学习数据库</a>中获取到威斯康辛乳腺癌数据(Breast Cancer Wisconsin)共计569个观测，包含1个字符型分类变量，取值B表示良性肿瘤，取值M表示恶性肿瘤；30个数值型检测指标，如肿块厚度、大小、形态等。</p>
+<h3 id="42-建立逻辑回归模型">4.2 建立逻辑回归模型</h3>
+<p>我们使用<code>R</code>读入数据并进行分析。由于数据没有特定顺序，我们选择前70%作为训练集，剩下的作为测试集。为了方便展示结果，我们<strong>仅选取前三个变量</strong> 进行模型拟合，对应的代码如下所示。</p>
+<pre><code class="language-r{.line-numbers}">## 逻辑回归模型处理WDBC数据
+wdbc &lt;- read.csv(&quot;wdbc.csv&quot;, header = F, stringsAsFactors = F)
+colnames(wdbc) &lt;- c(&quot;y&quot;, paste0(&quot;x&quot;, 1:30))
+wdbc$y &lt;- ifelse(wdbc$y==&quot;M&quot;, 1, 0)
+# 划分训练集和测试集
+wdbc_train &lt;- wdbc[1:400, 1:4]
+wdbc_test &lt;- wdbc[401:569, 1:4]
+# 训练模型
+wdbc_fit &lt;- glm(y~., data = wdbc_train, family = binomial(link = &quot;logit&quot;))
+</code></pre>
+<h3 id="43-评价模型">4.3 评价模型</h3>
+<p>首先，我们使用<code>summary()</code>函数查看模型相关的统计指标，具体如下所示。</p>
+<img src="/LRmodel/logitfit.png" width="600"/>
+<p>可见，三个系数都非常显著。</p>
+<p>其次，我们使用<code>predict.glm()</code>查看模型的内预测效果，得到混淆矩阵(Confusion Matrix)如下</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">真实M</th>
+<th align="left">真实B</th>
+<th align="left">总计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">预测M</td>
+<td align="left">215</td>
+<td align="left">18</td>
+<td align="left">233</td>
+</tr>
+<tr>
+<td align="left">预测B</td>
+<td align="left">12</td>
+<td align="left">155</td>
+<td align="left">167</td>
+</tr>
+<tr>
+<td align="left">总计</td>
+<td align="left">227</td>
+<td align="left">173</td>
+<td align="left">400</td>
+</tr>
+</tbody>
+</table>
+<p>可以算出模型的预测准确率为(155+215)/400=0.925，仅三个变量就可以很好的预测病人肿瘤的状态。</p>
+<p>不过分类问题中，大家比较关心模型的<strong>敏感性和特异性。</strong> 敏感性指真阳性率，而特异性指真阴性率。以本案例而言，模型的敏感性为0.947，特异性为0.896。这么看来，我们的模型假阳性率为0.104，还是不太好。</p>
+<pre><code class="language-r{.line-numbers}">library(pROC)
+roclong &lt;- plot.roc(wdbc_train$y, lty = 1, train_pre, grid = T,
+                    percent=TRUE,ci=TRUE,col=&quot;red&quot;,
+                    print.auc = T,print.auc.cex = 0.8,print.auc.x = 60,print.auc.y = 50,
+                    main = &quot;逻辑回归的ROC曲线和AUC值&quot;)
+</code></pre>
+<p>进一步分析敏感性和特异性，可以利用<strong>ROC曲线</strong> 和<strong>AUC值</strong> 来刻画。我们在<code>R</code>中使用<code>pROC</code>包画出ROC曲线以及进行AUC的计算和检验，结果参见下图。</p>
+<p><img src="/LRmodel/roc.png" alt=""></p>
+<p><strong>AUC达到了92.2%，</strong> 说明模型能够很好的刻画我们的数据。</p>
+<p>最后，我们对剩下的测试集进行验证，得到预测准确率为88.76%，还是挺理想的——毕竟我们仅使用三个变量进行建模。关于逻辑回归更多的内容，还请读者自己了解。</p>
+<p><em>参考文献</em></p>
+<p>[1] Myers, Raymond H., et al. Generalized linear models: with applications in engineering and the sciences. 2012.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/03/logistic-regression/" title="逻辑回归模型" target="_blank" rel="external">https://qkai-stat.github.io/2020/03/logistic-regression/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2019/11/oyqy/" title="偶遇秋雨"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/03/stockbind/"
+                    title="股票数据的合并"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

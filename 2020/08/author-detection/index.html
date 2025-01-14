@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        解密文章作者之谜 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。 ——" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>解密文章作者之谜 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="解密文章作者之谜" />
+<meta property="og:description" content="文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。 ——" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/08/author-detection/" />
+<meta property="article:published_time" content="2020-08-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-08-12T00:00:00+00:00" />
+<meta itemprop="name" content="解密文章作者之谜">
+<meta itemprop="description" content="文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。 ——">
+<meta itemprop="datePublished" content="2020-08-12T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-08-12T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1999">
+
+
+
+<meta itemprop="keywords" content="数据可视化,文本分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="解密文章作者之谜"/>
+<meta name="twitter:description" content="文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。 ——"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/08/author-detection/"
+    >解密文章作者之谜</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/08/author-detection/" class="article-date">
+  <time datetime="2020-08-12 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-08-12</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/"> 数据可视化 </a>
+    <a class="article-tag-link" href="/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/"> 文本分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/08/author-detection/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1999字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <blockquote>
+<p>文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。	——百度百科</p>
+</blockquote>
+<p>自然语言处理领域近些年来的研究非常火热，文本分析作为其分支之一也颇受关注。我之前分享过如何利<a href="https://jiandan94.gitee.io/2018/07/wordcloud-introduction/">用R绘制词云</a>，也算和文本分析沾了边。</p>
+<p>在绘制词云的过程中，我们主要将大篇幅的文字内容进行“分词”，然后统计各个词组的词频，最后根据词频进行绘图。虽然这个过程听起来很简单，但通过垃圾短信案例我们还是可以得到很有意义的信息。不过，仅仅靠观察词云是非常粗糙的，这无法更加量化的分析文本的特征。</p>
+<p>本期我们一起来解密文章作者之谜，通过一些<strong>简单但比词云更加细化</strong>的统计思路和方法来分析文本，让大家稍稍感受分析文本的乐趣。</p>
+<h2 id="1-背景介绍">1 背景介绍</h2>
+<p>一名文学研究员带着一份文稿匆匆找到正在学习统计理论的你寻求帮助。他说：“我手上这份文稿共有四篇散文，目前可以根据文稿来源断定是一人所作，但是具体作者是谁尚不肯定。经过各方专家分析写作手法，初步断定可能是鲁迅、朱自清或徐志摩所作。如今大数据这么火，请你帮我判断一下文章作者。”</p>
+<h2 id="2-初步探索">2 初步探索</h2>
+<p>读者此时可能正在努力回忆自己中学时代学过的有关文章，暗自揣摩它们之间的异同。诚然，想要判断文章作者，我们必须要了解每个作者的写作特点。因此，我们不妨在网上搜集到鲁迅、朱自清和徐志摩三人的散文文集。接着可以按照前文的方式分别做出它们的词云图案，观察之间的异同点。这里，笔者用R绘制出了他们三人各自散文的词云</p>
+<img src="/author-detection/author-wordcloud.png" width="600"/>
+<p>从上图看，三名作家的高频词汇竟然大同小异！回忆上一节的案例，读者不难想到其中原因。一方面，文章写作中很多字是常用字，大家出现的频率都高很正常。事实上，早期人们在破解密码时就利用写作中字（字母）出现的频率不同找到突破口。另一方面，一个朝代的文学尚且有一种主流，何况一个时代呢？三名作家生活年代相近，且正好处于新、旧文化更替时期，文章用字（词）大趋势类似也无可厚非。那么，我们的解谜难道就此止步么？</p>
+<h2 id="3-细致分析">3 细致分析</h2>
+<p>大趋势类似，之于个人风格的细节肯定互有不同。如果比较每个人风格的细节，应该就能得到蛛丝马迹。为了验证这样的想法，我们利用R软件对三名作家散文中的词频进行更为细致的比较，得到结果如图所示</p>
+<img src="/author-detection/author-compare.png" width="600"/>
+<p>从图示结果来看，我们的猜测是正确的。图中每个点的横、纵坐标表示相应作者散文集中某词汇出现的频率，频率一致的点即构成灰色的虚线。显然，实际词汇的分布和虚线有一定的位移，说明鲁迅和另外两名作家的风格不同（类似的，可以对另外两名作家分析，不赘述）。比起徐志摩和朱自清，鲁迅似乎更喜欢在散文中提到动物，如猫、鼠、象和老虎等。</p>
+<p>继续观察图像，可看到鲁迅散文中的词频没有徐、朱二人散文中的词频更接近低频区，说明后两者在作文时采用的词汇更加丰富。这似乎符合我们对三人的印象——徐、朱的文章多具美感，故而可能使用更加丰富的辞藻；鲁迅的文章则冷静犀利，词汇的变化可能不太大。</p>
+<p>找到突破口后，我们还要确定一件事情：</p>
+<blockquote>
+<p>假设没有重大的变故，一名作家的的文风数年之后会发生很大改变么？</p>
+</blockquote>
+<p>如果是，那么这无疑增加了我们分析的难度。现在，我们以鲁迅的散文集为例，将其按时间顺序差不多等分成三部分，对比这三部分各自词汇频率的相似程度，结果如下图所示</p>
+<img src="/author-detection/authorself-compare.png" width="600"/>
+<p>从图中可以看出，第2、3部分的词汇频率和第1部分词汇的频率基本对称分布在虚线两侧。这说明，鲁迅前后的文风没有发生很大的改变！同理，我们可以对其他两位作者的散文集做相同的分析，可以发现结果类似。那么，我们现在就可以利用词汇的频率进行相似度检验了。</p>
+<p>在R中，检测两个数值量之间的相似度可以用<code>cor.test()</code>命令，它基于的是皮尔逊相关性检验。我们使用下述命令</p>
+<pre><code class="language-R"># 相关性检测
+cor.test(data = frequency[frequency$author == &quot;zhuziqing&quot;,],~proportion + test)
+cor.test(data = frequency[frequency$author == &quot;luxun&quot;,],~proportion + test)
+cor.test(data = frequency[frequency$author == &quot;xuzhimo&quot;,],~proportion + test)
+</code></pre>
+<p>分别得到待测文本和鲁迅散文集、朱自清散文集与徐志摩散文集的相似度系数为0.90917、0.9461695以及0.905819。至此，我们可以对研究员说“<strong>您这份文稿和三名作家的风格都极为接近，但经过我的分析，它出于朱自清先生手笔的可能性更大！</strong>”</p>
+<p>事实上，研究员的故事是笔者杜撰的，文稿也是笔者事先从朱自清散文集中随机抽取的四篇文章。笔者希望通过这个小小的案例让读者感受到探究文本分析背后奥秘的乐趣，以及R在数据分析中的强大之处。</p>
+<h2 id="4-结语">4 结语</h2>
+<p>上述案例的灵感来源本科大一的新生研讨课。那时刚刚步入大学接触统计学，主讲老师（也是我现在的博导）通过各种精彩的案例让我们感受到了统计学的美妙。期间，老师给我们讲到学者如何利用统计知识分析《红楼梦》前80回和后40回的差别，又在课程结束让我们探究老子的《道德经》是否为一人所作。因此，我在研究生多元课上接触到文本分析时，首先就想到该经历——也就杜撰了这个案例。</p>
+<h3 id="参考文献">参考文献</h3>
+<p>韦博成.《红楼梦》前80回与后40回某些文风差异的统计分析(两个独立二项总体等价性检验的一个应用)[J].应用概率统计,2009,25(04):441-448.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/08/author-detection/" title="解密文章作者之谜" target="_blank" rel="external">https://qkai-stat.github.io/2020/08/author-detection/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/07/hugo-gitee/" title="Hugo&#43;Gitee搭建个人专属博客"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/08/ml-pub-introduction/"
+                    title="人工智能方向的优秀刊物"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

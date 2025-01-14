@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        广义线性模型及其一般求解方式 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>广义线性模型及其一般求解方式 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="广义线性模型及其一般求解方式" />
+<meta property="og:description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2018/06/glm/" />
+<meta property="article:published_time" content="2018-06-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-06-15T00:00:00+00:00" />
+<meta itemprop="name" content="广义线性模型及其一般求解方式">
+<meta itemprop="description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的">
+<meta itemprop="datePublished" content="2018-06-15T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="5763">
+
+
+
+<meta itemprop="keywords" content="多元统计,回归分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="广义线性模型及其一般求解方式"/>
+<meta name="twitter:description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2018/06/glm/"
+    >广义线性模型及其一般求解方式</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2018/06/glm/" class="article-date">
+  <time datetime="2018-06-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-06-15</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/"> 回归分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/06/glm/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5763字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="1-指数族分布与广义线性模型">1 指数族分布与广义线性模型</h2>
+<h3 id="11-引入指数族分布">1.1 引入指数族分布</h3>
+<p>在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的假设。因此，我们考虑更加一般的指数族分布。</p>
+<p>指数族分布定义如下：</p>
+<p>$$
+f\left( y;\theta ,\phi \right) =\exp \left[ \frac{y\theta -b\left( \theta \right)}{a\left( \phi \right)}+c\left( y,\phi \right) \right]
+$$</p>
+<p>其中 $a(\cdot)$，$b(\cdot)$ 和 $c(\cdot)$ 是已知给定的函数。参数 $\theta$ 为分布族的位置参数（location parameter），参数 $\phi$ 通常被称为分散参数（dispersion parameter）。一般来说，函数 $a(\phi)$ 通常有形式 $a(\phi)=\phi\cdot\omega$，其中 $\omega$ 是一个已知的常数。指数族分布包括常见的二项分布、泊松分布、正态分布和指数分布等。</p>
+<h3 id="12-联系回归问题">1.2 联系回归问题</h3>
+<p>前面直接给出指数族分布，有点让人一时难以和回归问题构建联系。我们不妨回忆<a href="/2018/05/lm/">线性模型</a>的内容，此时响应变量 $y$ 满足下面的正态分布</p>
+<p>$$
+N(x^T\beta, \sigma^2)
+$$</p>
+<p>我们写出它的密度函数具体表达式</p>
+<p>$$
+f\left( y \right) = \frac{1}{\sqrt{2\pi}\sigma}\exp\left[ -\frac{(y - x\beta)^2}{2\sigma^2} \right] = \exp\left[ -\frac{(y^2 - 2yx\beta + \beta^Tx^Tx\beta)}{2\sigma^2} - \frac{1}{2} \ln(2\pi\sigma^2) \right]
+$$</p>
+<p>整理一下就得到</p>
+<p>$$
+f\left( y \right) = \exp\left[ \frac{yx\beta - 1/2\beta^Tx^Tx\beta}{\sigma^2} - \frac{y^2}{2\sigma^2} - \frac{1}{2} \ln(2\pi\sigma^2) \right]
+$$</p>
+<p><strong>原来线性回归问题就是 $\theta = x\beta$ 和 $\phi = \sigma^2$ 的指数族问题。</strong> 因此，我们保留线性模型中的线性结构假设，把正态分布约束推广成指数族分布，这就得到的更为一般的广义线性模型。</p>
+<p>对应线性模型的假设，广义线性模型也有若干前提假设：</p>
+<ol>
+<li>观测 $y_1,\cdots ,y_n$ 是相互独立的，且对应的均值为 $\mu _1,\mu _2,\cdots ,\mu _n$；</li>
+<li>每个观测 $y_i$ 具有指数族分布；</li>
+<li>模型建立在线性预测因子 $\eta _1,\cdots ,\eta _n$ 上，其中 $\eta _i=x _{i}^{\mathrm{T}}\beta $，$x_i$ 是设计矩阵第 $i$ 个行向量；</li>
+<li>模型通过链接函数（link function）建立，其中：$\eta _i=g\left( \mu _i \right) ,\ i=1,2,\cdots ,n$；</li>
+<li>链接函数是单调可微的（其反函数存在）。</li>
+</ol>
+<p>不难看出待求参数 $\beta$ 和指数族分布之间的关系链接：</p>
+<p>$$
+\beta \overset{\eta _i=g\left( \mu _i \right)}{\leftrightarrow}\mu _i\overset{\mu _i=\dot{b}\left( \theta _i \right)}{\leftrightarrow}\theta _i
+$$</p>
+<p>上述这种关系对我们逐步得到参数 $\beta$ 的求解公式意义重大。</p>
+<h2 id="2-广义线性模型的参数估计">2 广义线性模型的参数估计</h2>
+<p>在线性模型的假设下，<a href="/2019/08/forum-ols/">最小二乘法</a>和极大似然法都能用于参数的求解。在广义线性模型中，我们无法写出二乘形式的优化函数。<strong>因此，我们根据分布信息利用极大似然法来估计参数。</strong> 模型的似然函数 $\mathscr{L}(\theta;Y)$ 为</p>
+<p>$$
+\mathscr{L}(\theta;Y) = \prod _{i=1}^n \exp \left[ \frac{y_i\theta_i -b\left( \theta-i \right)}{a\left( \phi_i \right)}+c\left( y_i,\phi_i \right) \right]
+$$</p>
+<p>为了方便理解算法的具体推导过程，下面首先介绍指数族的两个重要结论，然后再具体推导求解算法。</p>
+<h3 id="21-两个重要的结论">2.1 两个重要的结论</h3>
+<p>对于指数族分布，首先讨论两个重要的结论。根据密度函数可以得到相应的对数似然函数：</p>
+<p>$$
+\ln \mathscr{L}\left( \theta ;Y \right) =\sum _{i=1}^n{\frac{y _i\theta _i-b\left( \theta _i \right)}{a\left( \phi _i \right)}}+\sum _{i=1}^n{c\left( y _i,\phi _i \right)}
+$$</p>
+<p>这里仅假定 $y_i$ 是独立的。则似然函数对 $\theta$ 求导有：</p>
+<p>$$
+\frac{\partial \ln \mathscr{L}\left( \theta ;Y \right)}{\partial \theta}=\sum _{i=1}^n{\frac{y _i-\dot{b}\left( \theta _i \right)}{a\left( \phi _i \right)}}=\sum _{i=1}^n{S _i}
+$$</p>
+<p>似然函数对 $\theta$ 的二阶导为：</p>
+<p>$$
+\frac{\partial ^2\ln \mathscr{L}\left( \theta ;Y \right)}{\partial \theta ^2}=\sum _{i=1}^n{\frac{\ddot{b}\left( \theta _i \right)}{a\left( \phi _i \right)}}
+$$</p>
+<p>其中 $\dot{b}(\theta)$ 和 $\ddot{b}(\theta)$ 是 $b(\theta)$ 对 $\theta$ 的一阶导和二阶导（下同）。那么，大部分指数族分布（要求密度函数积分号和求导号可以交换顺序）满足：</p>
+<p>$$
+E\left( \frac{\partial \ln \mathscr{L}\left( \theta ;Y \right)}{\partial \theta} \right) =0, \quad E\left( \frac{\partial \ln \mathscr{L}\left( \theta ;Y \right)}{\partial \theta} \right) =0
+$$</p>
+<p>显然，根据上述两条性质可以推出：</p>
+<p>$$
+\mu _i=Ey_i=\dot{b}\left( \theta _i \right)
+$$</p>
+<p>和</p>
+<p>$$
+Var\left( y_i \right) =\ddot{b}\left( \theta _i \right) a\left( \phi \right) =\frac{\mathrm{d}\mu _i}{\mathrm{d}\theta _i}a\left( \phi \right) = Var _{\mu _i}a\left( \phi \right)
+$$</p>
+<h3 id="22-极大似然估计">2.2 极大似然估计</h3>
+<p>根据极大似然思想，对数似然函数对 $\beta$ 求导得到：</p>
+<p>$$
+\begin{split}
+S\left( \beta \right) &amp;=\frac{\partial \ln \mathscr{L}\left( \beta ;Y \right)}{\partial \beta}=\sum _{i=1}^n{\frac{\partial}{\partial \theta  _i}\left( \frac{y _i\theta  _i-b\left( \theta  _i \right)}{a\left( \phi  _i \right)} \right) \cdot \frac{\partial \theta  _i}{\partial \mu  _i}\cdot \frac{\partial \mu  _i}{\partial \beta}}
+\newline
+&amp;=\sum _{i=1}^n{\frac{y _i-\dot{b}\left( \theta  _i \right)}{a\left( \phi  _i \right)}\cdot \frac{\partial \theta  _i}{\partial \mu  _i}\cdot \frac{\partial \mu  _i}{\partial \beta}}=\sum _{i=1}^n{\frac{y _i-\dot{b}\left( \theta  _i \right)}{a\left( \phi  _i \right)}\cdot \frac{1}{\frac{\partial \mu  _i}{\partial \theta  _i}}\cdot \frac{\partial \mu  _i}{\partial \beta}}
+\newline
+&amp;=\sum _{i=1}^n{\left( y _i-\dot{b}\left( \theta  _i \right) \right) \frac{1}{a\left( \phi  _i \right) \frac{\partial \mu  _i}{\partial \theta  _i}}\cdot \frac{\partial \mu  _i}{\partial \beta}}=\sum _{i=1}^n{\left( y _i-\mu  _i \right) \frac{1}{Var\left( y _i \right)}\cdot \frac{\partial \mu  _i}{\partial \beta}}
+\newline
+&amp;=\left( \frac{\partial \mu  _1}{\partial \beta},\cdots ,\frac{\partial \mu  _n}{\partial \beta} \right) \left( \begin{matrix}
+\frac{1}{Var\left( y _1 \right)}&amp;		&amp;		\newline
+&amp;		\ddots&amp;		\newline
+&amp;		&amp;		\frac{1}{Var\left( y _n \right)}\newline
+\end{matrix} \right) \left( \begin{array}{c}
+y _1-\mu  _1\newline
+\newline
+y _n-\mu  _n\newline
+\end{array} \right)
+\newline
+&amp;=\frac{\partial \mu ^{\mathrm{T}}}{\partial \beta}V^{-1}\left( y-\mu \right) =\left( \frac{\partial \mu}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+\newline
+&amp;=D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+\end{split}
+$$</p>
+<p>显然，这和之前求解得到的得分函数形式是一致的。为了得到具体的表达式，需要进一步求解 $D$ 的具体形式。</p>
+<p>因为 $D=\frac{\partial \mu}{\partial \beta ^{\mathrm{T}}}$，而 $x_{i}^{\mathrm{T}}\beta =\eta _i=g\left( \mu _i \right) $，考虑到链接函数 $g(\cdot)$ 是单调可微函数，则其反函数存在，不妨设为 $h(\cdot)$，所以</p>
+<p>$$
+\frac{\partial \mu _i}{\partial \beta}=\frac{\partial}{\partial \beta}h\left( x _{i}^{\mathrm{T}}\beta \right) =\dot{h}\left( x _{i}^{\mathrm{T}}\beta \right) x_i
+$$</p>
+<p>进而</p>
+<p>$$
+\begin{split}
+D&amp;=\frac{\partial \mu}{\partial \beta ^{\mathrm{T}}}=\left( \frac{\partial \mu}{\partial \beta _1},\cdots ,\frac{\partial \mu}{\partial \beta _n} \right) =\left( \dot{h}\left( x _{1}^{\mathrm{T}}\beta \right) x_1,\cdots ,\dot{h}\left( x _{n}^{\mathrm{T}}\beta \right) x _n \right)
+\newline
+&amp;=\left( \begin{matrix}
+\dot{h}\left( x _{1}^{\mathrm{T}}\beta \right)&amp;		&amp;		\newline
+&amp;		\ddots&amp;		\newline
+&amp;		&amp;		\dot{h}\left( x _{n}^{\mathrm{T}}\beta \right)\newline
+\end{matrix} \right) \left( x _1,\cdots ,x _n \right)
+\newline
+&amp;=\Delta X
+\end{split}
+$$</p>
+<p>所以得到 $S(\beta)$ 的最终表达式为</p>
+<p>$$
+S\left( \beta \right) =\left( \Delta X \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right) =X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+$$</p>
+<p>为了得到极大似然估计，我们接着求解对应的Fisher信息矩阵。根据定义有：</p>
+<p>$$
+I\left( \beta \right) =E\left( \frac{\partial}{\partial \beta ^{\mathrm{T}}}S\left( \beta \right) \right) =E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right)
+$$</p>
+<p>根据指数族的性质有</p>
+<p>$$
+E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right) =-E\left( SS^{\mathrm{T}} \right)
+$$</p>
+<p>考虑其第 $(i,j)$ 个元素 $S_{ij}=S_iS_j$，则</p>
+<p>$$
+\begin{split}
+E\left( S_iS_j \right) &amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) x _{j}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \right]
+\newline
+&amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \left( y-\mu \right) ^{\mathrm{T}}V^{-1}\Delta x _j \right]
+\newline
+&amp;=x _{i}^{\mathrm{T}}\Delta V^{-1}\Delta x _j
+\end{split}
+$$</p>
+<p>所以</p>
+<p>$$
+I\left( \beta \right) =X^{\mathrm{T}}\Delta V^{-1}\Delta X
+$$</p>
+<p>这时，再回到头考虑得分函数，根据极值的必要条件有</p>
+<p>$$
+S\left( \hat{\beta} \right) =X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) =0
+$$</p>
+<p>将上式在真值 $\beta$ 处进行Taylor展开</p>
+<p>$$
+S\left( \hat{\beta} \right) =S\left( \beta \right) +\frac{\partial}{\partial \beta ^{\mathrm{T}}}S\left( \beta \right) \left( \hat{\beta}-\beta \right) =0
+$$</p>
+<p>所以</p>
+<p>$$
+\hat{\beta}=\beta +\left( -\frac{\partial S\left( \beta \right)}{\partial \beta ^{\mathrm{T}}} \right) ^{-1}S\left( \beta \right)
+$$</p>
+<p>其中括号内的一项过于复杂，在实际求解中可以根据大数定律用其期望代替，由前面的讨论可知其期望即为 $I(\beta)$。这样，模型的极大似然估计可以近似成</p>
+<p>$$
+\begin{split}
+\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+\newline
+&amp;=\beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+\end{split}
+$$</p>
+<!-- ### 2.3 渐近正态性
+根据得到的估计量的近似表达式，其中等式右侧只有 $y$ 是服从正态分布的随机变量，那么得到的参数估计可以看成正态随机变量一个线性组合，显然估计量也服从正态分布，故而只需要求其均值和方差即可。
+
+$\hat{\beta}$ 的均值
+
+$$
+E\hat{\beta}=E\left[ \beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right) \right] =\beta
+$$
+
+$\hat{\beta}$ 的方差
+
+$$
+\begin{split}
+Var\left( \hat{\beta} \right) &=Var\left[ \beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right) \right] 
+\newline
+&=Var\left[ I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right) \right] 
+\newline
+&=I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}Var\left( y-\mu \right) V^{-1}DI\left( \beta \right) ^{-1}
+\newline
+&=I\left( \beta \right) ^{-1}\left( D^{\mathrm{T}}V^{-1}D \right) I\left( \beta \right) ^{-1}
+\newline
+&=I\left( \beta \right) ^{-1}
+\end{split}
+$$
+
+所以，可知估计量服从 $N\left( \beta ,I\left( \beta \right) ^{-1} \right)$。有了渐近分布，我们就能构造显著性检验了。 -->
+<h3 id="23-拟似然方法">2.3 拟似然方法</h3>
+<p>广义线性模型中对于分布有前提假设，但是实际问题中并不知道具体的分布是什么。考虑到在求解问题中一个重要的信息就是信息函数，它和分布前两阶矩有关，故而可以假设分布的前两阶矩存在，从而推出不含分布信息的拟似然方法。</p>
+<p>假定响应变量 $y_i$ 的均值为 $\mu_i$，方差函数为 $\mathrm{Var}y_i=a\left( \phi \right) \mathrm{Var} _{\mu _i}$，并且假定均值 $\mu_i$ 和 $x_i^T\beta$ 之间存在链结函数，链结函数的性质和广义线性模型的链结函数性质一样。据此，根据广义线性模型的思想实施拟似然方法。</p>
+<p>构造逆得分函数</p>
+<p>$$
+S_i\left( \mu _i \right) =\frac{y_i-\mu _i}{\mathrm{Var}y_i}
+$$</p>
+<p>它满足</p>
+<p>$$
+\begin{cases}
+ES_i\left( \mu _i \right) =0&amp;		\newline
+ES _{i}^{2}=E\left( -\frac{\partial S_i}{\partial \mu _i} \right)&amp;		\newline
+\end{cases}
+$$</p>
+<p>其中第二条性质是因为</p>
+<p>$$
+\begin{split}
+E\left( -\frac{\partial S_i}{\partial \mu _i} \right) &amp;=-E\left( \frac{\partial}{\partial \mu _i}\left( \frac{y_i-\mu _i}{\mathrm{Var}y_i} \right) \right)
+\newline
+&amp;=\frac{1}{\mathrm{Var}y_i}=E\left( S _{i}^{2} \right)
+\end{split}
+$$</p>
+<p>所以根据广义线性模型极大似然思想有</p>
+<p>$$
+\theta _i=\int _{y_i}^{\mu _i}{S_i\left( t \right) \mathrm{d}t}, \quad \theta \left( \mu \right) =\sum _{i=1}^n{\theta \left( \mu _i \right)}=\theta \left( \beta \right)
+$$</p>
+<p>那么拟似然方法的得分函数可以写成</p>
+<p>$$
+S\left( \beta \right) =\frac{\partial}{\partial \beta}\theta \left( \beta \right) =\sum _{i=1}^n{\frac{\partial \theta  _i}{\partial \beta}=\sum _{i=1}^n{\frac{\partial \mu  _{i}^{\mathrm{T}}}{\partial \beta}\frac{\partial \theta  _i}{\partial \mu  _i}=D^{\mathrm{T}}V^{-1}\left( y-\mu \right)}}
+$$</p>
+<p>类似的可以得到Fisher信息矩阵为</p>
+<p>$$
+I\left( \beta \right) =D^{\mathrm{T}}V^{-1}D
+$$</p>
+<h2 id="3-迭代求解算法">3 迭代求解算法</h2>
+<p>考虑模型的极大似然估计，其中括号内的一项过于复杂，在实际求解中可以根据大数定律用其期望代替，由前面的讨论可知其期望即为 $I(\beta)$。这样，模型的极大似然估计可以近似成</p>
+<p>$$
+\begin{split}
+\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+\newline
+&amp;=\beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+\end{split}
+$$</p>
+<p>这样就得到了估计量的求解迭代公式。</p>
+<h2 id="4-模拟分析">4 模拟分析</h2>
+<p>在<code>R</code>中，我们有<code>glm</code>函数求解广义线性模型。这里，我结合前面的分析自己编写的相应的参数估计和假设检验的函数，包括二项分布（逻辑回归）、Poisson分布。<strong>这些代码附在最后供参考。</strong></p>
+<p>以Poisson分布举例，考虑符合Poisson分布的观测，其中链接函数为</p>
+<p>$$
+\eta _i=\ln \mu _i
+$$</p>
+<p>我们生成 $\mathbb{R}^{1000\times 5}$ 的设计矩阵 $X$，系数 $\beta =\left( 1,3,2,4,5 \right) ^{\mathrm{T}}$，使用自编的广义线性模型求解算法求解该模型得到</p>
+<p><img src="/glm/myglm.png" alt=""></p>
+<p>这里的<code>myglm</code>是我自编的广义线性模型求解函数，其中囊括了线性模型、二项分布模型（逻辑回归）和Poisson模型的参数估计和显著性检验。对比一下<code>R</code>中的<code>glm</code>包求解的结果</p>
+<p><img src="/glm/glm.png" alt=""></p>
+<p>可以看到结果几乎是一样的。</p>
+<h2 id="5-自编函数代码">5 自编函数代码</h2>
+<h3 id="51-模型求解">5.1 模型求解</h3>
+<p>实际使用，主要运行该代码即可。这个代码整合了参数估计、检验等代码，将结果合并输出。</p>
+<pre><code class="language-r">## This program is to solve the generalized linear models: logistic, poisson
+
+myglm &lt;- function(x,y,b0,alpha = 0.05,family = &quot;poisson&quot;){#
+  
+  options(digits = 4)
+  
+  # family has two choice: logistic and poisson
+  # alpha is the significance of the interval estimate of the coefficients
+  
+  # solve the model
+  if(family == &quot;logistic&quot;){
+    glm.result &lt;- myglmlogistic(x,y,beta1 = b0)
+  }
+  else if(family == &quot;poisson&quot;){
+    glm.result &lt;- myglmpoisson(x,y,beta1 = b0)
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic,poisson之一&quot;))
+  }
+  
+  b &lt;- glm.result$模型的解
+  y.fit &lt;- glm.result$拟合值
+  num &lt;- glm.result$算法迭代次数
+  
+  # hypothesis testing
+  indivi &lt;- myglmindivi(x,y,b,expr = family)
+  
+  # confidence interval
+  inter.sig &lt;- myglminterval(x,y,b,alpha = alpha,expr = family)
+  
+  bname &lt;- paste0(rep(&quot;beta&quot;,length(b)),1:length(b))
+  
+  # the residuls
+  # glm.residual &lt;- y - y.fit
+  # res1 &lt;- summary(glm.residual)
+  # names(res1) &lt;- c(&quot;最小值&quot;,&quot;下四分位数&quot;,&quot;中位数&quot;,&quot;均值&quot;,&quot;上四分位数&quot;,&quot;最大值&quot;)
+  
+  estimate.test &lt;- data.frame(
+    &quot;估计值&quot; = b,
+    &quot;下界&quot; = inter.sig[,2],
+    &quot;上界&quot; = inter.sig[,3],
+    &quot;z值&quot; = indivi$Tu,
+    &quot;P值(&gt;|z|)&quot; = indivi$Tp,
+    &quot;置信度&quot; = indivi$Ts,check.names = F
+  )
+  
+  # output the results
+    cat(&quot;\n&quot;)
+    cat(&quot;Call: 这是不带截距项的&quot;,family,&quot;模型,&quot;,&quot;下面是模型的分析结果：&quot;,seq = &quot;&quot;,&quot;\n&quot;)
+    cat(&quot;\n&quot;)
+    cat(&quot;参数估计结果:&quot;,&quot;\n&quot;)
+    cat(&quot;\n&quot;)
+    print(estimate.test)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;置信度:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;区间估计的置信水平为：&quot;,alpha,&quot;\n&quot;)
+    cat(&quot;---&quot;,&quot;\n&quot;)
+    cat(&quot;Fisher信息矩阵的迭代次数为:&quot;,num,&quot;次&quot;,&quot;\n&quot;)
+}
+</code></pre>
+<h3 id="52-logistic模型的解">5.2 Logistic模型的解</h3>
+<pre><code class="language-r">##本程序用来求解广义线性模型中——logistic模型的解
+myglmlogistic &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  x &lt;- as.matrix(x)
+  y &lt;- as.matrix(y)
+  
+  g &lt;- expression(log(mu/(1 - mu)))# the link function
+  h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+  dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+  b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+  db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+  ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+  db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+  
+  k &lt;- 1
+  beta0 &lt;- beta1 + 1
+  while(sum((beta0 - beta1)^2) &gt;= e){
+    
+    beta0 &lt;- beta1
+    
+    # compute the D matrix
+    eta &lt;- x%*%beta1
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x
+    
+    # compute v.inverse—the inverse matrix of the covariance matrix of y
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))
+    
+    p1 &lt;- solve(t(D)%*%v.inverse%*%D)
+    p2 &lt;- t(D)%*%v.inverse%*%delta
+    p3 &lt;- x%*%beta1 + v.inverse%*%(y - mu)
+    
+    beta1 &lt;- p1%*%p2%*%p3# the kth estimates
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(beta1)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(beta1) &lt;- c(&quot;估计值&quot;)
+  rownames(beta1) &lt;- paste0(rep(&quot;系数&quot;,length(beta1)),1:length(beta1))
+  eta &lt;- x%*%beta1
+  y.fit &lt;- eval(h)# compute the fitting values of y
+  glmlogistic.result &lt;- list(&quot;模型的解&quot; = beta1,&quot;算法迭代次数&quot; = k-1,&quot;拟合值&quot; = y.fit)
+  return(glmlogistic.result)
+}
+</code></pre>
+<h3 id="53-poisson模型的解">5.3 Poisson模型的解</h3>
+<pre><code class="language-r">##本程序用来求解广义线性模型中——Poisson模型的解
+myglmpoisson &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
+	# x is the design matrix
+	# b is the starting value of the iteration
+	# N is the upper bound of the times of the iteration
+	# e is the convergence criteria
+	
+	n &lt;- length(x)
+	x &lt;- as.matrix(x)
+	y &lt;- as.matrix(y)
+	
+	g &lt;- expression(log(mu))# the link function
+	h &lt;- expression(exp(eta))# the inverse of the link funtion
+	dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+	b &lt;- expression(exp(theta))# the b(theta) function of the pdf
+	db &lt;- expression(exp(theta))# the first derivative funtion of b
+	ddb &lt;- expression(exp(theta))# the second derivative funtion of b
+	db.inverse &lt;- expression(log(mu))# the inverse of db
+	
+	k &lt;- 1
+	beta0 &lt;- beta1 + 1
+	while(sum((beta0 - beta1)^2) &gt;= e){
+	
+		beta0 &lt;- beta1
+		
+		# compute the D matrix
+	    eta &lt;- x%*%beta1
+		delta &lt;- diag(as.vector(eval(dh)))
+		D &lt;- delta%*%x
+		
+		# compute v.inverse—the inverse matrix of the covariance matrix of y
+		mu &lt;- eval(h)
+		theta &lt;- eval(db.inverse)
+		v.inverse &lt;- diag(1/as.vector(eval(ddb)))
+		
+		p1 &lt;- solve(t(D)%*%v.inverse%*%D)
+		p2 &lt;- t(D)%*%v.inverse%*%delta
+		p3 &lt;- x%*%beta1 + v.inverse%*%(y - mu)
+		
+		beta1 &lt;- p1%*%p2%*%p3# the kth estimates
+		
+		# check if it is divergent
+		if(k &gt; N){
+			cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+			cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+			print(beta1)
+			break
+		}
+		else{
+			k &lt;- k + 1
+		}
+	}
+	
+	colnames(beta1) &lt;- c(&quot;估计值&quot;)
+	rownames(beta1) &lt;- paste0(rep(&quot;系数&quot;,length(beta1)),1:length(beta1))
+	eta &lt;- x%*%beta1
+	y.fit &lt;- eval(h)# compute the fitting values of y
+	glmpoisson.result &lt;- list(&quot;模型的解&quot; = beta1,&quot;算法迭代次数&quot; = k-1,&quot;拟合值&quot; = y.fit)
+	return(glmpoisson.result)
+}
+</code></pre>
+<h3 id="54-拟似然">5.4 拟似然</h3>
+<pre><code class="language-r">##
+##This program is quasi-likelihood method
+##
+
+myquasimle &lt;- function(x,y,beta1,family,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  x &lt;- as.matrix(x)
+  y &lt;- as.matrix(y)
+  
+  v.mu &lt;- expression(mu^2)# The covariance function of y
+  
+  if(family == &quot;possion&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+  }
+  else if(family == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))
+    dh &lt;- D(h,&quot;eta&quot;)
+  }
+  else{
+    print(&quot;分布参数错误, 请选择logistic或者possion分布！！！！&quot;)
+  }
+  
+  k &lt;- 1
+  beta0 &lt;- beta1 + 1
+  while(sum((beta0 - beta1)^2) &gt;= e){
+    
+    beta0 &lt;- beta1
+    
+    # compute the D matrix
+    eta &lt;- x%*%beta1
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x
+    
+    # compute v.inverse—the inverse matrix of the covariance matrix of y
+    mu &lt;- eval(h)
+    v.inverse &lt;- diag(1/as.vector(eval(v.mu)))
+    
+    p1 &lt;- solve(t(D)%*%v.inverse%*%D)
+    p2 &lt;- t(D)%*%v.inverse%*%delta
+    p3 &lt;- x%*%beta1 + v.inverse%*%(y - mu)
+    
+    beta1 &lt;- p1%*%p2%*%p3# the kth estimates
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(beta1)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(beta1) &lt;- c(&quot;估计值&quot;)
+  rownames(beta1) &lt;- paste0(rep(&quot;系数&quot;,length(beta1)),1:length(beta1))
+  eta &lt;- x%*%beta1
+  y.fit &lt;- eval(h)# compute the fitting values of y
+  quasi.result &lt;- list(&quot;模型的解&quot; = beta1,&quot;算法迭代次数&quot; = k-1,&quot;拟合值&quot; = y.fit)
+  return(quasi.result)
+}
+</code></pre>
+<h3 id="55-单个系数检验">5.5 单个系数检验</h3>
+<pre><code class="language-r">## 求解广义线性模型单个系数检验
+myglmindivi &lt;- function(x,y,b,expr){#
+  # expr 表示模型：logistic, poisson
+  # b 表示由广义线性模型估计得到的估计量
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  beta.hat &lt;- b
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+    db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+    ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else if(expr == &quot;poisson&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    db &lt;- expression(exp(theta))# the first derivative funtion of b
+    ddb &lt;- expression(exp(theta))# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic,poisson之一&quot;))
+  }
+  
+  cc &lt;- solve(t(D)%*%v.inverse%*%D)
+  diagc &lt;- diag(cc)
+  
+  Tt &lt;- 1:p;Tp &lt;- Tt;Ts &lt;- Tt
+  
+  for(i in 1:p){
+    
+    Tt[i] &lt;- beta.hat[i]/sqrt(diagc[i])
+    Tp[i] &lt;- 2*(1 - pnorm(Tt[i]))
+    if(Tp[i] &lt; 0.001 ){# 判断置信度
+      Ts[i] &lt;- c(&quot;***&quot;)
+    }
+    else if(Tp[i] &lt; 0.01 &amp;&amp; Tp[i] &gt;= 0.001){
+      Ts[i] &lt;- c(&quot;**&quot;)
+    }
+    else if(Tp[i] &lt; 0.05 &amp;&amp; Tp[i] &gt;= 0.01){
+      Ts[i] &lt;- c(&quot;*&quot;)
+    }
+    else if(Tp[i] &lt; 0.1 &amp;&amp; Tp[i] &gt;= 0.05){
+      Ts[i] &lt;- c(&quot;.&quot;)
+    }
+    else{
+      Ts[i] &lt;- c(&quot; &quot;)
+    }
+  }
+  
+  indivitest &lt;- data.frame(&quot;Tu&quot; = Tt,&quot;Tp&quot; = Tp,&quot;Ts&quot; = Ts)
+  return(indivitest)
+}
+</code></pre>
+<h3 id="56-区间估计">5.6 区间估计</h3>
+<pre><code class="language-r">## the confidence interval of the generalized linear model
+myglminterval &lt;- function(x,y,b,expr,alpha = 0.05){
+  
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  beta.hat &lt;- b
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+    db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+    ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else if(expr == &quot;poisson&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    db &lt;- expression(exp(theta))# the first derivative funtion of b
+    ddb &lt;- expression(exp(theta))# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic, gompertz, weibull之一&quot;))
+  }
+  
+  Ti &lt;- matrix(0,nrow = p,ncol = 2)
+  
+  
+  cc &lt;- solve(t(D)%*%v.inverse%*%D)
+  diagc &lt;- diag(cc)
+  
+  for(i in 1:p){
+    Ti[i,1] &lt;- beta.hat[i] - qnorm((1-alpha/2))*sqrt(diagc[1])
+    Ti[i,2] &lt;- beta.hat[i] + qnorm((1-alpha/2))*sqrt(diagc[1])  
+  }
+  
+  out &lt;- cbind(beta.hat,Ti)
+  colnames(out) &lt;- c(&quot;Estimator&quot;,&quot;LowerBound&quot;,&quot;UpperBound&quot;)
+  return(out)
+}
+</code></pre>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2018/06/glm/" title="广义线性模型及其一般求解方式" target="_blank" rel="external">https://qkai-stat.github.io/2018/06/glm/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2018/05/nlm/" title="非线性模型的参数估计和统计性质"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2018/07/wordcloud-introduction/"
+                    title="R制作词云"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

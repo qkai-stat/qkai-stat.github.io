@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Hugo&#43;Gitee搭建个人专属博客 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>Hugo&#43;Gitee搭建个人专属博客 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="Hugo&#43;Gitee搭建个人专属博客" />
+<meta property="og:description" content="相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/07/hugo-gitee/" />
+<meta property="article:published_time" content="2020-07-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-07-31T00:00:00+00:00" />
+<meta itemprop="name" content="Hugo&#43;Gitee搭建个人专属博客">
+<meta itemprop="description" content="相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈">
+<meta itemprop="datePublished" content="2020-07-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-07-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2883">
+
+
+
+<meta itemprop="keywords" content="git," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hugo&#43;Gitee搭建个人专属博客"/>
+<meta name="twitter:description" content="相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/07/hugo-gitee/"
+    >Hugo&#43;Gitee搭建个人专属博客</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/07/hugo-gitee/" class="article-date">
+  <time datetime="2020-07-31 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-07-31</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/linux/"> linux </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/git/"> git </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/07/hugo-gitee/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2883字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈哈哈哈~）等等。不过，对于我们广大网站搭建小白，学习从头部署一个博客网站耗时耗力、实属没必要，我们完全可以站在“巨人”的肩膀上快速实现部署博客的目的。</p>
+<p>本期给大家介绍如何使用Hugo和Gitee部署私人博客网站，你需要提前安装好Git软件。当然，想要成功实现本期的内容，懂得一些简单的Git命令和Markdown的语法不可或缺，因为网站的搭建是基于Git，网站的博客渲染是基于Markdown的。</p>
+<h2 id="1-hugo安装与配置">1 Hugo安装与配置</h2>
+<blockquote>
+<p>Hugo is one of the most popular open-source static site generators. With its amazing speed and flexibility, Hugo makes building websites fun again.</p>
+</blockquote>
+<p>Hugo是由Go语言实现的静态网站生成器，相较于同类的Jekyll和Hexo，Hugo最大的优势在于编译、渲染速度快。因此，Hugo 非常适合博客、文档等等网站的生成。目前，Hugo在Windows、MAC、Linux等平台都可下载安装。</p>
+<p>虽然制作网站听起来很复杂，但是Hugo实际使用过程很友好，加之Hugo官网有300+博客主题可供下载，用户可以在很短的时间内生成满意的博客网站。</p>
+<p>首先我们从官方渠道下载相应的安装包，Win10平台实际就是一个Zip压缩包，解压后可以看到一个50M不到的hugo.exe程序——没错！我们生成博客网站的主角就是它！</p>
+<p>我们只需将其中<code>hugo.exe</code>程序放在你喜欢的某个目录下（<strong>后面不要改动位置</strong>），例如我放在<code>D:\Program Files\hugo</code>下。在正式使用之前，我们需要将这个<strong>目录保存到系统环境变量</strong>中，这可以在网上轻易的找到教程，故不赘述。</p>
+<blockquote>
+<p>所谓环境变量，简单来说就是在系统层面给这个程序的安装路径进行登记，使得我们通过CMD或Git直接输入程序名就能全局调用。</p>
+</blockquote>
+<p>下面，我们随便在某处右键Git Bash Here打开Git，然后输入</p>
+<pre><code class="language-R">hugo version
+</code></pre>
+<p>若返回了相应的版本号，如</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/hugo-version.png" width="600"/>
+<p>则说明Hugo配置成功。</p>
+<h2 id="2-初始化博客网站">2 初始化博客网站</h2>
+<p>我们在某处，如电脑桌面，右键Git Bash Here打开Git，然后输入</p>
+<pre><code class="language-R"># hugo new site &lt;网站文件存放的名字&gt;
+hugo new site myblogfiles
+</code></pre>
+<p>可以看到桌面出现一个名为myblogfiles的文件夹，里面就是生成的网站的配置文件。</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/newsite-files.png" width="600"/>
+<p>我们主要了解这么几个文件（夹）的作用即可：</p>
+<ul>
+<li>content：通常存放网站用到的文档</li>
+<li>static：通常存放网站使用到的图片、音视频</li>
+<li>themes：网站使用到的主题</li>
+<li>config.toml：网站的配置文件</li>
+</ul>
+<p>想要预览生成的网站，可以在myblogfiles目录下打开Git，然后输入命令</p>
+<pre><code class="language-R">hugo server
+</code></pre>
+<p>然后在自己的浏览器上访问网址：http://localhost:1313/ 就可看到当前网站的模样。</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/hugo-server.png" width="600"/>
+<p><code>hugo server</code>运行后，只要不在Git中使用快捷键Ctrl+C停止，**就可以对网站的改动实时进行预览！**显然，我们打开网页什么也看不到——因为我们还没有对网站进行个人配置，自然什么也看到。</p>
+<h2 id="3-使用hugo主题">3 使用Hugo主题</h2>
+<p>我们不必自己将网站从头配置成型（那样学hugo的意义也不大了），只须学会使用他人已经设计好的Hugo主题即可。目前，Hugo官网聚集了300+博客主题，内容涵盖学术风格类博客、技术风格类博客、文艺风格类博客等，可以直接下载使用。</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/hugo-theme.png" width="600"/>
+<p>进入任一博客主题，你可以点击Demo查看网站的显示效果——换句话说，自己以后的网站就长这样，不同之处是内（nei）容（han）。有得必有失嘛，方便的同时必然牺牲了一些个性化，不过比之于平台提供的个人主页，Hugo主题的自由性显然高太多了。此外，博客主题的主页还详细介绍了该主题的使用方式。</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/theme-pure.png" width="600"/>
+<p>我们下载上述的Pure主题压缩包，解压后（文件夹名为pure）放在网站的theme文件下。</p>
+<p>为了让使用者可以在本地看到主题的效果，每个主题都含有一个名为exampleSite的文件夹，里面有主题作者事先放好的材料，他们最终将在网站上呈现出来。网站呈现的效果一般就是文章+图片（音视频），根据我们前面的介绍，通常只用干三件事：</p>
+<ul>
+<li>
+<p>将exampleSite中的content文件夹内容复制到我们网站的content文件夹中；</p>
+</li>
+<li>
+<p>将exampleSite中的配置文件替换掉我们网站的配置文件；</p>
+</li>
+<li>
+<p>将pure（主题根目录）中的static文件夹内容复制到我们网站的static文件夹中。</p>
+</li>
+</ul>
+<p>这时，我们回到网站的根目录打开Git，输入命令</p>
+<pre><code class="language-R">hugo
+hugo server
+</code></pre>
+<p>再访问 http://localhost:1313/ 时就看到pure主题渲染出的网站了</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/pure.png" width="600"/>
+<p>可见，pure主题下博客分成三大区域展示，对于博文可以进行归档（Archive）、分类（Categories）和标签（Tags）。此外，该主题还可以设置博客的评论方式、分享渠道等。</p>
+<p>总之，网页上我们看到的内容基本都可以替换成自己的信息。具体替换要参考每个主题的使用介绍，但基本都是围绕content（放文章）、static（放图片、音视频）两个文件夹和网站配置文件。</p>
+<h2 id="4-实现外网访问">4 实现外网访问</h2>
+<p>如果做好的博客只能在本地自娱自乐，那就太没意思了！因此，学会如何实现外网访问很重要。这里我们选用国内的Gitee进行网站部署。</p>
+<blockquote>
+<p>Gitee不是必选项，国外的Github才是主流。不过因其服务器在国外，国内访问速度很慢，使得他人浏览博客的体验大打折扣。</p>
+</blockquote>
+<p>首先，我们在Gitee上新建一个仓库，用来存放渲染好的博客网站的全部文件。这里，一定要注意！一定要注意！一定要注意！仓库的名称必须和你的Gitee账户名一致。</p>
+<blockquote>
+<p>其实也不是必须一致，只是我们最终想实现通过网址 https://用户名.gitee.io/ 来访问博客的效果。如果你设置成其他名称，那博客网址就变成：https://用户名.gitee.io/博客名/ ，略显累赘。</p>
+</blockquote>
+<p>然后，我们把网站本地配置文件中的链接改成自己的博客链接，也即是将<code>baseURL</code>对应的网址换成自己的博客链接。</p>
+<p>接着，我们就要把本地渲染好的博客网站文件推送到仓库中。问题来了：推送哪些文件呢？我们在博客目录下可以看到一个名为public的文件夹，它是在运行<code>hugo</code>后出现的——其中包含了博客网站的全部配置和内容。因此，我们只要将public文件夹下的内容推送到仓库即可。</p>
+<p>最后，我们回到Gitee中的博客仓库，可以看到服务中有个Gitee Pages选项。</p>
+<img src="http://jiandan94.gitee.io/md-figures/git/gitee-pages.png" width="600"/>
+<p>点击进入，选择强制使用HTTPS并更新。等待更新完成，博客网站就部署成功了！</p>
+<blockquote>
+<p>Gitee每次将public文件推送到仓库，要手动进行更新，否则博客还是前一次的内容；而自动更新是要收费的！Github可以免费使用自动更新功能，使用更友好，就是访问速度头疼。</p>
+</blockquote>
+<p>读者可以访问<strong>我的个人博客</strong>，看看pure主题的最终效果。欢迎大家对我的博文评论，不喜勿喷~</p>
+<pre><code class="language-R"># 我的个人博客网址
+https://jiandan94.gitee.io/
+</code></pre>
+<h2 id="5-结语">5 结语</h2>
+<p>本期学习了使用Hugo和Gitee搭建个人博客。从上面的介绍来看，Hugo上手简单、渲染高效且配有众多主题进行网站快速部署。如果觉得有意思，就赶快动手实践吧！</p>
+<h3 id="相关链接">相关链接</h3>
+<p>Hugo官网：https://gohugo.io/</p>
+<p>Hugo主题网址：https://themes.gohugo.io/</p>
+<p>Hugo下载网址：https://github.com/gohugoio/hugo/releases</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/07/hugo-gitee/" title="Hugo&#43;Gitee搭建个人专属博客" target="_blank" rel="external">https://qkai-stat.github.io/2020/07/hugo-gitee/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/07/git-submodule/" title="Git-Submodule的基本使用"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/08/author-detection/"
+                    title="解密文章作者之谜"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

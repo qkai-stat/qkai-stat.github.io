@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        再生希尔伯特空间与核函数 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="在运用SVM处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>再生希尔伯特空间与核函数 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="再生希尔伯特空间与核函数" />
+<meta property="og:description" content="在运用SVM处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/09/rkhs-and-kernel/" />
+<meta property="article:published_time" content="2020-09-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-24T00:00:00+00:00" />
+<meta itemprop="name" content="再生希尔伯特空间与核函数">
+<meta itemprop="description" content="在运用SVM处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space">
+<meta itemprop="datePublished" content="2020-09-24T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-09-24T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3838">
+
+
+
+<meta itemprop="keywords" content="机器学习," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="再生希尔伯特空间与核函数"/>
+<meta name="twitter:description" content="在运用SVM处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/09/rkhs-and-kernel/"
+    >再生希尔伯特空间与核函数</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/09/rkhs-and-kernel/" class="article-date">
+  <time datetime="2020-09-24 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-09-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/09/rkhs-and-kernel/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3838字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>在运用<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM</a>处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space）的概念。这些听上去很高大上的名词，其基本含义并不是十分生涩。本文主要介绍再生核希尔伯特空间和核函数的相关内容。</p>
+<h2 id="1-希尔伯特空间">1 希尔伯特空间</h2>
+<p>现代数学研究问题常常以集合为对象，而赋予了某种结构或规则的集合便称为空间。所谓结构或规则，它必须可以描述集合中元素之间的某种关系，这个关系你可以自定义，如代数运算、距离、内积等等。下面介绍一些具体的空间概念，这对理解希尔伯特空间有很大的帮助。</p>
+<h3 id="11-线性空间">1.1 线性空间</h3>
+<p>线性空间就是定义了<strong>加法和数乘</strong>的空间。换句话说，任意空间中的两个元素 $a,b$ 和数 $\lambda,\mu$ 要满足下面的8条公理：</p>
+<ul>
+<li>$a + b = b + a$</li>
+<li>$a + (b + c) = (a + b) + c$</li>
+<li>$\lambda(\mu a) = (\lambda\mu)a$</li>
+<li>$\lambda(a + b) = \lambda a + \lambda b$</li>
+<li>$(\lambda + \mu)a = \lambda a + \mu a$</li>
+<li>$a + 0 = a$，即有零元素</li>
+<li>$a + (-a) = 0$</li>
+<li>$a\cdot 1 = a$，即有单位1</li>
+</ul>
+<p>给空间赋予加法和数乘之后，我们就可以进一步寻找空间中的一组基（basis），从而把空间中任一元素用基的线性组合表示。这样，研究空间的性质就简化了。</p>
+<h3 id="12-度量空间">1.2 度量空间</h3>
+<p>度量空间就是定义了距离的空间。空间中任意两个元素 $x,y$，距离 $d(x,y)$ 的定义需要满足下面三个条件：</p>
+<ul>
+<li>非负性：$d(x,y) \geq 0$，且 $d(x,y)=0 \Leftrightarrow x = y$</li>
+<li>对称性：$d(x,y) = d(y,x)$</li>
+<li>三角不等式：$d(x,y) \leq d(x,z) + d(z,y)$</li>
+</ul>
+<p>通过定义距离，空间中的各个元素之间可以相互比较。定义了距离的线性空间叫<strong>线性度量空间</strong>。</p>
+<h3 id="13-赋范空间">1.3 赋范空间</h3>
+<p>赋范空间就是定义了范数的空间。空间中任一元素 $x$，范数 $\Vert x\Vert$ 的定义需要满足下面三个条件：</p>
+<ul>
+<li>非负性：$\Vert x\Vert \geq 0$，且 $\Vert x\Vert = 0 \Leftrightarrow x = 0$</li>
+<li>数乘法则：$\Vert\lambda x\Vert = \vert\lambda\vert \cdot \Vert x\Vert$</li>
+<li>三角不等式：$\Vert x + y\Vert \leq \Vert x\Vert + \Vert y\Vert$</li>
+</ul>
+<p>通过定义范数，元素本身可以度量大小。另一方面，根据距离的定义可以将范数看成是从零点到 $x$ 的距离，也即是</p>
+<p>$$
+\Vert x\Vert = d(x,0)
+$$</p>
+<p>但同时比距离的定义要严格，因为范数有数乘规则而距离不一定有。换句话说，有了范数定义可以直接根据该范数定义距离，反之则不行。</p>
+<p>例如</p>
+<p>$$
+d(x,y) = \Vert x - y\Vert
+$$</p>
+<p>显然满足距离定义。而下述定义的距离</p>
+<p>$$
+d(x, y) = \frac{\sqrt{\sum (x_i - y_i)^2}}{1 + \sqrt{\sum (x_i - y_i)^2}}
+$$</p>
+<p>不满足范数定义的条件。因此<strong>范数是比距离更具体的一个概念</strong>，或者说赋范空间也是度量空间。</p>
+<p>此外，<strong>完备</strong>的赋范空间叫做巴拿赫空间。空间的完备性是指空间中的任一柯西序列的极限仍在该空间中，即取极限运算不会跑出空间。例如，实数集是完备的而有理数集是不完备的，因为有理数序列的极限可能是无理数。举例说明，考虑下面的数列</p>
+<p>$$
+x_n = \frac{[\sqrt{3}n]}{n}
+$$</p>
+<p>其中 $[\cdot]$ 是取整函数。显然 $x_n$ 是有理数，但不难看出 $x_n\rightarrow \sqrt{3}$ 是一个无理数。</p>
+<blockquote>
+<p>柯西序列中提到了距离的概念，也就是说在定义完备空间之前，先要有距离的概念。所以完备空间也是<strong>完备度量空间</strong></p>
+</blockquote>
+<h3 id="14-内积空间">1.4 内积空间</h3>
+<p>内积空间就是定义了内积运算的空间。空间中任意两个元素 $x,y$，内积 $&lt;x,y&gt;$ 的定义需要满足下面三个条件：</p>
+<ul>
+<li>对称性：$&lt;x,y&gt; = &lt;y, x&gt;$</li>
+<li>线性性：$&lt;\lambda x, y&gt; = \lambda &lt;x, y&gt;$</li>
+<li>正定性：$&lt;x,x&gt; \geq 0$，且 $&lt;x,x&gt; = 0 \Leftrightarrow x = 0$</li>
+</ul>
+<p>对比范数的定义，给了内积定义后我们可以根据该内积定义范数</p>
+<p>$$
+\Vert x \Vert = \sqrt{&lt;x,x&gt;}
+$$</p>
+<p>但是范数的定义不满足上述的线性性，故而<strong>内积是比范数更具体的一个概念</strong>。内积将两个矢量与一个纯量连接起来，允许我们严格地谈论矢量的“夹角”和“长度”，并进一步谈论矢量的正交性。</p>
+<p>我们用一张图来描述线性空间、度量空间、赋范空间和内积空间的关系：</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/space-comparison.png" width = 600 /></p>
+<h3 id="15-欧几里得空间">1.5 欧几里得空间</h3>
+<p>欧式空间是定义了<strong>内积</strong>的<strong>有限维实线性空间</strong>。</p>
+<h3 id="16-希尔伯特空间">1.6 希尔伯特空间</h3>
+<p>希尔伯特空间是欧氏空间的一推广，即为<strong>完备的内积空间</strong>（<strong>允许</strong>无穷维且不限于实数情形）。希尔伯特空间的研究对象通常是函数，而函数可以看成无穷维的向量（相对于欧氏空间的有限维做了拓展）。因为对连续函数 $f(x)$ 可以按照 $x$ 进行采样，则函数可以表示成</p>
+<p>$$
+(f(x_0), f(x_1),\ldots, f(x_n))
+$$</p>
+<p>采样的间隔越小，函数刻画的越精确。如果采用间隔趋于无穷，那么函数就变成一个无穷维的向量了。所以，函数空间内积可以类比欧式空间的内积定义成</p>
+<p>$$
+&lt;f(x), g(x)&gt; = \int f(x)g(x)dx
+$$</p>
+<p>从函数内积的定义来看，函数空间的元素（即函数）不是随意取的，起码要满足可积性可平方可积性。由此可以导出函数空间的范数</p>
+<p>$$
+\Vert f(x)\Vert = \sqrt{&lt;f(x), f(x)&gt;}
+$$</p>
+<blockquote>
+<p>这部分以及接下来的内容都涉及函数的积分描述，我们默认所有操作都是可以进行的，只去理解其主要的思想。至于具体要满足何种条件、如何证明等，可以参考</p>
+</blockquote>
+<h2 id="2-核函数">2 核函数</h2>
+<p>有了函数 $f(x)$ 可以看成无穷维向量的意识后，我们可以把二元函数 $\kappa(x, y)$ 看成一个无穷维的矩阵（类比两个方向无穷采样）。若 $\kappa(x, y)$ 满足</p>
+<ul>
+<li>
+<p>正定性：即对任意的 $f(x)$ 都成立着
+$$
+\iint f(x)\kappa(x,y)f(y)dxdy \geq 0
+$$</p>
+</li>
+<li>
+<p>对称性：即 $\kappa(x, y) = \kappa(y, x)$</p>
+</li>
+</ul>
+<p>则称之为核函数（正定核）。上述是从积分的角度定义的，<a href="https://baike.baidu.com/item/Mercer%E5%AE%9A%E7%90%86/19446322?fr=aladdin">Mercer定理</a>告诉我们<strong>任何半正定的函数都可以作为核函数</strong>。不过，根据定义来检验某个函数是否为核函数仍然比较困难，好在已有一些被大家证明过的核函数可供选择，如</p>
+<ul>
+<li>线性核：$K(x_i,x_j)=x_i^Tx_j$；</li>
+<li>高斯核：$K(x_i,x_j)=\exp(-\frac{\Vert x_i-x_j\Vert^2}{\sigma})$，$\sigma&gt;0$；</li>
+<li>Sigmoid核：$K(x_i,x_j)=\tanh(\beta x_i^Tx_j + \theta)$，$\beta&gt;0,\theta&lt;0$；</li>
+</ul>
+<p>在一般的欧氏空间中，我们可以定义 $n\times n$ 阶矩阵 $A$ 的特征值和特征向量</p>
+<p>$$
+Ax = \lambda x
+$$</p>
+<p>当一个矩阵可以进行特征值分解时，其特征向量 $(u_i)_{i=1}^{n}$ 就构成了这个 $n$ 维空间的一组正交基，并且我们可以得到</p>
+<p>$$
+A = \sum_{i=1}^n \lambda_i u_i {u_i^T}
+$$</p>
+<p>对照欧氏空间的特征值分解，我们可以定义希尔伯特空间的特征值和特征向量：</p>
+<p>$$
+\int \kappa(x, y) \psi(x)dx = \lambda \psi(y)
+$$</p>
+<p>对于不同的特征值 $\lambda_1$ 和 $\lambda_2$ 及对应的特征函数 $\psi_1(x)$ 和 $\psi_2(x)$，我们可以看到</p>
+<p>$$
+\begin{split}
+\int \lambda_1 \psi_1(x)\psi_2(x)dx &amp;= \int\int\kappa(y,x)\psi_1(y)dy,\psi_2(x)dx\newline
+&amp;= \int\int\kappa(x,y)\psi_2(x)dx,\psi_1(y)dy\newline
+&amp;= \int \lambda_2 \psi_1(x)\psi_2(x)dx
+\end{split}
+$$</p>
+<p>所以</p>
+<p>$$
+&lt;\psi_1, \psi_2&gt; = 0
+$$</p>
+<p>所以 $(\psi_i)_{i = 1}^{\infty}$ 就是原函数空间的一组正交基。类似的，核函数就可以写成基函数的和</p>
+<p>$$
+\kappa(x,y) = \sum_{i = 1}^{\infty} \lambda_i \psi_i(x)\psi_i(y)
+$$</p>
+<h2 id="3-再生核希尔伯特空间">3 再生核希尔伯特空间</h2>
+<p>现在我们考虑基为 $(\sqrt{\lambda_i} \psi_i) _{i = 1}^{\infty}$ 的希尔伯特空间 $\mathcal{H}$。对于 $\mathcal{H}$ 中的任意元素 $f(x)$ 和 $g(x)$，可以将其表示成基 $(\sqrt{\lambda_i}\psi_i) _{i = 1}^{\infty}$ 的和</p>
+<p>$$
+f(x) = \sum_{i = 1}^{\infty} \alpha_i \sqrt{\lambda_i}\psi_i(x),\quad g(x) = \sum_{i = 1}^{\infty} \beta_i \sqrt{\lambda_i}\psi_i(x)
+$$</p>
+<p>那么在 $\mathcal{H}$ 中 $f(x)$ 和 $g(x)$ 就可以表示成下面两个无穷维向量</p>
+<p>$$
+f = (\alpha_1, \alpha_2, \ldots) _{\mathcal{H}}^T,\quad g = (\beta_1, \beta_2, \ldots) _{\mathcal{H}}^T
+$$</p>
+<p>两者之间的内积便为</p>
+<p>$$
+&lt;f, g&gt; = \sum_{i = 1}^{\infty} \alpha_i \beta_i
+$$</p>
+<p>再来看核函数 $\kappa(x, y)$，我们若固定其中一个变量如 $x = x_0$，则 $\kappa(x_0, \cdot)$ 可表示成无穷维矩阵 $\kappa(x, y)$ 的第 $x_0$ 行。显然 $\kappa(x_0, \cdot)$ 在我们定义的 $\mathcal{H}$ 中，那么用基表示成</p>
+<p>$$
+\kappa(x_0, \cdot) = \sum_{i=1}^{\infty} \sqrt{\lambda_i}\psi_i(x_0) \sqrt{\lambda_i}\psi_i
+$$</p>
+<p>对应 $\mathcal{H}$ 中的一个无穷维向量</p>
+<p>$$
+\kappa(x_0, \cdot) = (\sqrt{\lambda_1}\psi_1(x_0), \sqrt{\lambda_2}\psi_2(x_0), \ldots)_{\mathcal{H}}^T
+$$</p>
+<p>类似的，对 $\kappa(\cdot, y_0)$ 有 $\kappa(x, \cdot) = \sum_{i=1}^{\infty} \sqrt{\lambda_i}\psi_i(y_0) \sqrt{\lambda_i}\psi_i$。所以两者内积的计算为</p>
+<p>$$
+&lt;\kappa(x_0, \cdot), \kappa(\cdot, y_0)&gt; = \sum_{i=1}^{\infty} \lambda_i \psi_i(x_0)\psi_i(y_0) = \kappa(x_0, y_0)
+$$</p>
+<p>这个性质就叫做核函数的<strong>再生性</strong> 。若令 $f(\cdot) = \kappa(x_0, \cdot)\in \mathcal{H}$，则有 $&lt;f(\cdot), \kappa(\cdot, y_0)&gt; = f(y_0)$，原空间的样本点经过核运算后与 $\mathcal{H}$ 中的元素做内积运算，最后又跑出来了（再生出来）。空间 $\mathcal{H}$ 叫做再生核希尔伯特空间（Reproducing Kernel Hilbert Space，RKHS）。</p>
+<blockquote>
+<p>从上面的介绍可以看出，对于每个正定核函数，都隐式的定义了一个RKHS的特征空间。</p>
+</blockquote>
+<h2 id="4-rkhs和svm">4 RKHS和SVM</h2>
+<h3 id="41-高维映射">4.1 高维映射</h3>
+<p>我们已经知道核函数 $\kappa(x, y)$ 对应的再生核希尔伯特空间 $\mathcal{H}$ 中的向量内积可以用核函数计算。那么，如何将给定的样本空间（一般是有限维）的任一点 $x$ 映射到高维甚至无穷维的 $\mathcal{H}$ 中呢？考虑映射
+$$
+\phi(x) = \kappa(x, \cdot)
+$$
+显然该映射将点 $x$ 对应到 $\mathcal{H}$ 中的向量
+$$
+(\sqrt{\lambda_1}\psi_1(x), \sqrt{\lambda_2}\psi_2(x), \ldots)_{\mathcal{H}}^T
+$$
+按照这种映射得到 $\mathcal{H}$ 中的两个向量 $\phi(x)$ 和 $\phi(y)$ 的内积即为 $\kappa(x, y)$。</p>
+<p>例如，对于二维样本空间中任意点 $x = (x_1, x_2)$ 和 $y = (y_1, y_2)$，考虑核函数
+$$
+\kappa(x, y) = (x_1, x_2, x_1 x_2)
+\left(\begin{matrix}
+y_1 \newline y_2 \newline y_1 y_2
+\end{matrix}\right)
+=x_1y_1 + x_2y_2 + x_1 x_2 y_1 y_2
+$$
+不妨令 $\lambda_1 = \lambda_2 = \lambda_3 = 1$，$\psi_1(x) = x_1, \psi_2(x) = x_2, \psi_3(x) = x_1x_2$，定义映射
+$$
+\left(
+\begin{matrix}
+x_1 \newline x_2
+\end{matrix}
+\right)
+\overset{\phi}{\rightarrow}
+\left(
+\begin{matrix}
+x_1 \newline x_2 \newline x_1 x_2
+\end{matrix}
+\right)
+$$
+就把二维空间映射到三维空间了，相应的内积运算满足
+$$
+&lt;\phi(x), \phi(y)&gt; = \kappa(x, y)
+$$</p>
+<h3 id="42-核技巧">4.2 核技巧</h3>
+<p>SVM的基本原理是从线性可分数据出发的，如果数据不可分直接用SVM建模显然不合理。为此，我们考虑<strong>将原始的原本映射到更高维度的空间</strong>中，使得在高维空间中的每个样本是线性可分的。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/kernel-transformation1.png" width = 600 /></p>
+<p>【<strong>定理</strong>】如果原始空间是有限维的，则一定存在一个高维空间使样本线性可分。</p>
+<p>事实上，给定一个样本空间 $\mathcal{X}$ 后，将其变成线性可分的映射的具体形式一般很难确定。然而，我们可以借助核函数来定义这样的映射。显然，若核函数选的不合适，对应的映射空间不能将原始数据线性可能，那最终的SVM分类效果也不太好。尽管如此，比起确定映射的具体形式，选择核函数显得要容易多了。</p>
+<p>对于原始空间 $\mathcal{X}$ 的样本点 $x_1, \ldots, x_n \in R^p$，给定核函数 $\kappa(x, y)$，做映射
+$$
+x_i\in R^p \rightarrow \phi(x_i) = \kappa(x_i, \cdot)\in \mathscr{F}
+$$
+那么相应的高维空间的超平面就是
+$$
+\phi(x)^T w + b = 0
+$$
+根据线性<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM的求解思路</a>，我们最后可以得到高维SVM的对偶模型为
+$$
+\begin{split}
+&amp; \min \frac12\alpha^TD K D\alpha - 1^T\alpha\newline
+&amp; 0\leq \alpha \leq 1c
+\end{split}
+$$
+其中 $K$ 是核矩阵满足 $K_{ij} = \kappa(x_i, x_j)$，最终的分类超平面为
+$$
+f(x)=\sum_{i=1}^n \alpha_iy_i\kappa(x_i,x) + b
+$$</p>
+<h2 id="5-结语">5 结语</h2>
+<p>核函数的引入使得SVM处理非线性可分数据变得切实可行。事实上，我们由<a href="https://baike.baidu.com/item/%E9%87%8C%E6%96%AF%E8%A1%A8%E7%A4%BA%E5%AE%9A%E7%90%86/18936193?fr=aladdin">Riesz表示定理</a>可知满足一定条件时，原始样本空间经过映射到再生希尔伯特空间后，学习得到的模型总能表示成核函数 $\kappa(x,x_i)$ 的一个线性组合。</p>
+<p>【<strong>表示定理</strong>】令 $\mathbb{H}$ 为核函数 $\kappa$ 对应的RKHS，$\Vert h\Vert_{\mathbb{H}}$ 表示空间 $\mathbb{H}$ 中元素 $h$ 的范数。$\forall$ 单调递增函数 $\Omega:[0, \infty]\rightarrow \mathbb{R}$ 和 $\forall$ 非负损失函数 $l:\mathbb{R}^n \rightarrow [0, \infty]$，优化问题
+$$
+\min F(h) = \Omega(\Vert h\Vert_{\mathbb{H}}) + l(h(x_1), \ldots, h(x_n))
+$$
+的解总可以写成
+$$
+h^*(x) = \sum_{i=1}^n \alpha_i \kappa(x, x_i)
+$$
+从此可以看出核函数的巨大威力。目前根据函数发展而成的一系列方法称之为“核方法”。</p>
+<p><strong>参考资料</strong></p>
+<p>[1] <a href="https://www.jianshu.com/p/f14012775d6a">数学中的各种空间</a></p>
+<p>[2] <a href="http://songcy.net/posts/story-of-basis-and-kernel-part-2/">A Story of Basis and Kernel - Part II: Reproducing Kernel Hilbert Space</a></p>
+<p>[3] 李航. 统计学习方法[M]. Qing hua da xue chu ban she, 2012.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/09/rkhs-and-kernel/" title="再生希尔伯特空间与核函数" target="_blank" rel="external">https://qkai-stat.github.io/2020/09/rkhs-and-kernel/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/09/dual-problem/" title="对偶模型理论基础"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/10/pca/"
+                    title="主成分分析原理"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

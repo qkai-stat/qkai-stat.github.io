@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        非凸惩罚之SCAD简介 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出LASSO后，基于正则化模型的变量选择研究日益壮大、独领风潮。LAS" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>非凸惩罚之SCAD简介 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="非凸惩罚之SCAD简介" />
+<meta property="og:description" content="变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出LASSO后，基于正则化模型的变量选择研究日益壮大、独领风潮。LAS" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2022/09/scad/" />
+<meta property="article:published_time" content="2022-09-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-09-01T00:00:00+00:00" />
+<meta itemprop="name" content="非凸惩罚之SCAD简介">
+<meta itemprop="description" content="变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出LASSO后，基于正则化模型的变量选择研究日益壮大、独领风潮。LAS">
+<meta itemprop="datePublished" content="2022-09-01T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2022-09-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="4894">
+
+
+
+<meta itemprop="keywords" content="多元统计,变量选择,高维数据分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="非凸惩罚之SCAD简介"/>
+<meta name="twitter:description" content="变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出LASSO后，基于正则化模型的变量选择研究日益壮大、独领风潮。LAS"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2022/09/scad/"
+    >非凸惩罚之SCAD简介</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2022/09/scad/" class="article-date">
+  <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/"> 变量选择 </a>
+    <a class="article-tag-link" href="/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"> 高维数据分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2022/09/scad/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4894字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">LASSO</a>后，基于正则化模型的变量选择研究日益壮大、独领风潮。LASSO采用 $l _1$ 惩罚，得益于 $l _1$ 罚项在零点的奇异性，LASSO可以同时实现系数稀疏化（变量选择）和系数估计。事实上，LASSO估计可以看成一个软阈值（soft thresholding）准则，即它将绝对值较小的系数估计直接压缩成零，而较大的系数估计则做了一个有偏估计。因此，虽然LASSO优点众多，但是不容忽视的是LASSO有对大系数低估的缺陷。本文介绍了<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>提出一种非凸罚项，称之为SCAD（smoothly clipped absolute deviation）罚项。与LASSO不同，SCAD非凸，其对应的正则化模型不仅能够同时实现变量选择和参数估计，还拥有更加好的统计性质，即Oracle性。</p>
+<h2 id="1-问题的引入">1 问题的引入</h2>
+<p>考虑线性模型</p>
+<p>$$
+y = X\beta + \epsilon \qquad (1)
+$$</p>
+<p>其中 $y\in \mathbb{R}^n$ 是观测向量，$X\in \mathbb{R}^{n\times p}$ 是设计阵（design matrix），$\beta\in \mathbb{R}^p$ 是系数向量，$n$ 是样本的个数，$p$ 是变量的个数。我们假定模型（1）是稀疏的，即存在一部分系数为零（对应的变量为冗余变量）、其余系数非零（对应的变量为重要变量）。不失一般性，我们假定前 $q$ 个变量重要，则 $\beta _1, \ldots, \beta _q \neq 0$；后$p - q$ 个变量冗余，则 $\beta _{q+1}, \ldots, \beta _p = 0$。此外，本文研究的是<strong>固定维情形</strong>，即 $p$ 随着 $n$ 的增大保持不变。</p>
+<p>在前言中，我们曾提到LASSO罚项对大系数低估的缺陷。那么，一个良好的罚项应当具有怎样的性质呢？考虑关于模型（1）的惩罚最小二乘</p>
+<p>$$
+arg\min _{\beta} \frac12 \Vert y - X\beta\Vert^2 + \lambda\sum _{i=1}^p p _j(\vert \beta _j\vert)
+$$</p>
+<p>其中 $\lambda&gt;0$ 是调节参数（tuning parameter），控制系数的压缩程度。$p _j(|\cdot|)$ 是系数的罚项，对不同的 $\beta _j$，$p _j(|\cdot|)$可以允许不同。令 $\lambda p(|\cdot|) = p _{\lambda}(|\cdot|)$，则罚项 $p(|\cdot|)$ 可以看成是 $\lambda$ 的函数。</p>
+<p><a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>认为，一个好的罚函数应当产生具有如下三个性质的估计量：</p>
+<ul>
+<li>无偏性（unbiasedness）：当真实的未知参数很大（绝对值）时，估计量应该渐近无偏，从而避免产生不必要的模型偏度。</li>
+<li>稀疏性（sparsity）：估计量是一个阈值准则（thresholding rule），即它可以自动将绝对值较小的系数估计直接压缩到零以降低模型复杂度。</li>
+<li>连续性（continuity）：估计量应当是基于数据得到的 $\hat{\beta}^{ols}$ 的连续函数，以减少模型预测的不稳定性。</li>
+</ul>
+<p>为了探究罚项对系数估计的影响，我们考虑一种特殊的情形，即设计阵正交（orthogonal）。若设计阵正交，则最小二乘估计满足 $\hat{\beta}^{ols} = (X^TX)^{-1}X^Ty = X^Ty$，上述惩罚最小二乘可以改写成</p>
+<p>$$
+\begin{split}
+&amp;arg\min _{\beta} \frac12 \Vert y - X\beta\Vert^2 + \lambda\sum _{i=1}^p p _j(\vert \beta _j\vert)\newline
+\Leftrightarrow &amp;arg\min _{\beta} \frac12 \Vert y - XX^Ty
++ XX^Ty - X\beta\Vert^2 + \lambda\sum _{i=1}^p p _j(\vert \beta _j\vert)\newline
+\Leftrightarrow &amp;arg\min _{\beta} \frac12 \Vert y - XX^Ty\Vert^2 + \frac12 \sum _{j=1}^p (\hat{\beta} _j^{ols} - \beta _j)^2 + \lambda\sum _{i=1}^p p _j(\vert \beta _j\vert)\newline
+\Leftrightarrow &amp;arg\min _{\beta} \frac12 \sum _{j=1}^p (\hat{\beta} _j^{ols} - \beta _j)^2 + \lambda\sum _{i=1}^p p _j(\vert \beta _j\vert)\newline
+\end{split} <br>
+$$</p>
+<p>上述最小化问题等价于逐个元素的最小化问题，即</p>
+<p>$$
+arg\min _{\theta} \frac 12 (\hat{\beta} _j^{ols} - \theta)^2 + p _{\lambda}(\vert \theta\vert)
+$$</p>
+<p>对 $\theta$ 求导数得到</p>
+<p>$$
+\theta - \hat{\beta} _j^{ols} + p _{\lambda}'(|\theta|)\text{sgn}(\theta) = \text{sgn}(\theta)(|\theta| + p _{\lambda}'(|\theta|)) - \hat{\beta} _j^{ols} \qquad (2)
+$$</p>
+<p>我们分析上述一阶导数的不同情况可能产生的估计量：</p>
+<ol>
+<li>
+<p>对较大的 $|\theta|$ 有 $p _{\lambda}'(|\theta|) = 0$ 是较大系数估计无偏的充分条件。若对较大的 $|\theta|$ 有 $p _{\lambda}'(|\theta|) = 0$，很容易看出当 $|z|$ 很大时，对应的估计为 $\hat{\theta} = \hat{\beta} _j^{ols}$。这样，若真实参数 $|\theta|$ 很大，则相应的 $|\hat{\beta} _j^{ols}|$ 也高概率很大。因此，估计量 $\hat{\theta} = \hat{\beta} _j^{ols}$ 近似无偏。</p>
+</li>
+<li>
+<p>一阶导数中 $|\theta| + p _{\lambda}'(|\theta|)$ 最小值为正是估计量为阈值准则的充分条件。下图展示了 $|\theta| + p _{\lambda}'(|\theta|)$ 和 $\theta$ 的关系图。（1）当 $|z| &lt; \min _{\theta\neq 0} \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 时，即图中的 $z _1$，则导数式（2）的结果对正的 $\theta$ 始终为正（负的 $\theta$ 始终为负），故 $\hat{\theta} = 0$；当 $|z| &gt; \min _{\theta\neq 0} \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 时，即图中的 $z _2$，此时产生两个交点，较大的点对应就是惩罚最小二乘估计量。</p>
+</li>
+</ol>
+<p><img src = "/lasso-introduction/scad-1.png" width = "400" /></p>
+<ol start="3">
+<li>最小化问题 $\min \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 在零点达到是估计量关于 $\hat{\beta} _j^{ols}$ 连续的充分条件。如前述，若 $\min \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 在零点达到，则当 $|z|$ 不断减小直至小于 $\min \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 时，估计量连续的变化到零；当 $|z| &lt; \min _{\theta\neq 0} \lbrace|\theta| + p _{\lambda}'(|\theta|)\rbrace$ 时，估计量为零。所以，此时的估计量关于 $\hat{\beta} _j^{ols}$ 连续。</li>
+</ol>
+<p>基于上述的分析，我们回头来看几个常见的罚项：岭罚项、硬阈值（hard thresholding）罚项和LASSO罚项。首先，岭罚项 $p _{\lambda}(|\theta|) = \lambda \theta^2$，它的 $p _{\lambda}'(|\theta|)$ 在 $|\beta|$ 较大时非零，故不满足无偏性；$|\theta| + p _{\lambda}'(|\theta|)$ 最小值始终为零，故不满足稀疏性；但可以看出岭估计具有连续性。其次，硬阈值罚项 $p _{\lambda}(|\theta|) = \lambda^2 - (|\theta| - \lambda^2)^2I(|\theta| &lt; \lambda)$，它的 。最后，LASSO罚项 $p _{\lambda}(|\theta|) = \lambda |\theta|$，它的$p _{\lambda}'(|\theta|)$ 在 $|\beta|$ 较大时非零，故不满足无偏性；但可以看出LASSO估计具有稀疏性和连续性。下图分别展示了（a）硬阈值罚项和（b）LASSO罚项的示意图。</p>
+<p><img src = "/lasso-introduction/scad-2.png" width = "800" /></p>
+<p>显然，根据前面的分析，已有的罚项（岭罚项、硬阈值罚项和LASSO罚项）都不能同时具有上述三种良好的性质。现在，我们给出<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>所提出的非凸罚项，即SCAD（smoothly clipped absolute deviation）罚项，示意图如上图（c）所示，公式为</p>
+<p>$$
+p _\lambda(|\theta|) = \lambda\left\lbrace I(|\theta| \leq \lambda) + \frac{(a\lambda - |\theta|) _+}{(a - 1)\lambda}I(|\theta| &gt; \lambda)\right\rbrace
+$$</p>
+<p>其中 $a &gt; 2$ 是某个既定的常数。<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>通过数值方法计算基于平方损失的不同 $a$ 的取值对应的Bayes风险发现，当 $a = 3.7$ 时，Bayes风险较低且模型通常表现的较好。因此，<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>建议一般取 $a = 3.7$。详细内容请参见论文的第5页，2.2小节上的段落讨论。根据SCAD的表达式，可以验证，SCAD罚项同时具有无偏性、稀疏性和连续性这三种性质。</p>
+<h2 id="3-固定维下scad估计量的统计性质">3 固定维下SCAD估计量的统计性质</h2>
+<p>本节我们讨论SCAD罚项得到的估计量的大样本性质。为表述方便，令 $\beta _0 = (\beta _{10}, \ldots, \beta _{p0})^T = (\beta _0(1)^T, \beta _0(2)^T)^T$ 为真实系数。不失一般性，假设前 $q$ 个系数 $\beta _0(1)\neq 0$，后 $p-q$ 个系数 $\beta _0(2)=0$；再令 $I _1(\beta _0(1), 0)$ 是已知 $\beta _0(2)=0$ 时Fisher信息矩阵。记 $V _i = (X _i, Y _i), i = 1, \ldots, n$。令 $L(\beta)$ 为基于观测 $V _1, \ldots, V _n$ 的对数似然函数（log-liklihood function），以及 $Q(\beta) = L(\beta) - n\sum _{i=1}^p p _{\lambda}(|\beta _j|)$ 为惩罚似然函数。此外，我们还需给出以下和证明密切相关的正则条件（regular conditions）：</p>
+<p>【C1】观测 $V _i$ 之间相互独立且同分布于基于某个测度 $\mu$、密度函数为 $f(V,\beta)$ 的分布。$f(V,\beta)$ 具有常规的支持（common support）并且可识别。此外，$f$ 的一阶、二阶对数导数满足</p>
+<p>$$
+\mathbb{E} _{\beta} \left( \frac{\partial \log f(V, \beta)}{\partial \beta _j}\right) = 0, j = 1, \ldots, p
+$$</p>
+<p>和</p>
+<p>$$
+I _{jk}(\beta) = \mathbb{E} _{\beta}\left( \frac{\partial}{\partial \beta _j}\log f(V, \beta)\frac{\partial}{\partial \beta _k}\log f(V, \beta)\right) = \mathbb{E} _{\beta}\left( -\frac{\partial^2}{\partial \beta _j \beta _k}\log f(V, \beta)\right)
+$$</p>
+<p>【C2】Fisher信息矩阵</p>
+<p>$$
+I(\beta) = \mathbb{E}\left(\left( \frac{\partial}{\partial \beta}\log f(V, \beta)\right)\left( \frac{\partial}{\partial \beta}\log f(V, \beta)\right)^T\right)
+$$</p>
+<p>是有限的（暗示最大、最小特征根有限）且在 $\beta = \beta _0$ 处正定。</p>
+<p>【C3】存在包含真是参数 $\beta _0$ 的开集 $\omega$ 使得，$\forall \beta\in \omega$，对几乎所有的 $V$ 对应的密度函数 $f(V, \beta)$ 可以进行三阶求导。</p>
+<p>以上条件都是保证经典极大似然估计量渐近正态性的正则条件。</p>
+<p>基于以上表述，我们首先证明SCAD估计量具有 $\sqrt{n}$ 一致性，这是LASSO估计所不具有的性质（参见我关于<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节），具体结果如定理1所述。</p>
+<p>【<strong>定理1</strong>】假设C1-C3满足。若 $\max\lbrace |p _{\lambda}''(|\beta _{j0}|):\beta _{j0}\neq 0|\rbrace$，则 $Q(\beta)$ 存在一个局部最大值点 $\hat{\beta}$ 满足 $\Vert \hat{\beta} - \beta _0\Vert = O _p(n^{-1/2} + a _n)$，其中 $a _n = \max\lbrace p _{\lambda}'(|\beta _{j0}|): \beta _{j0}\neq 0\rbrace$。</p>
+<p>【<strong>证明</strong>】令 $\alpha _n = n^{-1/2} + a _n$。为了证明定理1的结论，我们只需表明对任意给定的 $\epsilon &gt; 0$，存在一个大的常数 $C&gt;0$ 使得</p>
+<p>$$
+\text{Pr}\left\lbrace \sup _{\Vert u\Vert = C} Q(\beta _0 + \alpha _n u) &lt; Q(\beta _0)\right\rbrace \geq 1 - \epsilon \qquad (3)
+$$</p>
+<p>成立。因为这表明至少以概率 $1 - \epsilon$ 在球域 $\lbrace \beta _0 + \alpha _n u: \Vert u\Vert \leq C\rbrace$ 中存在一个局部最大值点，也即存在一个局部最大值点使得 $\Vert \hat{\beta} - \beta _0\Vert = O _p(n^{-1/2} + a _n)$。</p>
+<p>考虑到 $p _{\lambda}(0) = 0$ 以及 $\beta _0(2) = 0$，我们有</p>
+<p>$$
+D _n (u) = Q(\beta _0 + \alpha _n u) - Q(\beta _0) \leq L(\beta _0 + \alpha _n u) - L(\beta _0) - n\sum _{j=1}^q (p _{\lambda}(|\beta _{j0} + \alpha _n u _j|) - p _{\lambda}(|\beta _{j0}|))
+$$</p>
+<p>令 $L&rsquo;(\beta _0)$ 是 $L$ 在 $\beta = \beta _0$ 处的一阶导数，则根据标准的泰勒展示有</p>
+<p>$$
+\begin{split}
+D _n (u) \leq &amp;\alpha _n L&rsquo;(\beta _0) - \frac 12u^TI(\beta _0)u n\alpha _n^2(1 + o _p(1))\newline
+&amp;- \sum _{j=1}^q(n\alpha _n p _{\lambda}'(|\beta _{j0}|)\text{sgn}(\beta _{j0})u _j + n\alpha _n^2 p _{\lambda}''(|\beta _{j0}|u _j^2(1 + o _p(1))))
+\end{split} \qquad (4)
+$$</p>
+<p>注意到 $n^{-1/2}L&rsquo;(\beta _0) = O _p(1)$。因此，式(4)不等式右侧的第一项的阶等于 $O _p(n^{1/2}\alpha _n) = O _p(n\alpha^2)$。选择充分大的常数 $C$, 式（4）不等式右侧的第二项将在 $\Vert u\Vert = C$ 下一致地控制第一项的大小。注意到，使用柯西不等式，式（4）不等式右侧的第三项可以由下面界定</p>
+<p>$$
+\sqrt{q} n \alpha _n a _n \Vert u\Vert + n\alpha^2 \max\lbrace |p _{\lambda}''(|\beta _{j0}|):\beta _{j0}\neq 0|\rbrace \Vert u\Vert
+$$</p>
+<p>当 $n\rightarrow \infty$ 时，这同样被第二项控制大小。因此，$D _n(u) &lt; 0, n\rightarrow \infty$，概率不等式（3）成立，即定理1的结论成立。$\blacksquare$</p>
+<p>结合SCAD罚项公式，当 $\lambda\rightarrow 0, n\rightarrow \infty$ 时，存在某个 $N&gt;0$，使得 $n &gt; N$ 时满足 $\lambda &lt; \min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$，我们始终有 $a _n = 0$。因此，SCAD估计量具有 $\sqrt{n}$ 一致性。当然，这里有个小问题，即 $\lambda$ 的衰减速率要快于 $\min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$ 的衰减速率，这在<a href="https://doi.org/10.1214/009053604000000256">Fan和Peng（2004）</a>中有细致的分析。对于LASSO而言，$a _n = \lambda$，这表明LASSO估计要想具有$\sqrt{n}$ 一致性，$\lambda$ 必须具有 ${n}^{-1/2}$ 的衰减速率。然而，这跟LASSO估计的变量选择一致性对 $\lambda$ 的要求相冲突（参见我关于<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节）。</p>
+<p>SCAD估计量具有 $\sqrt{n}$ 速率的参数估计一致性，这并不能说明SCAD估计量具有稀疏性，我们用下面的引理1来阐明该结论。</p>
+<p>【<strong>引理1</strong>】假设C1-C3满足。若</p>
+<p>$$
+\liminf _{n\rightarrow \infty} \liminf _{\theta\rightarrow 0+} p _{\lambda}(\theta)/\lambda &gt; 0
+$$</p>
+<p>以及 $\lambda\rightarrow 0$ 和 $\sqrt{n}\lambda \rightarrow \infty$，则依概率1成立着，对任意给定满足 $\Vert \beta(1) - \beta _0(1)\Vert = O _p(n^{-1/2})$ 的 $\beta(1)$ 和任意常数 $C$，有</p>
+<p>$$
+Q\left[ \begin{pmatrix} \beta(1) \newline 0\end{pmatrix}\right] = \max _{\Vert \beta(2)\Vert \leq Cn^{-1/2}} Q\left[ \begin{pmatrix} \beta(1) \newline \beta(2)\end{pmatrix}\right].
+$$</p>
+<p>【<strong>证明</strong>】引理1的一个充分条件可以是，依概率1成立着，对任意给定满足 $\Vert \beta(1) - \beta _0(1)\Vert = O _p(n^{-1/2})$ 的 $\beta(1)$ 和一个小的 $\epsilon _n = Cn^{-1/2}$，$j = q+1, \ldots, p$，有</p>
+<p>$$
+\begin{split}
+\frac{\partial Q(\beta)}{\partial \beta _j} &amp;&lt;0 \quad \text{for }0&lt; \beta _j&lt; \epsilon _n\newline
+&amp;&gt; 0\quad \text{for }-\epsilon _n&lt; \beta _j&lt; 0
+\end{split}\qquad
+\begin{split}
+&amp;(5.1)\phantom{\frac{\partial Q(\beta)}{\partial \beta _j}}\newline
+&amp;(5.2)
+\end{split}
+$$</p>
+<p>为了表明式（5.1）的结论，利用泰勒展示，我们有</p>
+<p>$$
+\begin{split}
+\frac{\partial Q(\beta)}{\partial \beta _j} &amp;= \frac{\partial L(\beta)}{\partial \beta _j} - np _{\lambda}'(|\beta _{j}|)\text{sgn}(\beta _j)\newline
+&amp;= \frac{\partial L(\beta _0)}{\partial \beta _j} + \sum _{l = 1}^p \frac{\partial^2 L(\beta _0)}{\partial \beta _j\beta _l}(\beta _l - \beta _{l0}) + \sum _{l = 1}^p\sum _{k = 1}^p \frac{\partial^3 L(\beta^ *)}{\partial \beta _j\beta _l\beta _k}(\beta _l - \beta _{l0})(\beta _k - \beta _{l0}) - np _{\lambda}'(|\beta _{j}|)\text{sgn}(\beta _j)
+\end{split}
+$$</p>
+<p>其中 $\beta^ *$ 在 $\beta$ 和 $\beta _0$ 之间。注意到，根据标准的理论设定（standard arguments）有</p>
+<p>$$
+n^{-1}\frac{\partial L(\beta _0)}{\partial \beta _j} = O _p(n^{-1/2})
+$$</p>
+<p>以及</p>
+<p>$$
+\frac 1n \frac{\partial^2 L(\beta _0)}{\partial \beta _j\beta _l} = \mathbb{E}\left( \frac{\partial^2 L(\beta _0)}{\partial \beta _j\beta _l}\right) + o _p(1)
+$$</p>
+<p>根据假设 $\beta - \beta _0 = O _p(n^{-1/2})$，我们有</p>
+<p>$$
+\frac{\partial Q(\beta)}{\partial \beta _j} = n\lambda(-\lambda^{-1}p _{\lambda}'(|\beta _j|)\text{sgn}(\beta _j) + O _p(n^{-1/2}/\lambda))
+$$</p>
+<p>由于 $\liminf _{n\rightarrow \infty} \liminf _{\theta\rightarrow 0+} p _{\lambda}(\theta)/\lambda &gt; 0$ 和 $\sqrt{n}\lambda \rightarrow \infty$，导数的符号被 $\beta _j$ 的符号所控制。因此，式（5.1）和（5.2）都成立。$\blacksquare$</p>
+<p>【<strong>定理2</strong>】（Oracle性）假设C1-C3满足，罚项 $p _{\lambda}(|\theta|)$ 满足 $\liminf _{n\rightarrow \infty} \liminf _{\theta\rightarrow 0+} p _{\lambda}(\theta)/\lambda &gt; 0$。若$\lambda\rightarrow 0$ 和 $\sqrt{n}\lambda \rightarrow \infty$，则依概率1成立着，定理1中的 $\sqrt{n}$ 一致的估计量 $\hat{\beta} = (\hat{\beta}(1)^T, \hat{\beta}(2)^T)^T$一定满足</p>
+<ol>
+<li>稀疏性：$\hat{\beta}(2) = 0$。</li>
+<li>渐近正态性：$\sqrt{n}(I _1(\beta _0(1)) + \Sigma)(\hat{\beta}(1) - \beta _0(1) + (I _1(\beta _0(1)) + \Sigma)^{-1}b) \rightarrow _L N(0, I _1(\beta _0(1)))$。</li>
+</ol>
+<p>其中 $\Sigma = diag(p _{\lambda}''(|\beta _{10}|), \ldots, p _{\lambda}''(|\beta _{q0}|))$，$b = (p _{\lambda}'(|\beta _{10}|)\text{sgn}(\beta _{10}),\ldots, p _{\lambda}'(|\beta _{q0}|)\text{sgn}(\beta _{q0}))$，$I _1(\beta _0(1)) = I _1(\beta _0(1), 0)$。</p>
+<p>【<strong>证明</strong>】根据引理1，结论1成立。现证明结论2。根据定理1，存在 $\hat{\beta}(1)$ 是 $Q(\beta(1), 0)$ 的 $\sqrt{n}$ 一致的估计量，自然满足</p>
+<p>$$
+\left.\frac{\partial Q(\beta)}{\partial \beta _j} \right\vert _{\beta = (\hat{\beta}(1)^T, 0^T)^T} = 0, j = 1, \ldots, q
+$$</p>
+<p>注意到 $\hat{\beta}(1)$ 是一致的估计量，则</p>
+<p>$$
+\begin{split}
+&amp;\left.\frac{\partial L(\beta)}{\partial \beta _j} \right\vert _{\beta = (\hat{\beta}(1)^T, 0^T)^T} - np _{\lambda}'(|\beta _{j}|)\text{sgn}(\beta _j)\newline<br>
+=&amp;\frac{\partial L(\beta _0)}{\partial \beta _j} + \sum _{l=1}^q \left( \frac{\partial^2 L(\beta _0)}{\partial \beta _j\beta _l} + o _p(1) \right)(\hat{\beta} _l - \beta _{l0}) - n[p _{\lambda}'(|\beta _{j0}|)\text{sgn}(\beta _{j0}) + (p _{\lambda}''(|\beta _{j0}|) + o _p(1))(\hat{\beta} _j - \beta _{j0})]
+\end{split}
+$$</p>
+<p>再根据Slutsky定理即可得结论。$\blacksquare$</p>
+<p>SCAD估计量的Oracle性表明，如同事先知道模型的稀疏结构进行估计一般。这个性质LASSO不具备，这是因为证明中要求非零系数的估计具有$\sqrt{n}$ 一致性，但LASSO估计不具备。Oracle性表明，相较于很多罚项，SCAD罚项具有独特的优点。</p>
+<h2 id="4-结语">4 结语</h2>
+<p>本文介绍了SCAD惩罚的基本思想，并探讨了固定维下的大样本性质。目前，非凸罚项的研究十分丰富且火热，了解经典的SCAD理论对学习相关的非负惩罚有着重要的帮助。关于SCAD估计在发散维下的大样本性质可参考<a href="https://doi.org/10.1214/009053604000000256">Fan和Peng（2004）</a>，关于SCAD估计在高维下的大样本性质可参考<a href="https://doi.org/10.1198/016214508000001066">Kim等（2008）</a>。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2022/09/scad/" title="非凸惩罚之SCAD简介" target="_blank" rel="external">https://qkai-stat.github.io/2022/09/scad/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" title="高维情形下非凸惩罚SVM的参数一致性"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

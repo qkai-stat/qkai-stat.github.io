@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        非线性模型的参数估计和统计性质 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>非线性模型的参数估计和统计性质 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="非线性模型的参数估计和统计性质" />
+<meta property="og:description" content="这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2018/05/nlm/" />
+<meta property="article:published_time" content="2018-05-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-05-18T00:00:00+00:00" />
+<meta itemprop="name" content="非线性模型的参数估计和统计性质">
+<meta itemprop="description" content="这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应">
+<meta itemprop="datePublished" content="2018-05-18T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-05-18T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="4987">
+
+
+
+<meta itemprop="keywords" content="多元统计,回归分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="非线性模型的参数估计和统计性质"/>
+<meta name="twitter:description" content="这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2018/05/nlm/"
+    >非线性模型的参数估计和统计性质</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2018/05/nlm/" class="article-date">
+  <time datetime="2018-05-18 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-05-18</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/"> 回归分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/05/nlm/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4987字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应的<code>R</code>软件求解算法，并做了相应的模拟。</p>
+<h2 id="1-非线性模型">1 非线性模型</h2>
+<p><a href="/2018/05/lm/">线性模型</a>建立在自变量和响应变量之间呈线性关系的基础上，但实际数据并不总是如此。当我们没有额外信息认为两者之间的关系为线性时，非线性模型便成了一种选择。</p>
+<p>考虑非线性模型</p>
+<p>$$
+y=f\left( X,\beta \right) +\epsilon
+$$</p>
+<p>其中 $y\in \mathbb{R}^n$，$X\in \mathbb{R}^{n\times p}$，$n$ 表示观测数，$p$ 表示变量数。$\beta \in \mathbb{R}^n$ 表示回归系数。$\epsilon$ 一般假设成为独立同分布的 $N\left( 0,\sigma ^2I_n \right) $ 高斯随机变量。</p>
+<h2 id="2-模型的极大似然估计">2 模型的极大似然估计</h2>
+<p>如果我们假设模型的随机误差项是独立同分于均值为0方差为常数 $\sigma^2$ 的正态分布，那么可以考虑极大似然估计法来估计模型的解。</p>
+<p>首先，根据模型和假设得到似然函数</p>
+<p>$$
+\mathscr{L}\left( \beta ,\sigma ^2 \right) =\frac{1}{\left( 2\pi \sigma ^2 \right) ^{n/2}}\exp \left[ -\frac{1}{2\sigma ^2}\left( y-f\left( X,\beta \right) \right) ^{\mathrm{T}}\left( y-f\left( X,\beta \right) \right) \right]
+$$</p>
+<p>对上式取对数，得到对数似然函数</p>
+<p>$$
+\ln \mathscr{L}\left( \beta ,\sigma ^2 \right) =-\frac{n}{2}\ln \left( 2\pi \sigma ^2 \right) -\frac{1}{2\sigma ^2}\left( y-f\left( X,\beta \right) \right) ^{\mathrm{T}}\left( y-f\left( X,\beta \right) \right)
+$$</p>
+<p>将对数似然方程对 $\beta$ 进行求偏导，根据极值必要条件令为零，从而得到得分方程（score equation）</p>
+<p>$$
+\begin{split}
+\frac{\partial \ln \mathscr{L}\left( \beta ,\sigma ^2 \right)}{\partial \beta}&amp;=\frac{\partial}{\partial \beta}\left[ -\frac{1}{2\sigma ^2}\left( y-f\left( X,\beta \right) \right) ^{\mathrm{T}}\left( y-f\left( X,\beta \right) \right) \right]
+\newline
+&amp;=-\frac{1}{2\sigma ^2}\frac{\partial \left( y-f\left( X,\beta \right) \right) ^{\mathrm{T}}}{\partial \beta}\left( y-f\left( X,\beta \right) \right)
+\newline
+&amp;=-\frac{1}{\sigma ^2}\frac{\partial f\left( X,\beta \right) ^{\mathrm{T}}}{\partial \beta}\left( y-f\left( X,\beta \right) \right)
+\newline
+&amp;=-\frac{1}{\sigma ^2}\left( \frac{\partial f\left( X,\beta \right)}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}\left( y-f\left( X,\beta \right) \right)
+\newline
+&amp;=0
+\end{split}
+$$</p>
+<p>上式利用了矩阵微分中的结论</p>
+<p>$$
+\frac{\mathrm{d}f\left( Y\left( X \right) \right)}{\mathrm{d}X}=\frac{\mathrm{d}Y^{\mathrm{T}}}{\mathrm{d}X}\cdot \frac{\mathrm{d}f\left( Y \right)}{\mathrm{d}Y}
+$$</p>
+<p>其中 $X\in \mathbb{R}^{n\times 1}$，$Y\in \mathbb{R}^{n\times 1}$，$f\in \mathbb{R}$ 的结论。进一步，上式等价于</p>
+<p>$$
+\left( \frac{\partial f\left( X,\beta \right)}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}\left( y-f\left( X,\beta \right) \right) =0
+$$</p>
+<p>由于 $f(X, \beta)$ 表示均值函数，将其记作 $\mu$，并用 $\hat{\mu}$ 表示 $f(X,\beta)$ 中 $\beta$ 被其估计量 $b$ 替换的结果。那么根据上式可以推导出模型的估计量满足</p>
+<p>$$
+\left( \frac{\partial \hat{\mu}}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}\left( y-\hat{\mu} \right) =0
+$$</p>
+<p>这时我们记 $\frac{\partial \hat{\mu}}{\partial \beta ^{\mathrm{T}}}=D\in \mathbb{R}^{n\times p}$，其中 $D_{ij}=\frac{\partial f\left( X_i,\beta \right)}{\partial \beta _j}$，那么就有</p>
+<p>$$
+D^{\mathrm{T}}\left( y-\hat{\mu} \right) =0
+$$</p>
+<blockquote>
+<p><strong>这里可以看出极大似然估计量和最小二乘估计量的形式是一致的。</strong> 之所以使用似然法，是因为在线性模型、<a href="/2018/06/glm/">广义线性模型</a>中似然法更普适。</p>
+</blockquote>
+<h2 id="3-迭代求解算法">3 迭代求解算法</h2>
+<p>在非线性回归模型中，求解最小二乘估计量（极大似然估计量）的一个广泛应用的方法是将期望函数线性化，然后利用Gauss—Newton迭代法进行求解。</p>
+<p>考虑非线性模型，将其在 点处进行Taylor展开</p>
+<p>$$
+y=f\left( X,\beta \right) +\epsilon =f\left( X,b_0 \right) +\frac{\partial f\left( X,\beta \right)}{\partial \beta ^{\mathrm{T}}}\left( \beta -b_0 \right) +\epsilon
+$$</p>
+<p>令 $y_0=y-f\left( X,b_0 \right) =y-f_0$，$\theta _0=\beta -b_0$，$D_0=\left[ \frac{\partial f\left( X,\beta \right)}{\partial \beta ^{\mathrm{T}}} \right] _{\beta =b_0}$，则上式可以写成</p>
+<p>$$
+y_0=D_0\theta _0+\epsilon
+$$</p>
+<p>那么 $\theta_0$ 的最小二乘估计量为</p>
+<p>$$
+\begin{split}
+\hat{\theta}_0 &amp;=\left( D _{0}^{\mathrm{T}}D_0 \right) ^{-1}D _{0}^{\mathrm{T}}y_0
+\newline
+&amp;=\left( D _{0}^{\mathrm{T}}D_0 \right) ^{-1}D _{0}^{\mathrm{T}}\left( y-f_0 \right)
+\end{split}
+$$</p>
+<p>因为 $\theta _0=\beta -b_0$，我们用</p>
+<p>$$
+b_1=b_0+\hat{\theta}_0
+$$</p>
+<p>作为未知参数 $\beta$ 的一个修正估计。那么，我们就按照这个逻辑不停得修正 $\beta$，也就是说有</p>
+<p>$$
+\begin{split}
+b _{k+1}&amp;=b _k+\hat{\theta} _k
+\newline
+&amp;=b _k+\left( D _{k}^{\mathrm{T}}D _k \right) ^{-1}D _{k}^{\mathrm{T}}\left( y-f _k \right)
+\end{split}
+$$</p>
+<p>当这种修正直到收敛（前后两个估计的改变量非常小）时，即</p>
+<p>$$
+\frac{\lVert b_{k+1}-b_k \rVert}{\lVert b_k \rVert}&lt;\delta
+$$</p>
+<p>迭代结束，其中 $\delta$ 是某个很小的数，比如说 $10^{-6}$。</p>
+<h2 id="4-估计量的渐近正态性">4 估计量的渐近正态性</h2>
+<p>根据前面分析可知 $\beta$ 估计量为</p>
+<p>$$
+\hat{\beta}\doteq \beta +\left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}\left( y-f \right)
+$$</p>
+<p>其中 $D=\frac{\partial \mu}{\partial \beta ^{\mathrm{T}}}=\frac{\partial f\left( X,\beta \right)}{\partial \beta ^{\mathrm{T}}}$。对上式进行分析，等式右侧的随机项只有 $y$ 一项，这时我们考察有</p>
+<p>$$
+\begin{split}
+E\hat{\beta}&amp;=\beta +E\left[ \left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}\left( y-f \right) \right]
+\newline
+&amp;=\beta +\left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}E\left( y-f \right)
+\newline
+&amp;=\beta +\left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}\left( Ey-f \right)
+\newline
+&amp;=\beta
+\end{split}
+$$</p>
+<p>和</p>
+<p>$$
+\begin{split}
+Var\left( \hat{\beta} \right) &amp;=Var\left[ \beta +\left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}\left( y-f \right) \right]
+\newline
+&amp;=Var\left[ \left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}\left( y-f \right) \right]
+\newline
+&amp;=\left( D^{\mathrm{T}}D \right) ^{-1}D^{\mathrm{T}}Var\left( y-f \right) D\left( D^{\mathrm{T}}D \right) ^{-1}
+\newline
+&amp;=\sigma ^2\left( D^{\mathrm{T}}D \right) ^{-1}
+\end{split}
+$$</p>
+<p>进一步，上式求出了得分函数</p>
+<p>$$
+S\left( \beta \right) =\frac{1}{\sigma ^2}D^{\mathrm{T}}\left( y-\mu \right)
+$$</p>
+<p>这是一个 $\mathbb{R}^{p\times 1}$ 中的列向量，并且</p>
+<p>$$
+ES=\frac{1}{\sigma ^2}ED^{\mathrm{T}}\left( y-\mu \right) =D^{\mathrm{T}}\left( Ey-\mu \right) =0
+$$</p>
+<p>所以</p>
+<p>$$
+\begin{split}
+Cov\left( S \right) &amp;=\frac{1}{\sigma ^4}E\left( S-ES \right) \left( S-ES \right) ^{\mathrm{T}}=\frac{1}{\sigma ^4}ESS^{\mathrm{T}}
+\newline
+&amp;=\frac{1}{\sigma ^4}E\left[ D^{\mathrm{T}}\left( y-\mu \right) \left( y-\mu \right) ^{\mathrm{T}}D \right]
+\newline
+&amp;=\frac{1}{\sigma ^4}D^{\mathrm{T}}E\left[ \left( y-\mu \right) \left( y-\mu \right) ^{\mathrm{T}} \right] D
+\newline
+&amp;=\frac{1}{\sigma ^4}D^{\mathrm{T}}Var\left( y \right) D=\frac{1}{\sigma ^2}D^{\mathrm{T}}D
+\end{split}
+$$</p>
+<p>上式得到的协方差矩阵称之为Fisher信息矩阵，记做 $I(\beta)$。所以，$\hat{\beta}$ 的协方差矩阵也可以写成</p>
+<p>$$
+Cov\left( \beta \right) =I^{-1}\left( \beta \right)
+$$</p>
+<p>重新考察 $\hat{\beta}$ 的近似表达式，由于 $\hat{\beta}$ 是近似关于 $y$ 的一个线性组合，而 $y$ 是服从正态分布的，那么 $\hat{\beta}$ 也近似服从正态分布，根据所求的结果有</p>
+<p>$$
+\hat{\beta}\ \sim N\left( \beta ,I^{-1}\left( \beta \right) \right)
+$$</p>
+<p><strong>如果 $y$ 不是独立的，协方差矩阵为 $V$，可以推出下面结果</strong></p>
+<p>$$
+S\left( \beta \right) =D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+$$</p>
+<p>且</p>
+<p>$$
+\hat{\beta}\ \dot{\sim} N\left( \beta ,I^{-1}\left( \beta \right) \right)
+$$</p>
+<h2 id="5-模拟和实例">5 模拟和实例</h2>
+<p>根据前面的分析可以自己用<code>R</code>编写非线性模型求解函数，以及显著性检验的函数。<strong>相关代码附在最后供参考。</strong></p>
+<blockquote>
+<p>迭代算法毕竟是局部最优，模拟的初始值最好取在真实值附近。<strong>如果是实际问题，可以根据经验、利用OLS估计等最为初始值。</strong></p>
+</blockquote>
+<h3 id="51-logistic模型">5.1 Logistic模型</h3>
+<p>考虑Logistic增长模型</p>
+<p>$$
+y=\frac{\beta _1}{1+\beta _2e^{-\beta _3x}}+\varepsilon
+$$</p>
+<p>在本例中取 $\beta_1=5$，$\beta_2=6$，$\beta_3 = 3$；并且 服从标准正态分布，样本观测数取5000。 $\epsilon$ 是服从标准正态分布的噪声。在模拟中，使用Gauss—Newton迭代法给定初始迭代值 $b_0=\left( 4.5,5.2,3.5 \right) ^{\mathrm{T}}$，程序迭代5次后收敛，得到系数估计如下图所示</p>
+<p><img src="/nlm/nlm-logistic.png" alt=""></p>
+<p>可见算法的效果还是不错的。</p>
+<h3 id="52-gompertz模型">5.2 Gompertz模型</h3>
+<p>考虑Gompertz模型</p>
+<p>$$
+y=\beta _1\exp \left( -\beta _2e^{-\beta _3x} \right) +\varepsilon
+$$</p>
+<p>在本例中取 $\beta_1=30$，$\beta_2=14$，$\beta_3 = 3$；并且 $x$ 服从标准正态分布，样本观测数取5000。 $\epsilon$ 是服从标准正态分布的噪声。在模拟中，使用Gauss—Newton迭代法给定初始迭代值 $b_0=\left( 24.5,15.2,3.5 \right) ^{\mathrm{T}}$，程序迭代6次后收敛，得到系数估计如下图所示</p>
+<p><img src="/nlm/nlm-gompertz.png" alt=""></p>
+<p>可见算法的效果还是不错的。</p>
+<h3 id="53-weibull模型">5.3 Weibull模型</h3>
+<p>考虑Weibull模型</p>
+<p>$$
+y=\beta _1-\beta _2\exp \left( -\beta _3x^{\beta _4} \right) +\varepsilon
+$$</p>
+<p>在本例中取 $\beta_1=5$，$\beta_2=1$，$\beta_3 = 3$，$\beta_4=2$；并且 $x$ 服从 $[0,1]$ 的均匀分布，样本观测数取5000。$\epsilon$ 是服从标准正态分布的噪声。在模拟中，使用Gauss—Newton迭代法给定初始迭代值 ，程序迭代6次后收敛，得到系数估计如下图所示</p>
+<p><img src="/nlm/nlm-weibull.png" alt=""></p>
+<p>可见算法的效果还是不错的。</p>
+<h3 id="54-michaelis-menten模型">5.4 Michaelis-Menten模型</h3>
+<p>考虑Michaelis-Menten模型</p>
+<p>$$
+y=\frac{\beta _1x}{\beta _2+x}+\varepsilon
+$$</p>
+<p>对puromycin数据</p>
+<table>
+<thead>
+<tr>
+<th align="left">Concentration ($y$)</th>
+<th align="left">Velocity ($x_1$)</th>
+<th align="left">Velocity ($x_2$)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">0.02</td>
+<td align="left">47</td>
+<td align="left">76</td>
+</tr>
+<tr>
+<td align="left">0.06</td>
+<td align="left">97</td>
+<td align="left">107</td>
+</tr>
+<tr>
+<td align="left">0.11</td>
+<td align="left">123</td>
+<td align="left">139</td>
+</tr>
+<tr>
+<td align="left">0.22</td>
+<td align="left">152</td>
+<td align="left">159</td>
+</tr>
+<tr>
+<td align="left">0.56</td>
+<td align="left">191</td>
+<td align="left">201</td>
+</tr>
+<tr>
+<td align="left">1.10</td>
+<td align="left">200</td>
+<td align="left">207</td>
+</tr>
+</tbody>
+</table>
+<p>考虑上述Michaelis-Menten模型，使用Gauss—Newton迭代法给定初始迭代值 $b_0=\left( 205.00,0.08 \right) ^{\mathrm{T}}$，程序迭代5次后收敛，得到系数估计</p>
+<p>$$
+b=\left( 212.6837,0.0641 \right) ^{\mathrm{T}}
+$$</p>
+<p>利用得到的参数估计计算拟合值，画出图像如下所示</p>
+<p><img src="/nlm/nlm-puromycin.png" width="400" /></p>
+<p>图中圆点表示真实数据，虚线是得到的Michaelis-Menten模型估计方程。从图中看出，拟合的效果还是不错的。</p>
+<h3 id="55-渐近正态性验证">5.5 渐近正态性验证</h3>
+<p>考虑5.1中的Logistic模型，在本次试验中分别取观测数目为50,500,1000和5000来进行模拟，每次模拟都做500次，然后画出每次参数估计中 $\beta_1$ 的核密度曲线，并与对应的正态密度曲线进行对比，结果如下所示</p>
+<p><img src="/nlm/nlm-anormal.png" width="700" /></p>
+<p>从图中可以看出，$\beta_1$ 的渐近正态性得到了验证。</p>
+<h2 id="6-自编函数代码">6 自编函数代码</h2>
+<h3 id="61-logistic模型系数求解">6.1 Logistic模型系数求解</h3>
+<pre><code class="language-r">mynlmlogistic &lt;- function(x,y,b,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+
+  mylogistic &lt;- expression(a1/(1 + a2*exp(-a3*t)))
+  partial.a1 &lt;- D(mylogistic,&quot;a1&quot;)
+  partial.a2 &lt;- D(mylogistic,&quot;a2&quot;)
+  partial.a3 &lt;- D(mylogistic,&quot;a3&quot;)
+  
+  k &lt;- 1
+  bk &lt;- b
+  b &lt;- b + 1# to enter the iteration
+  while(sum((bk - b) ^ 2) / sum(b ^ 2) &gt;= e) {
+    # get the D matrix
+    D &lt;- matrix(0, nrow = n, ncol = 3)
+    a1 &lt;- bk[1]
+    a2 &lt;- bk[2]
+    a3 &lt;- bk[3]
+    for (i in 1:n) {
+      t &lt;- x[i]
+      D[i, 1] &lt;- eval(partial.a1)
+      D[i, 2] &lt;- eval(partial.a2)
+      D[i, 3] &lt;- eval(partial.a3)
+    }
+    
+    t &lt;- x
+    f &lt;- eval(mylogistic)# compute the value of f
+    b &lt;- bk# denote the (k)th valuve by b
+    bk &lt;- bk + solve(t(D)%*%D)%*%t(D)%*%(as.matrix(y - f))# denote the (k+1)th value by bk
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(bk)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(bk) &lt;- c(&quot;估计值&quot;)
+  rownames(bk) &lt;- paste0(rep(&quot;系数&quot;,length(bk)),1:length(bk))
+  logistic.result &lt;- list(&quot;模型的解&quot; = bk,&quot;算法迭代次数&quot; = k-1)
+  return(logistic.result)
+}
+</code></pre>
+<h3 id="62-gompertz模型系数求解">6.2 Gompertz模型系数求解</h3>
+<pre><code class="language-r">mynlmgompertz &lt;- function(x,y,b,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+ 
+  mygompertz &lt;- expression(a1*exp(-a2*exp(-a3*t)))
+  partial.a1 &lt;- D(mygompertz,&quot;a1&quot;)
+  partial.a2 &lt;- D(mygompertz,&quot;a2&quot;)
+  partial.a3 &lt;- D(mygompertz,&quot;a3&quot;)
+  
+  k &lt;- 1
+  bk &lt;- b
+  b &lt;- b + 1# to enter the iteration
+  while(sum((bk - b) ^ 2) / sum(b ^ 2) &gt;= e) {
+    # get the D matrix
+    D &lt;- matrix(0, nrow = n, ncol = 3)
+    a1 &lt;- bk[1]
+    a2 &lt;- bk[2]
+    a3 &lt;- bk[3]
+    for (i in 1:n) {
+      t &lt;- x[i]
+      D[i, 1] &lt;- eval(partial.a1)
+      D[i, 2] &lt;- eval(partial.a2)
+      D[i, 3] &lt;- eval(partial.a3)
+    }
+    t &lt;- x
+    f &lt;- eval(mygompertz)# compute the value of f
+    b &lt;- bk# denote the (k)th valuve by b
+    bk &lt;- bk + solve(t(D)%*%D)%*%t(D)%*%(as.matrix(y - f))# denote the (k+1)th value by bk
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(bk)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(bk) &lt;- c(&quot;估计值&quot;)
+  rownames(bk) &lt;- paste0(rep(&quot;系数&quot;,length(bk)),1:length(bk))
+  gompertz.result &lt;- list(&quot;模型的解&quot; = bk,&quot;算法迭代次数&quot; = k-1)
+  return(gompertz.result)
+}
+</code></pre>
+<h3 id="63-weibull模型系数求解">6.3 Weibull模型系数求解</h3>
+<pre><code class="language-r">mynlmweibull &lt;- function(x,y,b,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  
+  myweibull &lt;- expression(a1 - a2*exp(-a3*(t^a4)))
+  partial.a1 &lt;- D(myweibull,&quot;a1&quot;)
+  partial.a2 &lt;- D(myweibull,&quot;a2&quot;)
+  partial.a3 &lt;- D(myweibull,&quot;a3&quot;)
+  partial.a4 &lt;- D(myweibull,&quot;a4&quot;)
+  
+  k &lt;- 1
+  bk &lt;- b
+  b &lt;- b + 1# to enter the iteration
+  while(sum((bk - b) ^ 2) / sum(b ^ 2) &gt;= e) {
+    # get the D matrix
+    D &lt;- matrix(0, nrow = n, ncol = 4)
+    a1 &lt;- bk[1]
+    a2 &lt;- bk[2]
+    a3 &lt;- bk[3]
+    a4 &lt;- bk[4]
+    for (i in 1:n) {
+      t &lt;- x[i]
+      D[i, 1] &lt;- eval(partial.a1)
+      D[i, 2] &lt;- eval(partial.a2)
+      D[i, 3] &lt;- eval(partial.a3)
+      D[i, 4] &lt;- eval(partial.a4)
+    }
+    
+    t &lt;- x
+    f &lt;- eval(myweibull)# compute the value of f
+    b &lt;- bk# denote the (k)th valuve by b
+    bk &lt;- bk + solve(t(D)%*%D)%*%t(D)%*%(as.matrix(y - f))# denote the (k+1)th value by bk
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(bk)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(bk) &lt;- c(&quot;估计值&quot;)
+  rownames(bk) &lt;- paste0(rep(&quot;系数&quot;,length(bk)),1:length(bk))
+  weibull.result &lt;- list(&quot;模型的解&quot; = bk,&quot;算法迭代次数&quot; = k-1)
+  return(weibull.result)
+}
+</code></pre>
+<h3 id="64-michaelis-menten模型系数求解">6.4 Michaelis-Menten模型系数求解</h3>
+<pre><code class="language-r">mynlmmicmen &lt;- function(x,y,b,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  
+  mymicmen &lt;- expression(a1*t/(a2 + t))
+  partial.a1 &lt;- D(mymicmen,&quot;a1&quot;)
+  partial.a2 &lt;- D(mymicmen,&quot;a2&quot;)
+  
+  k &lt;- 1
+  bk &lt;- b
+  b &lt;- b + 1# to enter the iteration
+  while(sum((bk - b) ^ 2) / sum(b ^ 2) &gt;= e) {
+    # get the D matrix
+    D &lt;- matrix(0, nrow = n, ncol = 2)
+    a1 &lt;- bk[1]
+    a2 &lt;- bk[2]
+    for (i in 1:n) {
+      t &lt;- x[i]
+      D[i, 1] &lt;- eval(partial.a1)
+      D[i, 2] &lt;- eval(partial.a2)
+    }
+    
+    t &lt;- x
+    f &lt;- eval(mymicmen)# compute the value of f
+    b &lt;- bk# denote the (k)th valuve by b
+    bk &lt;- bk + solve(t(D)%*%D)%*%t(D)%*%(as.matrix(y - f))# denote the (k+1)th value by bk
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(bk)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(bk) &lt;- c(&quot;估计值&quot;)
+  rownames(bk) &lt;- paste0(rep(&quot;系数&quot;,length(bk)),1:length(bk))
+  mymicmen.result &lt;- list(&quot;模型的解&quot; = bk,&quot;算法迭代次数&quot; = k-1)
+  return(mymicmen.result)
+}
+</code></pre>
+<h3 id="65-单个系数检验">6.5 单个系数检验</h3>
+<pre><code class="language-r">## 求解非线性模型单个系数检验
+mynlmindivi &lt;- function(x,y,b,expr){#
+  # expr 表示模型：logistic, gompertz, weibull
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  t &lt;- x
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    mylogistic &lt;- expression(a1/(1 + a2*exp(-a3*t)))
+    partial.a1 &lt;- D(mylogistic,&quot;a1&quot;)
+    partial.a2 &lt;- D(mylogistic,&quot;a2&quot;)
+    partial.a3 &lt;- D(mylogistic,&quot;a3&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+  }
+  else if(expr == &quot;gompertz&quot;){
+    mygompertz &lt;- expression(a1*exp(-a2*exp(-a3*t)))
+    partial.a1 &lt;- D(mygompertz,&quot;a1&quot;)
+    partial.a2 &lt;- D(mygompertz,&quot;a2&quot;)
+    partial.a3 &lt;- D(mygompertz,&quot;a3&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+  }
+  else if(expr == &quot;weibull&quot;){
+    myweibull &lt;- expression(a1 - a2*exp(-a3*(t^a4)))
+    partial.a1 &lt;- D(myweibull,&quot;a1&quot;)
+    partial.a2 &lt;- D(myweibull,&quot;a2&quot;)
+    partial.a3 &lt;- D(myweibull,&quot;a3&quot;)
+    partial.a4 &lt;- D(myweibull,&quot;a4&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    a4 &lt;- b[4]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+    D[, 4] &lt;- eval(partial.a4)
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic, gompertz, weibull之一&quot;))
+  }
+  
+  cc &lt;- solve(t(D)%*%D)
+  diagc &lt;- diag(cc)
+  
+  Tt &lt;- 1:p;Tp &lt;- Tt;Ts &lt;- Tt
+  
+  for(i in 1:p){
+    
+    Tt[i] &lt;- b[i]/sqrt(diagc[i])
+    Tp[i] &lt;- 2*(1 - pnorm(Tt[i]))
+    if(Tp[i] &lt; 0.001 ){# 判断置信度
+      Ts[i] &lt;- c(&quot;***&quot;)
+    }
+    else if(Tp[i] &lt; 0.01 &amp;&amp; Tp[i] &gt;= 0.001){
+      Ts[i] &lt;- c(&quot;**&quot;)
+    }
+    else if(Tp[i] &lt; 0.05 &amp;&amp; Tp[i] &gt;= 0.01){
+      Ts[i] &lt;- c(&quot;*&quot;)
+    }
+    else if(Tp[i] &lt; 0.1 &amp;&amp; Tp[i] &gt;= 0.05){
+      Ts[i] &lt;- c(&quot;.&quot;)
+    }
+    else{
+      Ts[i] &lt;- c(&quot; &quot;)
+    }
+  }
+  
+  indivitest &lt;- data.frame(&quot;Tu&quot; = Tt,&quot;Tp&quot; = Tp,&quot;Ts&quot; = Ts)
+  return(indivitest)
+}
+</code></pre>
+<h3 id="66-区间估计">6.6 区间估计</h3>
+<pre><code class="language-r">##求解非线性模型区间估计
+mynlminterval &lt;- function(x,y,b,expr,alpha = 0.05){
+  
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  t &lt;- x
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    mylogistic &lt;- expression(a1/(1 + a2*exp(-a3*t)))
+    partial.a1 &lt;- D(mylogistic,&quot;a1&quot;)
+    partial.a2 &lt;- D(mylogistic,&quot;a2&quot;)
+    partial.a3 &lt;- D(mylogistic,&quot;a3&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+  }
+  else if(expr == &quot;gompertz&quot;){
+    mygompertz &lt;- expression(a1*exp(-a2*exp(-a3*t)))
+    partial.a1 &lt;- D(mygompertz,&quot;a1&quot;)
+    partial.a2 &lt;- D(mygompertz,&quot;a2&quot;)
+    partial.a3 &lt;- D(mygompertz,&quot;a3&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+  }
+  else if(expr == &quot;weibull&quot;){
+    myweibull &lt;- expression(a1 - a2*exp(-a3*(t^a4)))
+    partial.a1 &lt;- D(myweibull,&quot;a1&quot;)
+    partial.a2 &lt;- D(myweibull,&quot;a2&quot;)
+    partial.a3 &lt;- D(myweibull,&quot;a3&quot;)
+    partial.a4 &lt;- D(myweibull,&quot;a4&quot;)
+    a1 &lt;- b[1]
+    a2 &lt;- b[2]
+    a3 &lt;- b[3]
+    a4 &lt;- b[4]
+    D[, 1] &lt;- eval(partial.a1)
+    D[, 2] &lt;- eval(partial.a2)
+    D[, 3] &lt;- eval(partial.a3)
+    D[, 4] &lt;- eval(partial.a4)
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic, gompertz, weibull之一&quot;))
+  }
+  
+  Ti &lt;- matrix(0,nrow = p,ncol = 2)
+  
+  
+  cc &lt;- solve(t(D)%*%D)
+  diagc &lt;- diag(cc)
+  
+  for(i in 1:p){
+    Ti[i,1] &lt;- b[i] - qnorm((1-alpha/2))*sqrt(diagc[1])
+    Ti[i,2] &lt;- b[i] + qnorm((1-alpha/2))*sqrt(diagc[1])  
+  }
+  
+  out &lt;- cbind(b,Ti)
+  colnames(out) &lt;- c(&quot;Estimator&quot;,&quot;LowerBound&quot;,&quot;UpperBound&quot;)
+  return(out)
+}
+</code></pre>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2018/05/nlm/" title="非线性模型的参数估计和统计性质" target="_blank" rel="external">https://qkai-stat.github.io/2018/05/nlm/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2018/04/lm/" title="线性模型的理论与求解"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2018/06/glm/"
+                    title="广义线性模型及其一般求解方式"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

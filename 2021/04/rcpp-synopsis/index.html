@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        效率瓶颈突破：Rcpp简介 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>效率瓶颈突破：Rcpp简介 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="效率瓶颈突破：Rcpp简介" />
+<meta property="og:description" content="在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2021/04/rcpp-synopsis/" />
+<meta property="article:published_time" content="2021-04-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-23T00:00:00+00:00" />
+<meta itemprop="name" content="效率瓶颈突破：Rcpp简介">
+<meta itemprop="description" content="在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏">
+<meta itemprop="datePublished" content="2021-04-23T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-04-23T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2720">
+
+
+
+<meta itemprop="keywords" content="R语言,算法," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="效率瓶颈突破：Rcpp简介"/>
+<meta name="twitter:description" content="在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2021/04/rcpp-synopsis/"
+    >效率瓶颈突破：Rcpp简介</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2021/04/rcpp-synopsis/" class="article-date">
+  <time datetime="2021-04-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-04-23</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+    <a class="article-tag-link" href="/tags/%E7%AE%97%E6%B3%95/"> 算法 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2021/04/rcpp-synopsis/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2720字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏慢，具有某种“先天缺陷”。因此，并行R函数的运行时间有时仍然不尽人意。本期小Q与大家分享R的另一提速方式：<code>Rcpp</code>之效率瓶颈突破。</p>
+<h2 id="1-什么是rcpp">1 什么是Rcpp</h2>
+<p>在往期的文章中曾讲过，我们在R中尽量采用向量化或内建函数运算，避免自编循环带来的额外时间消耗。然而，算法中有时难以避免循环，若循环部分耗时严重，直接并行含有该循环的算法显得力不从心，此时又该如何？稍有编程知识的读者可能会想到，较低级的语言在执行循环时更高效。因此，将算法中耗时严重的循环用较低级的语言重新编写是提速的可行思路。、</p>
+<blockquote>
+<p><code>Rcpp</code>程序包便是构建R与C++之间的重要桥梁。有了<code>Rcpp</code>程序包的支持，我们可以很容易地将C++程序接入到R中，也可以在C++中使用R的数据类型甚至函数。</p>
+</blockquote>
+<p>其实将R和C++整合的想法由来已久，早在2001年Bates和DebRoy就已尝试过这种思路。<code>Rcpp</code>程序包最早在2005年出现，当时是作为<code>RQuantLib</code>的扩展包。在2006年时，<code>Rcpp</code>有了自己的名字并成为一个CRAN扩展包。不过，很长一段时间内，<code>Rcpp</code>程序包没有较大的更新发展。从2008年开始，Eddelbuettel对其进行重新开发后，<code>Rcpp</code>的更新和扩展有了积极的支持。</p>
+<h2 id="2-rcpp基本使用">2 Rcpp基本使用</h2>
+<h3 id="21-安装rcpp">2.1 安装Rcpp</h3>
+<p>我们在R中直接执行<code>install.packages(&quot;Rcpp&quot;)</code>就可以安装<code>Rcpp</code>程序包。不过，仅仅安装程序包并不能直接在R中调用C++程序，因为我们需要为之搭建C++编译的环境。在Windows系统中，C++程序的编译由<code>Rtools</code>工具包支持。我们可在CRAN上下载并安装<code>Rtools</code>工具包，下载链接为</p>
+<pre><code class="language-R">https://cran.r-project.org/bin/windows/Rtools/
+</code></pre>
+<p>安装尽量选择默认配置，注意要将<code>Rtools</code>的目录放到环境变量中。此外，<strong>我们还要注意R自身的安装路径中不能含有空格</strong>，否则编译C++程序时会报错。一般注意以上两点，我们的准备工作就可以顺利完成。</p>
+<h3 id="22-用cppfunction转换c函数">2.2 用cppFunction转换C++函数</h3>
+<p>函数<code>cppFunction()</code>可以用来在R中调用C++函数。例如，考虑Fibonacci数列的计算问题
+$$
+f_0 =0,f_1=1,f_n = f_{n-1} + f_{n-2}.
+$$
+那么，我们可以采用下面R和C++交互的形式来计算给定 $n$ 的Fibonacci数：</p>
+<pre><code class="language-R">library(Rcpp)
+cppFunction(code = &quot;
+  int fibonacci(const int n){
+    if(n &lt; 2){
+      return n;
+    }else{
+      return(fibonacci(n-1) + fibonacci(n-2));
+    }
+  }
+&quot;)
+</code></pre>
+<p>其中<code>code</code>部分就是一段C++代码。运行上面的命令后，就可以在R中调用函数<code>fibonacci()</code>，例如</p>
+<pre><code class="language-R">fibonacci(0)
+# [1] 0
+fibonacci(1)
+# [1] 1
+fibonacci(10)
+# [1] 55
+</code></pre>
+<h3 id="23-用sourcecpp转换c函数">2.3 用sourceCpp转换C++函数</h3>
+<p>当C++程序代码较多时，直接用<code>cppFunction()</code>来调用不太合适，将其单独保存成<code>.cpp</code>文件并使用<code>sourceCpp()</code>加载调用更为灵活方便。我们在RStudio中选择新建C++ File就可以在工作目录建立一个<code>.cpp</code>文档，RStudio默认会给出一个C++的示例，如下所示：</p>
+<pre><code class="language-R">#include &lt;Rcpp.h&gt;
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericVector timesTwo(NumericVector x) {
+  return x * 2;
+}
+</code></pre>
+<p>上述C++代码有这几个地方值得注意：</p>
+<ol>
+<li>头文件。代码<code>#include &lt;Rcpp.h&gt;</code>引入了名为<code>Rcpp</code>的头文件，表明代码需要使用到<code>Rcpp</code>中的模板或库等内容。事实上，<code>Rcpp</code>程序包简化了R中编写C++程序的过程，其中的<strong>语法糖（Sugar）</strong> 可以让用户在保持代码性能的同时使用类似R中的代码进行编程；此外，<code>Rcpp</code>程序包也让C++程序的编译、连接、接口等问题隐式进行，大大降低了代码迁移的负担。</li>
+<li>输出。C++程序中编写函数文件若想输入到R中进行调用，须在函数前加上<code>// [[Rcpp::export]]</code>这种特殊的注释；反之，如果不想将函数输出到R中，则可以省略这段代码。</li>
+</ol>
+<blockquote>
+<p>本文并不涉及Rcpp用法的细节，因为这部分的内容实在过于繁多。我们这里更多的展示Rcpp对代码速率的提升效果，为R代码加速提供不同的解决方案，Rcpp细节的内容则需要读者自行学习。</p>
+</blockquote>
+<p>我们将该文档保存后，用<code>sourceCpp()</code>加载，等待后台编译结束后就可以使用该文档中C++定义的函数<code>timesTwo()</code>，例如</p>
+<pre><code class="language-R">sourceCpp(&quot;timesTwo.cpp&quot;)
+timesTwo(5)
+# [1] 10
+</code></pre>
+<h2 id="3-rcpp与r效率对比">3 Rcpp与R效率对比</h2>
+<p>回到文章开始的话题，使用Rcpp优化R代码究竟带来多大的效率提高？小Q对此无法给出一个理论的结果。不过，我们可以用具体的案例直观感受一下优化前后的运行时间差异。下面代码都是在我的Matebook X Pro上跑的，CPU为Intel(R) Core(TM) i5-10210U，内存为16GB，R版本为4.0.5。</p>
+<p>考虑一个二分类数据集，其中正、负数据集服从双峰分布，即两个均值向量不同但协方差矩阵相同的多元正态分布。具体来说，正数据集的均值向量分别是</p>
+<p>$$ \mu_1^+=(-0.3,0.7)^T,\mu_2^+=(0.4,0.7)^T $$</p>
+<p>负数据集的均值向量分别是</p>
+<p>$$ \mu_1^-=(-0.7,0.2)^T,\mu_2^-=(0.3,0.2)^T $$</p>
+<p>协方差矩阵皆为 $V = diag(0.02, 0.06)$。</p>
+<p>我们按照上述设定产生等量的250个训练样本，使用LSVM（Lagrangian SVM）求解分类直线，算法基于坐标下降（Coordinate Decent）法设计。采用纯R编写的函数记为 <code>funR</code>，核心循环用C++重写其余保持不变的函数记为<code>funC</code>。由于LSVM中包含  一个调节参数 $\lambda_1$，我们分别查看<code>funR</code>和<code>funC</code>在 $\lambda_1\in {2^{-8},2^{-7},\ldots,2^7,2^8}$ 中寻找最优参数的表现，如下所示：</p>
+<pre><code class="language-R">## OptSearch_funR：funR寻找最优参数的函数
+## OptSearch_funC：funC寻找最优参数的函数
+tunseq &lt;- 2^seq(-8, 8, 1)
+# funR总耗时
+system.time(OptPar_funR &lt;- OptSearch_funR(x, y, tunseq))
+# 用户  系统  流逝 
+# 15.10  0.00 15.13 
+
+# funC总耗时
+system.time(OptPar_funC &lt;- OptSearch_funC(x, y, tunseq))
+# 用户 系统 流逝 
+# 4.93 0.01 4.95
+
+op_funR &lt;- funR(x, y, lam1=OptPar_funR[2], kernel = &quot;linear&quot;)
+op_funC &lt;- funC(x, y, lam1=OptPar_funC[2], kernel = &quot;linear&quot;)
+op_funR$w # funR得到的法向量估计
+#           [,1]
+# [1,] 0.1588028
+# [2,] 2.3881889
+op_funC$w # funC得到的法向量估计
+#           [,1]
+# [1,] 0.1588028
+# [2,] 2.3881889
+op_funR$b # funR得到的截距估计
+# [1] -1.201495
+op_funC$b # funC得到的截距估计
+# [1] -1.201495
+</code></pre>
+<p>从上述的运行结果来看，<code>funR</code>寻找最优参数耗时15.10秒，而用C++改良后的<code>funC</code>则只需4.93秒，速率提升较为明显。此外，我们也看到两者找到的最优参数、分类直线的法向量和截距项估计均相同——这是显然的，因为我们仅仅用C++重写了部分代码，相应的精度等设置并未改变，则结果自然与原始函数一致。</p>
+<img src="http://jiandan94.gitee.io/md-figures/rcpp/lsvm-classifier.png" width="400"/>
+<p>上述的数据和分类直线如上图所示。其中蓝色*表示正数据点，红色o表示负数据点，黑色实线为分类直线。</p>
+<h2 id="5-结语">5 结语</h2>
+<p>本文简单介绍了<code>Rcpp</code>程序包的功能，以及展示了使用<code>Rcpp</code>程序包后对原始R代码速率的提升幅度。关于<code>Rcpp</code>的详细使用方法，读者可以阅读<code>Rcpp</code>程序包开发者Dirk Eddelbuettel所著的《Rcpp：R与C++的无缝整合》（英文书名《Seamless R and C++ Integration with Rcpp》）。虽然C++在短时间内难以掌握，但是通过简单地学习一些C++命令和<code>Rcpp</code>程序包的使用方法，完全可以很快上手并优化手中的R代码。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2021/04/rcpp-synopsis/" title="效率瓶颈突破：Rcpp简介" target="_blank" rel="external">https://qkai-stat.github.io/2021/04/rcpp-synopsis/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/11/biased-estimate/" title="有偏估计"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2021/04/rpackagemake1/"
+                    title="R包制作简易教程1"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

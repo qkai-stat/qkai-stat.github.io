@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        主成分分析原理 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>主成分分析原理 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="主成分分析原理" />
+<meta property="og:description" content="主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/10/pca/" />
+<meta property="article:published_time" content="2020-10-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-10-24T00:00:00+00:00" />
+<meta itemprop="name" content="主成分分析原理">
+<meta itemprop="description" content="主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应">
+<meta itemprop="datePublished" content="2020-10-24T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-10-24T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3876">
+
+
+
+<meta itemprop="keywords" content="机器学习,多元统计," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="主成分分析原理"/>
+<meta name="twitter:description" content="主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/10/pca/"
+    >主成分分析原理</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/10/pca/" class="article-date">
+  <time datetime="2020-10-24 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-10-24</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/10/pca/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3876字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应用。PCA最早由现代统计科学的创立者、英国数学家<a href="https://baike.baidu.com/item/%E5%8D%A1%E5%B0%94%C2%B7%E7%9A%AE%E5%B0%94%E9%80%8A/5650305?fr=aladdin">Pearson</a>（1901）针对非随机变量提出，后经Hotelling（1933）推广到随机变量而逐渐完善成熟。PCA的背后有着坚实的数学理论，它将原始变量转换成若干个综合变量，在损失较少信息的前提下，抓住问题的主要矛盾、简化问题从而提升解决问题的效率。</p>
+<p>本期我们主要向大家介绍PCA的基本原理以及如何在R中实现PCA方法。</p>
+<h2 id="1-引言">1 引言</h2>
+<p>早在中学时代，我们就已经接触“数形结合”的思想。在很多实际问题中，我们思考如何处理搜集而来的数据之前，一个朴素的想法便是先通过画图观察数据中是否存在某种规律。比如，下面的图（a）就表示某二变量数据的散点图。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/raw-data.png" width=400 /></p>
+<p>我们之所以将数据对应成图（a）的形式，是因为基于如下的考虑。通常数据中包含很多变量，如研究健康问题中的血氧浓度、肺活量等，这些变量可以看成是对同一问题（健康）的不同角度的描述。那么，我们自然可以将问题中的各个变量与几何图形中的各个维度（如 $x_1, x_2$）进行一一对应：图形上的点在各个维度的取值等价于原始数据在相应变量上的取值。</p>
+<p>这样由原始变量对应的几何维度，我们称之为<a href="https://baike.baidu.com/item/%E5%9D%90%E6%A0%87%E7%B3%BB">坐标系</a>。一般情况下，坐标系的各个维度和数据中的<strong>原始变量</strong>一一对应，每个维度取值得到的交点和数据中的一个观测样本相对应。</p>
+<p>如果你明白了上述“数形结合”的思想，那么现在来思考这样一个问题：</p>
+<blockquote>
+<p>坐标系的维度是否非要和原始变量一一对应？</p>
+</blockquote>
+<p>也就是说，我们可不可以用其他的维度对相同的数据进行描述刻画，此时数据分析变得更加简单、规律更容易被发现？事实上， 以图（a）为例，我们确实可以找到一个新的坐标系来描述相同的数据，如下所示</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/rotation-axis.png" width=400 /></p>
+<p>我们按照原始变量建立坐标系之后，可以将坐标系的零点 $O$ 移动到图（b）中的 $O'$ 处，并以 $p_1,p_2$ 为新的维度来描述数据。在新的坐标系下，数据主要在 $p_1$ 方向分布，而 $p_2$ 方向则变动不大。换句话说，我们完全可以只用 $p_1$ 来描述数据。这样，原来要用两个变量（维度）刻画的数据，在新坐标系下只需一个<strong>新变量</strong>（维度）刻画即可，也即实现的降维的目的。</p>
+<p>进一步观察可以发现：如果事先将原始数据对各个变量进行<strong>中心化</strong>（每个变量的数据减去其平均值），新坐标和原始坐标的零点就重合了且可以看成原始坐标的一个旋转，如图（c）所示。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/rotation-center-axis.png" width=400 /></p>
+<p>此外，我们也注意到当前新坐标的方向 $p_1,p_2$ 可以写成原始坐标 $x_1,x_2$ 的<strong>一个线性组合</strong>。这一点对寻找新坐标很有启发意义。</p>
+<p>总之，上述思考表明<strong>确实可以通过原始变量建立新变量来描述同一数据，且可能降低分析问题的难度</strong>。这些对于问题朴素的思考就蕴含了主成分分析（principle component analysis）的基本思想。</p>
+<h2 id="2-主成分分析pca">2 主成分分析（PCA）</h2>
+<p>假设研究数据中的变量分别为 $x_1,\ldots,x_p$，由于原始变量繁杂不易于直接分析，主成分分析便希望通过构建原始变量的一系列线性组合找到若干<strong>主成分变量</strong>进行分析，在简化问题的同时又保留了原始数据的绝大多数信息。</p>
+<p>结合第一节的思考，对于PCA的第一个要求，我想大家应该豁然开朗了：<strong>PCA要寻找的主成分变量其实就是坐标变换后的新坐标</strong>。因为将原始数据中心化后，新坐标系中的各个方向（新变量）就是原始方向（变量）的线性组合。所以，<strong>PCA思想的背后其实就是线性代数中的坐标变换</strong>。这也表明PCA背后有坚实的数学理论基础。</p>
+<p>找到构建新变量的思路后，还要思考一个问题——变换到具体哪个坐标才是我们想要的？这要利用PCA的第二个要求：保留原始数据绝大多数信息。</p>
+<p>PCA对于数据信息的描述是基于方差的。方差反映数据的波动范围：方差越大波动越大，方差越小波动越小。波动大，表示该方向上数据有很大的变化，也即是参考这个方向以后对各个数据会有更多的认识。波动小，表示该方向上数据没有显著的改变，也即是参考这个方向以后对各个数据不会有更多的认识。所以，方差大的方向信息丰富，反之则信息较少。</p>
+<blockquote>
+<p>以图（c）为例，数据在 $p_1$ 方向的分布范围很大，可以刻画原始数据丰富的细节；而在 $p_2$ 方向分布范围较小，可以忽略。而数据在 $x_1$ 和 $x_2$ 方向的分布范围都很大，因此我们无法忽略哪个。</p>
+</blockquote>
+<p>下面，我们以第一主成分为例，介绍求解主成分的基本思路。</p>
+<p>给定原始变量 $x_1,\ldots,x_p$，我们用他们的一个线性组合表示第一主成分
+$$
+y_1 = \alpha_{11} x_1 + \ldots + \alpha_{1p} x_p
+$$
+根据方差最大原理，上述的系数要满足
+$$
+\max Var(y_1)
+$$
+由于对系数没有要求，单纯最大化的得不到最终的解。因此，我们对系数添加一个正则化的约束
+$$
+\max Var(y_1) \quad s.t.\quad \Vert \alpha_1\Vert=1
+$$
+其中 $\alpha_1 = (\alpha_{11},\ldots,\alpha_{1p})^T$，$\Vert \cdot\Vert$ 表示欧式范数。进一步假设我们针对 原始变量 $x_1,\ldots,x_p$ 观测到的数据矩阵（已列中心化）为 $X\in \mathbb{R}^{n\times p}$，则上述的优化问题变成
+$$
+\max \alpha_1^T(X^TX)\alpha_1 \quad s.t.\quad \Vert \alpha_1\Vert=1
+$$
+它的最优解为Gram矩阵 $X^TX$ 的最大特征值，$\alpha_1$ 为最大特征值对应的特征向量。</p>
+<p>如果已经求解出前 $q-1$ 个主成分，对于第 $q$ 个主成分 $y_q$ 有
+$$
+y_q = \alpha_{q1} x_1 + \ldots + \alpha_{qp} x_p
+$$
+满足
+$$
+\max \alpha_q^T(X^TX)\alpha_q \quad \<br>
+s.t.\quad \Vert \alpha_q\Vert=1, \alpha_q^T\alpha_1=0,\ldots, \alpha_q^T\alpha_{q-1}=0
+$$
+这等价于求一个 $p\times q$ 的列正交矩阵使 $X^TX$ 正交化的问题。当然，PCA还可以通过<a href="https://baike.baidu.com/item/%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3">矩阵的SVD</a>进行求解。具体的思路不再赘述，有兴趣的读者可以参考其他资料。</p>
+<p>从上述的分析中可以看出，PCA的背后是坐标变换，求解的过程利用到了依次方差最大的原则。当我们求解的各个主成分的<strong>方差累计贡献率</strong>（所求主成分的方差和占总方差的比例）达到一定比例时（一般在70%以上），就可以停止继续求解主成分了。我们对数据的分析就可以基于所求主成分展开。</p>
+<h2 id="3-若干说明">3 若干说明</h2>
+<h3 id="31-pca可行性检验">3.1 PCA可行性检验</h3>
+<p>PCA是数据降维的一个有效手段，可以透过繁杂的原始变量直击问题的主要矛盾，但并不意味着我们可以滥用PCA。从前面的分析可以看出，<strong>数据在各个方向上的分布有明星偏倚，才可以考虑采用PCA处理</strong>。假如数据的分布没有明显的偏倚，如空间中以球形分布，如图（d）所示，就不适用PCA进行处理了。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/ball-data.png" width=400 /></p>
+<p>因此，我们在使用PCA之前要对数据进行检测，通常是 <a href="https://baike.baidu.com/item/Bartlett%27s%E7%90%83%E7%8A%B6%E6%A3%80%E9%AA%8C/5678784?fr=aladdin">KMO和Bartlett球形检验</a>。</p>
+<h3 id="32-主成分的含义">3.2 主成分的含义</h3>
+<p>通过前面的讨论不难发现，主成分找到后虽然可以解释原始数据的绝大部分信息，但是它是原始变量的线性组合，其自身的含义难以理解。例如，假设图（c）中 $x_1$ 表示血氧浓度，$x_2$ 表示肺活量，$p_1 = 2x_1 + x_2$ 是第一主成分，它包含了原始数据的大部分信息。然而，原始问题的变量 $x_1,x_2$ 含义很清晰，$p_1$ 就很难基于实际问题理解其含义了。因此，PCA得到的主成分的含义解释，往往在问题分析中颇费精力。</p>
+<p>之所以难以理解主成分的含义，是因为主成分和所有的变量都有关。因此，一个提升含义的直接办法就是构建稀疏主成分，也即是主成分和较少的变量有关而在其余变量上稀疏为零或接近零。经典的办法是进行主成分的旋转。不过，旋转主成分丧失了依次方差最大的原则。关于这方面的内容，可以参考相关文献。</p>
+<h2 id="4-r实现pca">4 R实现PCA</h2>
+<p>在R中有专门的程序包实现PCA方法。首先我们安装并载入所需的程序包</p>
+<pre><code class="language-R">install.packages(&quot;psych&quot;)
+library(psych)
+</code></pre>
+<p>数据选取的是某地区高校大学生职业生涯规划现状的问卷，包含10 个变量，其含义如下表所示：</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/mydata.png" width=500 /></p>
+<p>在做PCA之前，对数据进行KMO和Bartlett球形检验：</p>
+<pre><code class="language-R">&gt; KMO(as.matrix(mydata))
+Kaiser-Meyer-Olkin factor adequacy
+Call: KMO(r = as.matrix(mydata))
+Overall MSA =  0.88
+MSA for each item = 
+  x1   x2   x3   x4   x5   x6   x7   x8   x9  x10 
+0.58 0.51 0.65 0.63 0.58 0.91 0.93 0.91 0.91 0.95 
+&gt; cortest.bartlett(cor(mydata), n = nrow(mydata))
+$chisq
+[1] 7929.074
+
+$p.value
+[1] 0
+
+$df
+[1] 45
+</code></pre>
+<p>可见KMO系数 $&gt;0.5$ 且Bartlett检验的P值 $&lt;0.05$，说明数据很适合进行主成分分析。</p>
+<p>程序包<code>psych</code>中进行PCA的函数是<code>principal</code>，它的基本使用方式为</p>
+<pre><code class="language-R">principal(data, nfactors = 1, rotate = &quot;varimax&quot;, scores = T)
+</code></pre>
+<p>其中<code>data</code>是我们要分析的数据的相关系数矩阵，直接输入原始数据亦可。<code>nfactors</code>是保留的主成分个数，需要被实现给定。<code>rotate</code>表示在求解过程中采用哪种旋转方式，默认<code>varimax</code>方式。<code>varimax</code>是一种试图对载荷阵的列进行去噪，使得每个主成分和有限的变量有关，从而提升主成分的可解释性。<code>scores</code>表示是否输出主成分得分矩阵，默认输出。</p>
+<pre><code class="language-R">fa.parallel(cor(mydata), n.obs = nrow(mydata), fa = &quot;both&quot;, n.iter = 100)
+</code></pre>
+<p>由于<code>principal</code>函数要实现给定主成分的个数，我们先用<code>psych</code>中的<code>fa.parallel</code>进行主成分个数的选取：</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/pca/scree-plot.png" width=500 /></p>
+<p>一般我们选择特征值大于1的主成分即可，如上面的碎石图所示，我们选择3个主成分进行后续分析。先看不使用旋转（<code>rotate = &quot;none&quot;</code>）的结果：</p>
+<pre><code class="language-R">&gt; principal(mydata, nfactors = 3, rotate = &quot;none&quot;, scores = T)
+Principal Components Analysis
+Call: principal(r = mydata, nfactors = 3, rotate = &quot;none&quot;, scores = T)
+Standardized loadings (pattern matrix) based upon correlation matrix
+      PC1   PC2   PC3   h2    u2 com
+x1   0.32  0.05 -0.85 0.83 0.172 1.3
+x2   0.03  0.70  0.21 0.53 0.473 1.2
+x3   0.05  0.70  0.14 0.52 0.482 1.1
+x4   0.13  0.58  0.29 0.43 0.567 1.6
+x5  -0.30 -0.50  0.68 0.81 0.192 2.3
+x6   0.98 -0.04  0.09 0.97 0.033 1.0
+x7   0.97 -0.03  0.09 0.96 0.044 1.0
+x8   0.98 -0.05  0.09 0.96 0.037 1.0
+x9   0.98 -0.05  0.08 0.96 0.038 1.0
+x10  0.94 -0.14  0.08 0.90 0.100 1.1
+
+                       PC1  PC2  PC3
+SS loadings           4.89 1.60 1.37
+Proportion Var        0.49 0.16 0.14
+Cumulative Var        0.49 0.65 0.79
+Proportion Explained  0.62 0.20 0.17
+Cumulative Proportion 0.62 0.83 1.00
+</code></pre>
+<p>上述第一部分的结果描述的提取的主成分变量PC1、PC2和PC3与原始变量的线性关系；第二部分则是每个主成分的方差贡献率和累计方差贡献率，可见3个主成分的累计方差贡献率为1，完全可以解释原始数据的信息。</p>
+<p>进一步我们发现，第一主成分主要和 $x_6\sim x_{10}$ 有关，即院校在大学生职业规划中的参与情况；第二主成分主要和 $x_2\sim x_4$ 有关，即职业规划的实践形式；第三主成分主要和 $x_1,x_5$ 有关，即职业规划的授课辅导（和专题讲座呈负相关，看来大家比较反感在就业辅导时进行上课学习，这似乎比较符合现状）。</p>
+<p>上述的案例在不进行主成分旋转时也能有一个合理的解释，这并不适用于一般的数据。感兴趣的读者可以自行搜集数据进行分析比较，看看两者之间的差异。</p>
+<h2 id="5-结语">5 结语</h2>
+<p>本期我们的主要学习了PCA的基本原理和R实现的方式。最后还要提醒大家，PCA虽然应用广泛，但不能滥用，要针对不同数据自身的特点选择合适的模型。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/10/pca/" title="主成分分析原理" target="_blank" rel="external">https://qkai-stat.github.io/2020/10/pca/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/09/rkhs-and-kernel/" title="再生希尔伯特空间与核函数"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/11/biased-estimate/"
+                    title="有偏估计"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

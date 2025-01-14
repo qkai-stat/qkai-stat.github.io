@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        高维情形下非凸惩罚SVM的参数一致性 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="传统的支持向量机模型（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失&#43;罚项的结构，其中SVM采用的是hing" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>高维情形下非凸惩罚SVM的参数一致性 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="高维情形下非凸惩罚SVM的参数一致性" />
+<meta property="og:description" content="传统的支持向量机模型（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失&#43;罚项的结构，其中SVM采用的是hing" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" />
+<meta property="article:published_time" content="2022-08-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-08-28T00:00:00+00:00" />
+<meta itemprop="name" content="高维情形下非凸惩罚SVM的参数一致性">
+<meta itemprop="description" content="传统的支持向量机模型（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失&#43;罚项的结构，其中SVM采用的是hing">
+<meta itemprop="datePublished" content="2022-08-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2022-08-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="9561">
+
+
+
+<meta itemprop="keywords" content="机器学习,变量选择,高维数据分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="高维情形下非凸惩罚SVM的参数一致性"/>
+<meta name="twitter:description" content="传统的支持向量机模型（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失&#43;罚项的结构，其中SVM采用的是hing"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2022/08/svm-with-non-convex-penalization/"
+    >高维情形下非凸惩罚SVM的参数一致性</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="article-date">
+  <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+    <a class="article-tag-link" href="/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/"> 变量选择 </a>
+    <a class="article-tag-link" href="/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"> 高维数据分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2022/08/svm-with-non-convex-penalization/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 9561字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 20分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>传统的<a href="https://jiandan94.gitee.io/2020/09/svm/">支持向量机模型</a>（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失+罚项的结构，其中SVM采用的是hinge损失函数+$l_2$ 罚项。然而，$l_2$ 罚项没有稀疏能力，这使得传统SVM在层见迭出的高维数据分析中应用受限。随着统计（和优化）领域中<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">LASSO</a>等具有变量选择能力的罚项的研究发展，一些学者提出稀疏SVM并讨论了估计量的相关性质。本文主要介绍了中度高维（moderately high dimensions）下<strong>非凸惩罚线性SVM</strong>的变量选择一致性，主要内容来源于对<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>的翻译。</p>
+<h2 id="1-问题的引入">1 问题的引入</h2>
+<p>考虑二分类问题，令 $\lbrace(X_i, Y_i)\rbrace_{i=1}^n$ 是从未知总体分布 $P(X, Y)$ 中随机抽取的样本，其中 $Y_i\in {-1, +1}$ 是标签，$X_i = (X_{i0}, X_{i1}, \ldots, X_{ip})^T = (1, (X_i^ *)^T)^T$ 是协变量。那么，传统的线性SVM（linear SVM）可以写成如下的优化问题：</p>
+<p>$$
+\min_{\beta} \frac 1n \sum_{i=1}W_i(1 - Y_iX_i^T\beta)_+ + \lambda(\beta ^ *)^T\beta ^ *
+$$</p>
+<p>其中 $\beta = (\beta_0, \beta_1, \ldots, \beta_p)^T = (\beta_0, (\beta ^ *)^T)^T$ 是分类超平面的法向量（首个元素为截距项），$(1 - u)_+ = \max{1 - u, 0}$ 是hinge损失函数，$\lambda &gt; 0$ 是正则化参数。注意到，上式与经典SVM相比多了 $W_i$，它具体的取值如下</p>
+<p>$$
+W_i = \begin{cases}
+w &amp; Y_i = 1\<br>
+1-w &amp; Y_i = -1
+\end{cases}, \quad 0 &lt; w &lt; 1
+$$</p>
+<p>是用来控制不同误分类成本而引入的权重。相较于经典SVM，这里考虑的模型形式更具一般性。</p>
+<p>为了研究线性加权SVM的变量选择问题，我们引入总体加权（population weighted）hinge损失 $\mathbb{E}\lbrace W(1 - YX^T\beta)_+\rbrace$。令 $\beta_0 = (\beta _{00}, \beta _{01}, \ldots, \beta _{0p})^T = (\beta _{00}, (\beta _0^* )^T)^T$ 为真实参数，其定义为如下总体加权hinge损失的最小值：</p>
+<p>$$
+\beta_0 = arg\min_{\beta} \mathbb{E}\lbrace W(1 - YX^T\beta)_+\rbrace \qquad (1)
+$$</p>
+<blockquote>
+<p>注意到，hinge损失函数是分段线性，其中 $u&gt;1$ 的部分为0，这表明最小值 $\beta_0$ 不唯一。这种不唯一性对后续的分析有很大影响，故作者在此假定<strong>总体加权hinge损失的最小值唯一</strong>，类似的假定还出现在<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>中。</p>
+</blockquote>
+<p>我们假定 $p=p_n$ 可以随着 $n$ 增大而增大，且可以比 $n$ 大（即高维问题）。进一步，假定 $\beta_0$ 是稀疏的，令 $A = \lbrace 1\leq j\leq p: \beta_{0j} \neq 0\rbrace$ 为非零系数的下标集。令 $q = |A|$ 为非零系数的个数，且可以随 $n$ 增大而增大。不失一般性，我们假定后系数的后 $p-q$ 个元素为0，即 $\beta_0 = (\beta_{01}^T, \mathbf{0}^T)^T$。相应地，我们令 $X_i^T = (Z_i^T, R_i^T)$，其中 $Z_i = (X_{i0}, X_{i1}, \ldots, X_{iq})^T = (1, (Z_i^ *)^T)$ 和 $R_i = (X_{i[q+1]}, \ldots, X_{ip})^T$。进一步，我们用 $\pi_+$ 和 $\pi_-$ 来表示标签 $Y=1$ 和 $Y=-1$ 的边际概率。</p>
+<p>如果我们事先知道模型的稀疏结构，则可以定义Oracle估计量 $\hat{\beta} = (\hat{\beta}_1^T, \mathbf{0}^T)^T$， 其中</p>
+<p>$$
+\hat{\beta}_1 = arg\min _{\beta _1} \frac 1n \sum _{i=1}^n W_i(1 - Y_i Z_i^T \beta _1) _+ \qquad (2)
+$$</p>
+<p>注意到，当 $n\rightarrow \infty$ 时，$\hat{\beta} _1$ 最小化总体加权hinge损失 $\mathbb{E}\lbrace W(1 - YX^T\beta) _+\rbrace$。</p>
+<p>然而，模型的稀疏结构通常难以事先获知，故我们结合非凸罚项提出如下具有变量选择能力的非凸惩罚线性SVM模型：</p>
+<p>$$
+\min_{\beta} Q(\beta) = \min_{\beta} \frac 1n \sum _{i=1} W_i(1 - Y_i X_i^T\beta) _+ + \sum _{i=1}^{p _n} p _{{\lambda_n}}(\vert \beta_j \vert) \qquad (3)
+$$</p>
+<p>其中 $\lambda_n$（通常简记为 $\lambda$）为调节参数（tuning parameter），$p_{{\lambda_n}}(\cdot)$ 是非凸罚项，满足以下两个假设：</p>
+<p>【假设1】对称函数 $p_{\lambda}(t)$ 在 $t\in [0, +\infty)$ 上是非减和凹的，且 $p_{\lambda}'(t)$ 在 $(0, \infty)$ 上连续且满足 $p_{\lambda}(0) = 0$。</p>
+<p>【假设2】存在 $a&gt;1$ 满足 $\lim_{t\rightarrow 0+}p_{\lambda}'(t) = \lambda$，$p_{\lambda}'(t) \geq \lambda - t/a$ 对 $0 &lt; t &lt; a\lambda$ 成立，且 $p_{\lambda_n}'(t) = 0$ 对 $t \geq a\lambda$ 成立。</p>
+<p>在后续的讨论中，我们主要考虑SCAD罚项（<a href="https://jiandan94.gitee.io/2022/09/scad">Fan and Li（2001）</a>）来进行相关理论分析，其他满足上述两个假设的非凸罚项，如MCP（<a href="https://doi.org/10.1214/09-AOS729">Zhang（2008）</a>），相关分析类似可参找原文<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>。SCAD罚项的表达式如下</p>
+<p>$$
+p_{\lambda}(|\beta|) = \lambda |\beta| I(0\leq \beta&lt; \lambda) + \frac{a\lambda |\beta| - (\beta^2 + \lambda^2)/2}{a-1}I(\lambda \leq |\beta| \leq a\lambda) + \frac{(a+1)\lambda^2}{2}I(|\beta|&gt;a\lambda)
+$$</p>
+<p>其中 $I(\cdot)$ 是示性函数，$a &gt; 2$ 为某个既定参数，通常取 $a = 3.7$ （<a href="https://jiandan94.gitee.io/2022/09/scad">Fan and Li （2001）</a>）。</p>
+<h2 id="2-若干记号与假设">2 若干记号与假设</h2>
+<p>为了后续的表述和证明方便，我们在本小节给出一些重要的记号和前提假设，后续的证明都是基于这些假设推导的。</p>
+<p>首先，我们给出总体hinge损失函数的梯度向量（gradient vector）和Hessian矩阵。令 $L(\beta_1) = \mathbb{E}\lbrace W(1 - YZ^T\beta_1)_+\rbrace$ 为只含有重要变量的线性加权hinge损失。定义 $S(\beta_1) = (S(\beta_1)_j)$ 是 $(q+1)$-维向量，即</p>
+<p>$$
+S(\beta_1) = -\mathbb{E}\lbrace I(1 - YX^T\beta \geq 0)WYZ\rbrace
+$$</p>
+<p>同时定义 $H(\beta_1) = (H(\beta_1)_{jk})$ 为 $(q+1)\times(q+1)$ 的矩阵，即</p>
+<p>$$
+H(\beta_1) = \mathbb{E}\lbrace \delta(1 - YZ^T\beta_1)WZZ^T\rbrace
+$$</p>
+<p>其中 $\delta(\cdot)$ 是<a href="https://baike.baidu.com/item/%E7%8B%84%E6%8B%89%E5%85%8B%CE%B4%E5%87%BD%E6%95%B0/5760582?fr=aladdin">Dirac函数</a>。可以表明，$S(\beta_1)$ 和 $H(\beta_1)$ 分别是 $L(\beta_1)$ 的梯度向量和Hessian矩阵，具体参见<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>中的引理2相关内容。</p>
+<p>然后，我们给出证明所需的正则化条件（regular conditions）：</p>
+<p>【C1】给定 $Y=1$ 或 $Y=-1$ 时 $Z^ *$ 的密度连续且在 $\mathbb{R}^q$ 上有常规的支持。</p>
+<p>【C2】$\mathbb{E}(X_j^2) &lt; \infty, 1\leq j\leq q$。</p>
+<p>【C3】真实参数 $\beta_0$ 唯一且非零。</p>
+<p>【C4】$q = O(n^{c_1})$，对某个 $0\leq c_1 &lt;\frac 12$ 成立。</p>
+<p>【C5】存在 $M_1 &gt; 0$ 使得 $\lambda_{\max}(n^{-1}X_A^TX_A)\leq M_1$，其中 $\lambda_{\max}(\cdot)$ 表示最大特征值。进一步假设 $\max_{1\leq j\leq n}\Vert Z_i\Vert = O_p(\sqrt{q}\log (n))$；$X_{ij}$ 为sub-Gaussian随机变量，$1\leq i\leq n, q+1\leq j\leq p$。</p>
+<p>【C6】存在 $M_2 &gt; 0$ 使得 $\lambda_{\min}(H(\beta_{01}))\geq M_2$，其中 $\lambda_{\min}(\cdot)$ 表示最小特征值。</p>
+<p>【C7】存在 $M_3 &gt; 0$ 使得 $n^{(1-c_2)/2} \min_{1\leq j\leq q}|\beta_{0j}| \geq M_3$，$2c_1\leq c_2\leq 1$。</p>
+<p>【C8】定义给定 $Y=1$ 或 $Y=-1$ 时 $Z^T\beta_{01}$ 的条件密度函数分别为 $f$ 和 $g$。假定 $f$ 一致地远离 0 和 $\infty$ 且在 1 附近，$g$ 一致地远离 0 和 $\infty$ 且在 -1 附近。</p>
+<p>C1-C3和C6在<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>中关于固定维度 $p$ 的讨论中也做相同假设，我们需要这些假设来保证oracle估计量在发散维下是一致的。C3表明最优决策函数非常数，这需要 $S(\beta)$ 和 $H(\beta)$ 良好定义。C4和C7是高维分析中常见的假设（<a href="https://www.tandfonline.com/doi/abs/10.1198/016214508000001066">Kim等（2008）</a>）。具体而言，C4表明非零系数的个数的增长速率不能超过 $\sqrt{n}$，C7表明信号不能衰退地太快。C5类似于<a href="https://projecteuclid.org/journals/annals-of-statistics/volume-36/issue-4/The-sparsity-and-bias-of-the-Lasso-selection-in-high/10.1214/07-AOS520.full">Zhang和Huang（2008）</a>中的Riesz条件。注意到，这里没有对最小特征值做要求。C8表明在hinge损失函数的不可导点处要有足够的信息，这和<a href="https://www.tandfonline.com/doi/full/10.1080/01621459.2012.656014">Wang等（2012）</a>关于quantile回归的条件（C5）类似。</p>
+<h2 id="3-局部oracle性质">3 局部Oracle性质</h2>
+<p>本节我们建立非凸惩罚SVM的局部Oracle性质的理论，这里的局部Oracle性质意为式（2）定义的Oracle估计量 $\hat{\beta}$ 是非凸惩罚SVM问题（3）中 $Q(\beta)$ 的一个局部最优解。在给出理论结果之前，我们大致勾勒一下整个证明的思路。首先，</p>
+<h3 id="31-oracle估计量的估计一致性">3.1 Oracle估计量的估计一致性</h3>
+<p>在<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>中已经讨论过固定维下Oracle估计量的估计一致性，这里将其推广到发散维的情形，具体如引理1所述：</p>
+<p>【<strong>引理1</strong>】若C1-C7都满足，则Oracle估计量 $\hat{\beta} = (\hat{\beta} _1^T, \mathbf{0}^T)^T$ 满足 $\Vert \hat{\beta} _1 - \beta _{01}\Vert = O_p \lbrace \sqrt{q/n}\rbrace, n\rightarrow \infty$。</p>
+<p>【<strong>证明</strong>】令 $l(\beta _1) = n^{-1}\sum _{i=1}^n W_i (1 - Y_i Z_i^T\beta _1) _+$，易知 $\hat{\beta}_1 = arg\min _{\beta _1}l(\beta _1)$。为了证明引理1的结论，我们只需证明：$\forall \eta&gt;0$，存在常数 $\Delta$ 使得对充分大的 $n$，$\text{Pr}[\inf _{\Vert u\Vert = \Delta}l(\beta _{01} + \sqrt{q/n}) &gt; l(\beta _{01})] \geq 1 - \eta$ 成立。</p>
+<blockquote>
+<p>若上面的概率不等式成立，由于 $l(\beta_1)$ 是凸函数，则易推得至少以概率 $1-\eta$，$\hat{\beta} _1$ 在球 $\lbrace \beta _1: \Vert \beta_1 - \beta _{01}\Vert \leq \Delta\sqrt{q/n}\rbrace$ 中，也即证明了引理1的结论。这个推理根据函数的性质即能得到：假设 $\hat{\beta}_1$ 在球外，定义 $\hat{\beta} _1$ 和 $\beta _{01}$ 的连线上的一点 $\tilde{\beta} _1 = s_1 \hat{\beta} _1 + s_2 \beta _{01}$，其中 $s_1 + s_2 = 1$。根据凸函数性质，$l(\tilde{\beta}_1) = l(s_1 \hat{\beta}_1 + s_2 \beta _{01}) \leq s_1 l(\hat{\beta}_1) + s_2 l(\beta _{01}) \leq l(\beta _{01})$，因为 $\hat{\beta}_1$ 是 $l(\beta_1)$ 最优值点。由于 $\hat{\beta}_1$ 在球外，根据上面的概率不等式有 $l(\tilde{\beta} _1) &gt; l(\beta _{01})$成立。矛盾，故假设不成立。</p>
+</blockquote>
+<p>令 $\Lambda_n(u) = nq^{-1}[l(\beta_{01} + \sqrt{q/n}u) - l(\beta_{01})]$，并注意到 $\mathbb{E}(\Lambda_n(u)) = nq^{-1}[L(\beta_{01} + \sqrt{q/n}u) - L(\beta_{01})]$。由于 $\beta_0 = arg\min_{\beta}\mathbb{E}\lbrace W(1-YX^T\beta)_+\rbrace$，如果按前述将系数的后 $p-q$ 个元素令为零，则</p>
+<p>$$
+\beta _{01} = arg\min _{\beta _1}\mathbb{E}\lbrace W(1-YZ^T\beta _1) _+\rbrace = arg\min _{\beta _1} L(\beta _1)
+$$</p>
+<p>由最优性条件，可知 $S(\beta_{01}) = 0$。那么，根据$L(\beta_1)$ 在 $\beta_{01}$ 附近的Taylor展式可知</p>
+<p>$$
+\mathbb{E}(\Lambda_n(u)) = \frac12 u^T H(\tilde{\beta})u + o_p(1)
+$$</p>
+<p>其中 $\tilde{\beta} = \beta_{01} + \sqrt{q/n}tu, 0 &lt; t &lt; 1$。如<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>所述，给定C1和C2，$H(\beta_{01})$ 的第 $(j, k)$ 元素连续，故 $H(\beta)$ 连续。根据 $H(\beta)$ 在 $\beta_{01}$ 处的连续性可知 $\frac12 u^T H(\tilde{\beta})u = \frac12 u^T H(\beta_{01})u + o_p(1)$。</p>
+<p>定义 $W_n = -\sum_{i=1}^n \zeta_iW_iY_iZ_i$，其中 $\zeta_i = I(1 - Y_iZ_i^T\beta_{01})$。注意到，$S(\beta_{01}) = -\mathbb{E}(\zeta_iW_iY_iZ_i) = 0$。再定义</p>
+<p>$$
+R_{i,n}(u) = W_i(1 - Y_i Z_i^T(\beta_{01} + \sqrt{q/n}u)) _+ - W_i(1 - Y_i Z_i^T\beta _{01}) _+ + \zeta_iW_iY_iZ_i^T\sqrt{q/n}u
+$$</p>
+<p>则 $\mathbb{E}(R_{i,n}(u)) = L(\beta_{01} + \sqrt{q/n}u) - L(\beta_{01})$，则</p>
+<p>$$
+\Lambda_n(u) = \mathbb{E}(\Lambda_n(u)) + \frac{W_n^Tu}{\sqrt{q/n}} + \frac 1q\sum_{i=1}^n[R_{i,n}(u) - \mathbb{E}(R_{i,n}(u))] \qquad (4)
+$$</p>
+<p>与<a href="https://www.jmlr.org/papers/volume9/koo08a/koo08a.pdf">Koo等（2008）</a>中的公式（28）类似，我们有</p>
+<p>$$
+\frac{1}{q^2}\sum_{i=1}^n[|R_{i,n}(u) - \mathbb{E}(R_{i,n}(u))|^2] \leq C \Delta^2 \mathbb{E}[q^{-1}(1 + \Vert Z\Vert^2)U\lbrace \sqrt{1 + \Vert Z\Vert^2}\Delta \sqrt{q/n}\rbrace]
+$$</p>
+<p>其中 $U(t) = I(|1 - Y_1Z_i^T\beta_{01}| &lt; t)$。C2表明 $\mathbb{E}[q^{-1}(1 + \Vert Z\Vert^2)] &lt;\infty$。这样，$\forall \epsilon &gt; 0$，我们总可以选择一个常数 $C$ 使得 $\mathbb{E}[q^{-1}(1 + \Vert Z\Vert^2)I\lbrace q^{-1}(1 + \Vert Z\Vert^2) &gt; C\rbrace] &lt; \epsilon/2$；则</p>
+<p>$$
+\begin{split}
+\mathbb{E}[q^{-1}(1 + \Vert Z\Vert^2)U\lbrace \sqrt{1 + \Vert Z\Vert^2}\Delta \sqrt{q/n}\rbrace] \leq &amp;\mathbb{E}[q^{-1}(1 + \Vert Z\Vert^2)I\lbrace q^{-1}(1 + \Vert Z\Vert^2) &gt; C\rbrace]\newline
+&amp;+ C\text{Pr}\lbrace |1 - Y_1Z_i^T\beta_{01}| &lt; C\Delta \sqrt{q/n}\rbrace
+\end{split}
+$$</p>
+<p>根据C4，我们可以找到一个充分大的 $N&gt;0$ 使得 $n &gt; N$ 时 $\text{Pr}\lbrace |1 - Y_1Z_i^T\beta_{01}| &lt; C\Delta \sqrt{q/n} &lt; \epsilon/(2C)$ 成立。这就证明了 $\lim_{n\rightarrow \infty}q^{-2}\sum_{i=1}^n[|R_{i,n}(u) - \mathbb{E}(R_{i,n}(u))|^2] = 0$。</p>
+<p>注意到 $\mathbb{E}(W_n^Tu/\sqrt{q/n}) = 0$ 且</p>
+<p>$$
+\text{Var}(W_n^Tu/\sqrt{q/n}) \leq Cn^{-1}q^{-1}\sum_{i=1}^n (Z_i^Tu)^2 \leq Cq^{-1}\lambda_{\max}(n^{-1}X_A^TX_A)\Vert u\Vert \rightarrow 0, \quad n\rightarrow \infty
+$$</p>
+<p>因此，当 $n\rightarrow \infty$ 时，公式（4）中的第一项将控制其他项。根据C6，我们有 $\frac12 u^T H(\beta_{01})u &gt;0$。因此，我们可以选择充分大的 $\Delta &gt; 0$，使得对 $\Vert u\Vert = \Delta$ 和充分大的 $n$，$\Lambda_n(u) &gt; 0$ 成立。$\blacksquare$</p>
+<h3 id="32-hinge损失在oracle估计处的次梯度">3.2 Hinge损失在Oracle估计处的次梯度</h3>
+<p>本小节我们分析Hinge损失在Oracle估计处的次梯度（sub-gradient）的渐近表现，为证明局部Oracle性做铺垫。令 $s(\hat{\beta}) = (s_0(\hat{\beta}), \ldots, s_p(\hat{\beta}))^T$ 为hinge损失在Oracle估计处的次梯度，则</p>
+<p>$$
+s_j(\hat{\beta}) = -\frac 1n \sum_{i=1}^n W_iY_iX_{ij}I(1 - Y_iX_i^T\hat{\beta} &gt; 0) - \frac 1n \sum_{i=1}^n W_iY_iX_{ij}v_i \qquad j = 1, \ldots, p
+$$</p>
+<p>其中</p>
+<p>$$
+v_i = \begin{cases}
+[-1, 0] &amp; 1 - Y_iX_i^T\hat{\beta} = 0\newline
+0 &amp; \text{otherwise}
+\end{cases}
+$$</p>
+<p>在一些正则条件下，我们可以研究在Oracle估计处的次梯度的渐近表现，结果如定理1所述。</p>
+<p>【<strong>定理1</strong>】若C1-C8成立，且调节参数满足 $\lambda = o(n^{-(1 - c_2)/2})$ 以及 $\log(p)q\log(n)n^{-1/2} = o(\lambda)$，对于Oracle估计 $\hat{\beta}$，存在 $v_i^ *$ 满足</p>
+<p>$$
+v_i^ * = \begin{cases}
+[-1, 0] &amp; 1 - Y_iX_i^T\hat{\beta} = 0\newline
+0 &amp; \text{otherwise}
+\end{cases}
+$$</p>
+<p>使得对于 $v_i = v_i^ *$ 成立的 $s_j(\hat{\beta})$，我们能够以概率趋近1得到</p>
+<p>$$
+\begin{cases}
+s_j(\hat{\beta}) = 0 &amp; j = 1, \ldots, q;\newline
+|\hat{\beta}_j|\geq (a + \frac 12)\lambda &amp; j = 1, \ldots, q;\newline
+|s_j(\hat{\beta})| \leq \lambda \text{ and } |\hat{\beta}_j| = 0 &amp; j = q+1, \ldots, p.
+\end{cases}
+$$</p>
+<p>【<strong>证明</strong>】为了证明定理1，我们首先不加证明的给出高维统计分析中常用的Bernstein不等式：</p>
+<p>【Bernstein不等式】假设 $\lbrace X_i\rbrace_{i=1}^n$ 是一些列零均值、独立、上界为 $K&gt;0$ 的亚指数（sub-exponential）随机变量，则 $\forall t &gt; 0$，我们有</p>
+<p>$$
+\text{Pr}\left(\left\vert\sum_{i=1}^n X_i \right\vert \geq t\right) \leq 2\exp\left( -\frac{t^2/2}{\sigma^2 + Kt/3}\right)
+$$</p>
+<p>其中 $\sigma^2 = \sum_{i=1}^n \mathbb{E}X_i^2$。这是Bernstein不等式应用最为广泛的版本。</p>
+<p>接下来，我们给出两个与定理1证明相关的引理，并分析详细的推导过程。</p>
+<p>【引理2】若调节参数 $\lambda$ 满足定理1中的假设，则</p>
+<p>$$
+\text{Pr}\left\lbrace \max_{q+1\leq j\leq p} \frac 1n \left\vert \sum_{i=1}^n W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01} \geq 0)\right\vert &gt; \frac{\lambda}{2}\right\rbrace \rightarrow 0, \quad n\rightarrow \infty.
+$$</p>
+<p>【证明】如前述 $\mathbb{E}(W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01})) = 0$。根据C5，$X_{ij}, q+1\leq j\leq p$ 是sub-Gaussian随机变量，则 $\text{Var}(W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01}))$ 有上界（<a href="https://www.stat.cmu.edu/~arinaldo/36788/subgaussians.pdf">Rivasplata，2012</a>），所以存在常数 $C_1, C_2 &gt; 0$，根据Bernstein不等式有</p>
+<p>$$
+\text{Pr}\left\lbrace \left\vert \sum_{i=1}^n W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01} \geq 0)\right\vert &gt; \frac{\lambda n}{2}\right\rbrace \leq 2\exp\left( -\frac{n\lambda^2}{C_1 + C_2\lambda}\right) = O(\exp(-n\lambda))
+$$</p>
+<p>注意到</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \max_{q+1\leq j\leq p} \frac 1n \left\vert \sum_{i=1}^n W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01} \geq 0)\right\vert &gt; \frac{\lambda}{2}\right\rbrace\newline
+= &amp;\text{Pr}\left\lbrace \bigcup_{q+1\leq j\leq p} \left\lbrace\frac 1n \left\vert \sum_{i=1}^n W_iY_iX_{ij} I(1 - Y_iZ_i^T\beta_{01} \geq 0)\right\vert &gt; \frac{\lambda}{2}\right\rbrace \right\rbrace = pO(\exp(-n\lambda))\newline
+= &amp;O(p\exp(-n\lambda)) = o(1)
+\end{split}
+$$</p>
+<p>这是因为根据定理1中关于调节参数的假设满足时，我们有</p>
+<p>$$
+\frac{\log(p)}{n\lambda} = \frac{\log(p)q\log(n)n^{-1/2}}{\lambda}\cdot\frac{1}{q\log(n)n^{1/2}} = o(1)
+$$</p>
+<p>从而证明了引理1的结论。$\square$</p>
+<p>【引理3】对任意的 $\Delta &gt; 0$，若调节参数 $\lambda$ 满足定理1中的假设，则
+$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \max_{q+1\leq j\leq p} \sup_{\Vert \beta_1 - \beta_{01}\Vert\leq \Delta\sqrt{q/n}} \left\vert \sum_{i=1}^n W_iY_iX_{ij}\cdot[I(1 - Y_iZ_i^T\beta_1\geq 0) - I(1 - Y_iZ_i^T\beta_{01}\geq 0)\right.\right.\newline
+&amp;\left.\left. \phantom{\max_{q+1\leq j\leq p} \sup_{\Vert \beta_1 - \beta_{01}\Vert\leq \Delta\sqrt{q/n}} \sum_{i=1}^n W_iY_iX_{ij}}-\text{Pr}\lbrace 1 - Y_iZ_i^T\beta_1&gt;0\rbrace + \text{Pr}\lbrace 1 - Y_iZ_i^T\beta_{01} &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\rightarrow 0, \quad n\rightarrow \infty.
+\end{split}
+$$</p>
+<p>【证明】我们推广<a href="https://www.jstor.org/stable/2241521">Welsh（1989）</a>中定理3.1的证明方法。我们用一个半径为 $\Delta\sqrt{q/n^5}$ 的球构成的球网来覆盖球 $\lbrace \beta_1: \Vert \beta_1 - \beta_{01}\Vert \leq \Delta\sqrt{q/n}\rbrace$，可以按照下面的思路来构建球网：</p>
+<img src="/ml/intuition-of-covering-ball.png" width="700"/>
+<p>因此，球网中的小球个数满足 $N \leq (2n^2)^q$。令这 $N$ 个小球分别为 $B(t_1), B(t_2), \ldots, B(t_N)$，其中 $t_1, t_2, \ldots, t_N$ 是对应的球心。令 $\kappa_i (\beta _1) = 1 - Y_i Z_i^T\beta _1$，以及</p>
+<p>$$
+\begin{split}
+J _{nj _1} &amp;= \sum _{k=1}^N \text{Pr}\left\lbrace\left\vert \sum _{i=1}^n W_i Y_i X _{ij}[I(\kappa _i (t _k)\geq 0) - I(\kappa _i(\beta _{01})\geq 0) - \text{Pr}\lbrace \kappa_i(t _k)\geq 0\rbrace + \text{Pr}\lbrace \kappa_i(\beta _{01})\geq 0\rbrace]\right\vert \geq \frac{n\lambda}{2}\right\rbrace\newline
+J _{nj _2} &amp;= \sum _{k=1}^N \text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W_i Y_i X _{ij}[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa_i(t _k)\geq 0) - \text{Pr}\lbrace \kappa_i(\tilde{\beta} _1)\geq 0\rbrace + \text{Pr}\lbrace \kappa_i(t _k)\geq 0\rbrace]\right\vert \geq \frac{n\lambda}{2}\right\rbrace
+\end{split}
+$$</p>
+<p>一方面</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\beta _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\beta _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\newline
+=&amp;\text{Pr}\left\lbrace \bigcup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\beta _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\beta _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\newline
+\leq&amp;\text{Pr}\left\lbrace \bigcup _{\tilde{\beta} _1\in B(t _k), k=1, \ldots, N} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\beta _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\beta _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\newline
+\leq&amp;\sum _{k=1}^N \text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace
+\end{split}
+$$</p>
+<p>另一方面</p>
+<p>$$
+\begin{split}
+&amp;\sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert\newline
+=&amp;\sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace \right.\newline
+&amp;\left.\phantom{\sup _{\tilde{\beta} _1\in B(t _k)}\sum _{i=1}^n W _iY _iX _{ij}\cdot\kappa _i}+I(\kappa _i(t _k)\geq 0) - I(\kappa _i(t _k)\geq 0) + \text{Pr}(\kappa _i(t _k)\geq 0) - \text{Pr}(\kappa _i(t _k)\geq 0)]\right\vert\newline
+\leq&amp;\left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(t _k)\geq 0) - I(\kappa _i(\beta _{01})\geq 0) - \text{Pr}\lbrace \kappa _i(t _k)\geq 0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01})\geq 0\rbrace]\right\vert\newline
+&amp;+ \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(t _k)\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(t _k) &gt; 0\rbrace]\right\vert
+\end{split}
+$$</p>
+<p>所以</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\beta _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\beta _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\newline
+\leq&amp;\sum _{k=1}^N \text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)} \left\vert \sum _{i=1}^n W _iY _iX _{ij}\cdot[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(\beta _{01})\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01}) &gt; 0\rbrace]\right\vert &gt; n\lambda\right\rbrace\newline
+\leq&amp;\sum _{k=1}^N \text{Pr}\left\lbrace  \left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(t _k)\geq 0) - I(\kappa _i(\beta _{01})\geq 0) - \text{Pr}\lbrace \kappa _i(t _k)\geq 0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01})\geq 0\rbrace]\right\vert\right.\newline
+&amp;\phantom{\sum _{k=1}^N \text{Pr}[[]]}\left. + \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(t _k)\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(t _k) &gt; 0\rbrace]\right\vert&gt; n\lambda\right\rbrace\newline
+\leq&amp;\sum _{k=1}^N \text{Pr}\left\lbrace  \left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(t _k)\geq 0) - I(\kappa _i(\beta _{01})\geq 0) - \text{Pr}\lbrace \kappa _i(t _k)\geq 0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01})\geq 0\rbrace]\right\vert\right. &gt; \frac{n\lambda}{2} \quad\text{或者}\newline
+&amp;\phantom{\sum _{k=1}^N \text{Pr}[[]]}\left. + \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(t _k)\geq 0)-\text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)&gt;0\rbrace + \text{Pr}\lbrace \kappa _i(t _k) &gt; 0\rbrace]\right\vert&gt; \frac{n\lambda}{2}\right\rbrace\newline
+&amp;\leq J _{nj _1} + J _{nj _2}
+\end{split}
+$$</p>
+<p>先分析 $J _{nj _1}$，令 $U _i = W _iY _iX _{ij}[I(\kappa _i(t _k)\geq 0) - I(\kappa _i(\beta _{01})\geq 0) - \text{Pr}\lbrace \kappa _i(t _k)\geq 0\rbrace + \text{Pr}\lbrace \kappa _i(\beta _{01})\geq 0\rbrace]$，易知 $U _i$ 是均值为0、互相独立的随机变量，且 $\mathbb{E}(U _i^2) = \mathbb{E}(U _i^2|Y _i=1)\text{Pr}(Y _i=1) + \mathbb{E}(U _i^2|Y _i=-1)\text{Pr}(Y _i=-1)$。令 $F$ 和 $G$ 分别是给定 $Y _i=1$ 和 $Y _i=-1$ 时 $Z^T\beta _{01}$ 的分布函数。注意到 $X _ij, j = q+1, \ldots, p$ 是sub-Gaussian随机变量，则根据C8可以推出</p>
+<p>$$
+\begin{split}
+\mathbb{E}(U_i^2|Y_i=1)\text{Pr}(Y_i=1) \leq &amp;C(F_i(1 + Z_i^T(\beta_{01} - t_k))[1 - F_i(1 + Z_i^T(\beta_{01} - t_k))] + F_i(1)(1 - F_i(1))\newline
+&amp;- 2F_i[\min(1 + Z_i^T(\beta_{01} - t_k), 1)] + 2F_i(1)F_i(1 + Z_i^T(\beta_{01} - t_k)))\newline
+\leq&amp; C\vert Z_i^T(t_k - \beta_{01})\vert
+\end{split}
+$$</p>
+<blockquote>
+<p><strong>？？？？暂时没有想出为什么有上述的不等式放缩。</strong></p>
+</blockquote>
+<p>类似地</p>
+<p>$$
+\begin{split}
+\mathbb{E}(U_i^2|Y_i=-1)\text{Pr}(Y_i=-1) \leq &amp;C(G_i(-1 + Z_i^T(\beta_{01} - t_k))[1 - G_i(-1 + Z_i^T(\beta_{01} - t_k))] + G_i(-1)(1 - G_i(-1))\newline
+&amp;- 2G_i[\max(-1 + Z_i^T(\beta_{01} - t_k), -1)] + 2G_i(-1)G_i(-1 + Z_i^T(\beta_{01} - t_k)))\newline
+\leq&amp; C\vert Z_i^T(t_k - \beta_{01})\vert
+\end{split}
+$$</p>
+<p>所以</p>
+<p>$$
+\sum_{i=1}^n \text{Var}(U_i) \leq nC\max_i \Vert Z_i\Vert \Vert \beta_{01} - t_k\Vert = n O(\sqrt{q}\log(n))O(\sqrt{q/n}) = O(\sqrt{n}q\log(n))
+$$</p>
+<p>因为 $N \leq (2n^2)^q\leq n^{4q}$，根据Bernstein不等式，存在常数 $C_1$ 和 $C_2$ 使得</p>
+<p>$$
+\begin{split}
+J_{nj_1} &amp;\leq 2N\exp\left( -\frac{n^2\lambda^2/4}{C_1\sqrt{n}q\log(n) + C_2 n\lambda}\right) \leq C\exp\left( 4q\log(n)-\frac{n^2\lambda^2/4}{C_1\sqrt{n}q\log(n) + C_2 n\lambda}\right)\newline
+&amp;= C\exp\left( 4q\log(n)-\frac{n\lambda/4}{C_1\frac{\sqrt{n}q\log(n)}{n\lambda} + C_2}\right)\newline
+&amp;= C\exp\left( 4q\log(n)-\frac{n\lambda/4}{C_1\frac{\log(p)q\log(n)n^{-1/2}}{\lambda}\cdot\frac{1}{\log(p)} + C_2}\right)\newline
+\end{split}
+$$</p>
+<p>又因为 $\log(p)q\log(n)n^{-1/2} = o(\lambda)$，所以存在常数 $C$ 使得</p>
+<p>$$
+\frac{1/4}{C_1\frac{\log(p)q\log(n)n^{-1/2}}{\lambda}\cdot\frac{1}{\log(p)} + C_2} \leq C
+$$</p>
+<p>从而</p>
+<p>$$
+J_{nj_1} \leq C\exp\left( 4q\log(n)-\frac{n\lambda/4}{C_1\frac{\log(p)q\log(n)n^{-1/2}}{\lambda}\cdot\frac{1}{\log(p)} + C_2}\right) \leq C\exp\left( 4q\log(n)-Cn\lambda\right) \qquad (5)
+$$</p>
+<p>再分析 $J_{nj_2}$，令</p>
+<p>$$
+V_i = I(\kappa_i(\tilde{\beta}_1)\geq 0) - I(\kappa_i(t_k)\geq 0)-\text{Pr}\lbrace \kappa_i(\tilde{\beta}_1)&gt;0\rbrace + \text{Pr}\lbrace \kappa_i(t_k) &gt; 0\rbrace
+$$</p>
+<p>由于 $\kappa_i(\tilde{\beta}_1) = 1 - Z_i^T\tilde{\beta}_1 = 1 - Z_i^T(\tilde{\beta}_1 + t_k - t_k) = \kappa_i(t_k)-Z_i^T(\tilde{\beta}_1 - t_k)$，则</p>
+<p>$$
+\kappa_i(\tilde{\beta}_1) \geq 0 \Rightarrow \kappa_i(t_k) \geq Z_i^T(\tilde{\beta}_1 - t_k)
+$$</p>
+<p>又 $|Z_i^T(\tilde{\beta}_1 - t_k)| \leq \Vert Z_i\Vert\cdot \Vert \tilde{\beta}_1 - t_k\Vert \leq \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}$ ，注意到 $I(x\geq s)$ 是 $s$ 的减函数，故 $\forall\tilde{\beta}_1\in B(t_k)$，有 $-B_i\leq V_i\leq A_i$，其中</p>
+<p>$$
+\begin{split}
+A_i &amp;= I(\kappa_i(t_k)\geq -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}) - I(\kappa_i(t_k)\geq 0)-\text{Pr}\lbrace \kappa_i(t_k) &gt; \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace + \text{Pr}\lbrace \kappa_i(t_k) &gt; 0\rbrace\newline
+B_i &amp;= I(\kappa_i(t_k)\geq 0) - I(\kappa_i(t_k)\geq \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}) - \text{Pr}\lbrace \kappa_i(t_k) &gt; 0\rbrace + \text{Pr}\lbrace \kappa_i(t_k) &gt; -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace
+\end{split}
+$$</p>
+<p>容易验证 $A_i, B_i$ 都大于零。</p>
+<p>因为 $\forall V_i$ 都满足</p>
+<p>$$
+\left\vert \sum_{i=1}^n W_iY_iX_{ij}V_i\right\vert \leq \sum_{i=1}^n \vert W_iY_iX_{ij}V_i\vert \leq \max_{i}|X_{ij}|\cdot\sum_{i=1}^n \vert V_i\vert \leq \max_{i}|X_{ij}|\cdot \max\left( \sum_{i=1}^n A_i, \sum_{i=1}^n B_i\right)
+$$</p>
+<p>所以</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}[I(\kappa _i(\tilde{\beta} _1)\geq 0) - I(\kappa _i(t _k)\geq 0) - \text{Pr}\lbrace \kappa _i(\tilde{\beta} _1)\geq 0\rbrace + \text{Pr}\lbrace \kappa _i(t _k)\geq 0\rbrace]\right\vert \geq \frac{n\lambda}{2}\right\rbrace\newline
+=&amp;\text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)}\left\vert \sum _{i=1}^n W _iY _iX _{ij}V _i\right\vert \geq \frac{n\lambda}{2}\right\rbrace \leq \text{Pr}\left\lbrace \sup _{\tilde{\beta} _1\in B(t _k)} \max _{i}|X _{ij}|\cdot\sum _{i=1}^n \vert V _i\vert \geq \frac{n\lambda}{2}\right\rbrace\newline
+\leq&amp;\text{Pr}\left\lbrace \max _{i}|X _{ij}|\cdot \max\left( \sum _{i=1}^n A _i, \sum _{i=1}^n B _i\right) \geq \frac{n\lambda}{2}\right\rbrace
+\end{split}
+$$</p>
+<p>注意到</p>
+<p>$$
+\begin{split}
+\sum_{i=1}^n A_i = &amp;\sum_{i=1}^n [I(\kappa_i(t_k)\geq -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}) - I(\kappa_i(t_k)\geq 0)-\text{Pr}\lbrace \kappa_i(t_k) &gt; -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace + \text{Pr}\lbrace \kappa_i(t_k) &gt; 0\rbrace]\newline
+&amp;+ \sum_{i=1}^n [\text{Pr}\lbrace \kappa_i(t_k) &gt; -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace - \text{Pr}\lbrace \kappa_i(t_k) &gt; \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace]
+\end{split}
+$$</p>
+<p>以及根据C8有</p>
+<p>$$
+\begin{split}
+&amp;\sum_{i=1}^n [\text{Pr}\lbrace \kappa_i(t_k) &gt; -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace - \text{Pr}\lbrace \kappa_i(t_k) &gt; \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace]\newline
+=&amp;\sum_{i=1}^n [(F_i(1 + \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5} - Z_i^T(\beta_{01} - t_k)) - F_i(1 - \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5} - Z_i^T(\beta_{01} - t_k)))\text{Pr}(Y_i = 1)\newline
+&amp;\phantom{\sum_{i=1}^n[}+ (G_i(-1 + \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5} - Z_i^T(\beta_{01} - t_k)) - G_i(-1 + \Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5} - Z_i^T(\beta_{01} - t_k)))\text{Pr}(Y_i = -1)]\newline
+\leq&amp;O(n^{-3/2}q\log(n))
+\end{split}
+$$</p>
+<blockquote>
+<p><strong>？？？？不知道最后的不等式结果怎么来的。</strong></p>
+</blockquote>
+<p>令</p>
+<p>$$
+O_i = I(\kappa_i(t_k)\geq -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}) - I(\kappa_i(t_k)\geq 0)-\text{Pr}\lbrace \kappa_i(t_k) &gt; -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}\rbrace + \text{Pr}\lbrace \kappa_i(t_k) &gt; 0\rbrace
+$$</p>
+<p>这样，对充分大的 $n$，由于 $\lambda = o(n^{-(1-c_2)/2})$ 和C7， 我们有</p>
+<p>$$
+\sum_{k=1}^N \text{Pr}\left( \sum_{i=1}^n A_i\geq \frac{n\lambda}{2}\right) \leq \sum_{k=1}^N \text{Pr}\left( \sum_{i=1}^n O_i\geq \frac{n\lambda}{2} - Cn^{-3/2}q\log(n)\right) \leq \sum_{k=1}^N \text{Pr}\left( \sum_{i=1}^n O_i\geq \frac{n\lambda}{4}\right)
+$$</p>
+<p>注意到 $O_i$ 是均值为零、互相独立的随机变量，且类似求 $\mathbb{E}(U_i^2)$ 可得</p>
+<p>$$
+\begin{split}
+\mathbb{E}(O_i^2) \leq \mathbb{E}(I(\kappa_i(t_k)\geq -\Vert Z_i\Vert \cdot \Delta\sqrt{q/n^5}) - I(\kappa_i(t_k)\geq 0))^2 \leq O(n^{-5/2}q\log(n))
+\end{split}
+$$</p>
+<p>因为 $X_{ij}, q+1\leq j\leq p$ 是sub-Gaussian随机变量，所以 $\max_i |X_{ij}| = O_p(\sqrt{\log(n)})$，所以</p>
+<p>$$
+\mathbb{E}(\max_i |X_{ij}|O_i)^2 \leq O(n^{-5/2}q\log^2(n))
+$$</p>
+<p>综上，根据Bernstein不等式，存在常数 $C_1, C_2$ 使得</p>
+<p>$$
+\begin{split}
+&amp;\sum_{k=1}^N \text{Pr}\left( \max_i |X_{ij}|\sum_{i=1}^n A_i\geq \frac{n\lambda}{2}\right) \leq \sum_{k=1}^N \text{Pr}\left( \max_i |X_{ij}|\sum_{i=1}^n O_i\geq \frac{n\lambda}{4}\right) \leq N\exp\left( -\frac{n^2\lambda^2/16}{C_1 n^{3/2}q\log^2(n) + C_2 n\lambda}\right)\newline
+\leq&amp;C\exp\left( 4q\log(n) - \frac{n^2\lambda^2/16}{C_1 n^{-3/2}q\log^2(n) + C_2 n\lambda}\right)\newline
+=&amp;C\exp\left( 4q\log(n) - \frac{n\lambda/16}{C_1 \frac{\log(p)q\log(n)n^{-1/2}}{\lambda}\cdot\frac{\log(n)}{n\log(p)} + C_2}\right)\newline
+\leq&amp;C\exp\left( 4q\log(n) - C n\lambda\right)
+\end{split}
+$$</p>
+<p>类似地，可以证明 $\sum_{k=1}^N \text{Pr}\left( \max_i |X_{ij}|\sum_{i=1}^n B_i\geq \frac{n\lambda}{2}\right) \leq C\exp\left( 4q\log(n) - C n\lambda\right)$。所以，我们有</p>
+<p>$$
+J_{nj_2} \leq C\exp\left( 4q\log(n) - C n\lambda\right) \qquad (6)
+$$</p>
+<p>根据式（5）和式（6），引理3中的概率满足</p>
+<p>$$
+\sum_{j=q+1}^p (J_{nj_1} + J_{nj_2}) \leq C\exp\left( \log(p) + 4q\log(n) - C n\lambda\right) \rightarrow 0, \quad n\rightarrow \infty
+$$</p>
+<p>这就证明了引理3中的结论。$\square$</p>
+<p>现在，我们来证明定理1的结论。</p>
+<p>（1）没有惩罚的hinge损失目标函数是凸的。根据凸优化理论，一定存在 $v _j^ *$ 使得对应的 $s _j(\hat{\beta}) = 0$。</p>
+<p>（2）注意到 $\min _{1\leq j\leq q} |\hat{\beta} _j| \geq \min _{1\leq j\leq q}|\beta _{0j}| - \max _{1\leq j\leq q}|\hat{\beta} _j - \beta _{0j}|$。根据C7可知 $n^{(1-c _2)/2}\min _{1\leq j\leq q}|\beta _{0j}| \geq M _1$，根据定理1可知 $\max _{1\leq j\leq q}|\hat{\beta} _j - \beta _{0j}| = O _p(\sqrt{q/n})$。所以，容易看出 $\min _{1\leq j\leq q} |\hat{\beta} _j| = O _p(n^{-(1 - c _2)/2})$。由于 $\lambda = o(n^{-(1 - c _2)/2})$，所以 $\text{Pr}\lbrace|\hat{\beta} _j|\geq (a+\frac 12)\lambda\rbrace \rightarrow 1, j=1, \ldots, q$ 成立。</p>
+<p>（3）根据Oracle估计量的构造，我们有 $\hat{\beta} _j = 0, j= q+1,\ldots, p$。我们可以充分表明 $\text{Pr}\lbrace|s _j(\hat{\beta})|&gt;\lambda, \text{for some }j = q+1, \ldots, p\rbrace\rightarrow 0$。不妨令 $D = \lbrace i: 1 - Y _iZ _i^T\hat{\beta} _1 = 0\rbrace$，我们有</p>
+<p>$$
+s _j(\hat{\beta}) = -\frac 1n \sum _{i=1}^n W _iY _iX _{ij} I(1 - Y _iZ _i^T\hat{\beta} _1\geq 0) - \frac 1n \sum _{i\in D} W _iY _iX _{ij}v _i
+$$</p>
+<p>其中 $-1\leq v_i\leq 0, i\in D$ 以及 $v_i = 0$ 其他情况。根据C5，$(Z_i, Y_i)$ 是<strong>一般情形</strong>，则依概率1满足 $D$ 中有 $q+1$ 个元素；且 $X_{ij}$ 是sub-Gaussian，满足 $\max_i |X_{ij}| = O(\sqrt{\log(n)})$。再根据C4，依概率1满足 $|n^{-1}\sum_{i\in D} W_iY_iX_{ij}v_i| = O(n^{-1}q\log(q)) = o(\lambda)$。</p>
+<blockquote>
+<p>没明白怎么算出的 $|n^{-1}\sum_{i\in D} W_iY_iX_{ij}v_i| = O(n^{-1}q\log(q)) = o(\lambda)$。</p>
+</blockquote>
+<p>因此，我们只需证明 $\text{Pr}\lbrace \max_{q+1\leq j\leq q}|n^{-1}\sum_{i=1}^n W_iY_iX_{ij}I(1 - Y_iZ_i^T\hat{\beta}_1\geq 0)| &gt; \lambda\rbrace \rightarrow 0$。注意到</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}I(1 - Y _iZ _i^T\hat{\beta} _1\geq 0)| &gt; \lambda\right\rbrace\newline
+\leq&amp;\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}[I(1 - Y _iZ _i^T\hat{\beta} _1\geq 0) - I(1 - Y _iZ _i^T\beta _{01}\geq 0)]\right| &gt; \frac{\lambda}{2}\right\rbrace\newline
+&amp;+ \text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}I(1 - Y _iZ _i^T\beta _{01}\geq 0)\right| &gt; \frac{\lambda}{2}\right\rbrace
+\end{split} \qquad (7)
+$$</p>
+<p>根据引理2可知，式（7）中不等式右侧的第二项为 $o_p(1)$。另一方面，根据以引理1，式（7）中不等式右侧的第二项满足</p>
+<p>$$
+\begin{split}
+&amp;\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}[I(1 - Y _iZ _i^T\hat{\beta} _1\geq 0) - I(1 - Y _iZ _i^T\beta _{01}\geq 0)]\right| &gt; \frac{\lambda}{2}\right\rbrace\newline
+\leq&amp;\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}[I(1 - Y _iZ _i^T\beta _1\geq 0) - I(1 - Y _iZ _i^T\beta _{01}\geq 0)\right.\right.\newline
+&amp;\phantom{\max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\sum _{i=1}^n W _iY _iX _{ij}nnnnnnnnn}-\text{Pr}\lbrace 1 - Y _iZ _i^T\beta _1\geq 0\rbrace + \text{Pr}\lbrace 1 - Y _iZ _i^T\beta _{01}\geq 0\rbrace\newline
+&amp;\left.\left.\phantom{\max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\sum _{i=1}^n W _iY _iX _{ij}nnnnnnnnn}+\text{Pr}\lbrace 1 - Y _iZ _i^T\beta _1\geq 0\rbrace - \text{Pr}\lbrace 1 - Y _iZ _i^T\beta _{01}\geq 0\rbrace]\right| &gt; \frac{\lambda}{2}\right\rbrace\newline
+\leq&amp;\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}[I(1 - Y _iZ _i^T\beta _1\geq 0) - I(1 - Y _iZ _i^T\beta _{01}\geq 0)\right.\right.\newline
+&amp;\left.\left.\phantom{\max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\sum _{i=1}^n W _iY _iX _{ij}nnnnnnnnn}-\text{Pr}\lbrace 1 - Y _iZ _i^T\beta _1\geq 0\rbrace + \text{Pr}\lbrace 1 - Y _iZ _i^T\beta _{01}\geq 0\rbrace]\right| &gt; \frac{\lambda}{4}\right\rbrace\newline
+&amp;+\text{Pr}\left\lbrace \max _{q+1\leq j\leq q}\sup _{\Vert \beta _1 - \beta _{01}\Vert\leq \Delta\sqrt{q/n}}\left|n^{-1}\sum _{i=1}^n W _iY _iX _{ij}[\text{Pr}\lbrace 1 - Y _iZ _i^T\beta _1\geq 0\rbrace - \text{Pr}\lbrace 1 - Y _iZ _i^T\beta _{01}\geq 0\rbrace]\right| &gt; \frac{\lambda}{4}\right\rbrace
+\end{split} \qquad (8)
+$$</p>
+<p>根据引理3，式（8）中不等式右侧的第一项为 $o_p(1)$。因此，我只需界定第二项即可。注意到</p>
+<p>$$
+\begin{split}
+|\text{Pr}\lbrace 1 - Y_iZ_i^T\beta_1\geq 0\rbrace - \text{Pr}\lbrace 1 - Y_iZ_i^T\beta_{01}\geq 0\rbrace| \leq &amp;|F_i(1 + Z_i^T(\beta_1 - \beta_{01})) - F_i(1)|\text{Pr}(Y_i = 1)\newline
+&amp;+ |G_i(-1 + Z_i^T(\beta_1 - \beta_{01})) - G_i(-1)|\text{Pr}(Y_i = -1)
+\end{split}
+$$</p>
+<p>则有</p>
+<p>$$
+\begin{split}
+&amp;\max_{q+1\leq j\leq q}\sup_{\Vert \beta_1 - \beta_{01}\Vert\leq \Delta\sqrt{q/n}}\left|n^{-1}\sum_{i=1}^n W_iY_iX_{ij}[\text{Pr}\lbrace 1 - Y_iZ_i^T\beta_1\geq 0\rbrace - \text{Pr}\lbrace 1 - Y_iZ_i^T\beta_{01}\geq 0\rbrace]\right|\newline
+\leq&amp; C\max_{i,j}|X_{ij}|\sup_{\Vert \beta_1 - \beta_{01}\Vert\leq \Delta\sqrt{q/n}} n^{-1}\sum_{i=1}^n \Vert Z_i\Vert\cdot \Vert \beta_1 - \beta_{01}\Vert\newline
+=&amp;O(\sqrt{\log(pn)})O(\sqrt{q/n})O(\sqrt{q\log(n)})\newline
+=&amp;o_p(1)
+\end{split}
+$$</p>
+<p>则</p>
+<p>$$
+\text{Pr}\left\lbrace \max_{q+1\leq j\leq q}\sup_{\Vert \beta_1 - \beta_{01}\Vert\leq \Delta\sqrt{q/n}}\left|n^{-1}\sum_{i=1}^n W_iY_iX_{ij}[\text{Pr}\lbrace 1 - Y_iZ_i^T\beta_1\geq 0\rbrace - \text{Pr}\lbrace 1 - Y_iZ_i^T\beta_{01}\geq 0\rbrace]\right| &gt; \frac{\lambda}{4}\right\rbrace = o_p(1)
+$$</p>
+<p>综上，也就证明了定理1的结论。$\blacksquare$</p>
+<p>定理1主要刻画了hinge损失函数在Oracle估计量处次梯度的行为特征。具体而言，在通常的设定下，依概率1满足，对应重要变量的次梯度为零；对应无关变量的次梯度离零不会很远。定理1对证明Oracle性质有重要的启发作用。</p>
+<h3 id="33-局部oracle性质">3.3 局部Oracle性质</h3>
+<p>在证明<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO的变量选择一致性</a>时，我们先找到LASSO模型和估计之间联结的桥梁——KKT条件，再分析稀疏解对应的KKT条件成立的概率，最后论证LASSO的变量选择一致性。与之类似，我们证明非凸惩罚SVM的局部Oracle性质，也要找到类似KKT条件联结非凸惩罚SVM和估计之间的条件，再讨论其成立的概率。与LASSO不同，非凸惩罚SVM是非凸优化，我们在此要研究针对DC优化（difference convex programming）的充分局部最优性条件（sufficient local optimality condition），而不是KKT条件。</p>
+<p>注意到，虽然非凸惩罚SVM（3）是非凸优化问题，但是它可以写成两个凸函数的差，即</p>
+<p>$$
+Q(\beta) = g(\beta) - h(\beta)
+$$</p>
+<p>其中</p>
+<p>$$
+g(\beta) = \frac 1n \sum _{i=1}^n W _i(1 - Y _iX _i^T\beta) _+ + \lambda \sum _{i=1}^p |\beta _j|
+$$</p>
+<p>以及</p>
+<p>$$
+h(\beta) = \lambda \sum  _{i=1}^p |\beta _j| - \sum _{i=1}^p p _{\lambda}(|\beta _j|) = \sum _{i=1}^p H _{\lambda}(\beta _j)
+$$</p>
+<p>其中 $H_{\lambda}(|\beta_j|)$ 和罚函数有关。对于SCAD罚项，我们有</p>
+<p>$$
+H_{\lambda}(\beta_j) = \frac{\beta_j^2 - 2\lambda|\beta_j| + \lambda^2}{2(a - 1)}I(\lambda\leq |\beta_j|\leq a\lambda) + \left\lbrace \lambda|\beta_j| + \frac{(a+1)\lambda^2}{2}\right\rbrace I(|\beta_j| &gt; a\lambda)
+$$</p>
+<p>以上关于 $Q(\beta)$ 的凸函数的差分解，表明非凸惩罚SVM（3）满足DC算法（difference of convex function algorithm，<a href="https://doi.org/10.1007/s10479-004-5022-1">An and Tao（2005）</a>）的形式要求，可以用相关理论进行分析。我们具体阐述基于次梯度的充分局部最优性条件。<a href="http://journals.math.ac.vn/acta/pdf/9701289.pdf">Tao and An（1997）</a>中推论（Corollary）1表明，若在点 $x^ *$ 附近有一个领域 $U$ 使得 $\partial h(x) \cap\partial g(x^ *)\neq \emptyset, \forall x\in U\cup \text{dom}(g)$，则 $x^ *$ 是 $g(x) - h(x)$ 的一个局部最小值点（local minimizer）。基于该结论，我们来证明局部Oracle性质。</p>
+<p>首先，我们计算 $g(\beta)$ 和 $h(\beta)$ 的次梯度。对 $g(\beta)$，我们有</p>
+<p>$$
+\partial g(\beta) = \left\lbrace \xi\in\mathbb{R}^{p+1}: \xi_j = -\frac 1n \sum_{i=1}^n W_iY_iX_{ij}I(1 - Y_iX_i^T\hat{\beta}&gt;0) - \frac 1n \sum_{i=1}^n W_iY_iX_{ij}v_i + \lambda l_j, j = 0, 1,\ldots, p\right\rbrace
+$$</p>
+<p>其中 $l_0 = 0, l_j = \text{sgn}(\beta_j), \beta_j\neq 0$ 以及 $l_j \in [-1,1]$ 其他情况；$v_i \in [-1,0], 1 - Y_iX_i^T\hat{\beta} = 0$ 以及 $v_i = 0$ 其他情况。</p>
+<p>根据假设2，对非凸罚项，我们有 $\lim_{t\rightarrow 0+} H_{\lambda}'(t) = \lim_{t\rightarrow 0-} H_{\lambda}'(t) = \lambda\text{sgn}(t) - \lambda\text{sgn}(t) = 0$，所以 $h(\beta)$ 处处可导，所以</p>
+<p>$$
+\partial h(\beta) = \left\lbrace \mu\in \mathbb{P}^{p+1}: \mu_j = \frac{\beta_j - \lambda\text{sgn}(\beta_j)}{a - 1}I(\lambda \leq |\beta_j|\leq a\lambda) + \lambda\text{sgn}(\beta_j)I(|\beta_j|&gt;a\lambda)\right\rbrace
+$$</p>
+<p>上述结果对SCAD罚项成立，其他罚项如MCP可自行推导。</p>
+<p>结合充分局部最优性条件和定理1中的结论，我们应当表明依概率1满足，对任意在以Oracle估计量 $\hat{\beta}$ 为中心、半径为 $\lambda/2$ 的球域中的 $\beta$，存在一个次梯度 $\xi\in \partial g(\hat{\beta})$ 使得 $\partial h(\beta)/\partial \beta_j = \xi_j, j = 0, 1, \ldots, p$。这就能推出Oracle估计量 $\hat{\beta}$ 自己就是非凸惩罚SVM（3）的一个局部最小值点。我们把这个结论用定理2来描述。</p>
+<p>【<strong>定理2</strong>】假定C1-C8都满足。令 $B_n(\lambda)$ 是非凸优化问题中基于参数 $\lambda$ 的 $Q(\beta)$ 的局部最小值集合。若 $\lambda = o(n^{-(1 - c_1)/2})$ 和 $\log(p)q\log(n)n^{-1/2} = o(\lambda)$，则Oracle估计量 $\hat{\beta} = (\hat{\beta}_1^T, \mathbf{0}^T)^T$ 满足</p>
+<p>$$
+\text{Pr}\lbrace \hat{\beta}\in B_n(\lambda)\rbrace \rightarrow 1, \quad n\rightarrow\infty.
+$$</p>
+<p>【<strong>证明</strong>】我们应当表明通过写成 $Q(\beta) = g(\beta) - g(\beta)$ 来说明 $\hat{\beta}$ 是 $Q(\beta)$ 的局部最小值点。</p>
+<p>根据定理1，我们有 $\text{Pr}\lbrace \mathscr{G}\subseteq\partial g(\hat{\beta})\rbrace$，其中</p>
+<p>$$
+\mathscr{G} = \lbrace \xi: \xi_0 = 0; \xi_j = \lambda\text{sgn}(\hat{\beta}_j), j = 1, \ldots, q; \xi_j = s_j(\hat{\beta}) + \lambda l_j, j = q+1, \ldots, p\rbrace
+$$</p>
+<p>考虑任意在以Oracle估计量 $\hat{\beta}$ 为中心、半径为 $\lambda/2$ 的球域中的 $\beta$，我们可以证明存在 $\xi^ * \in \mathscr{G}$ 使得 $\text{Pr}\lbrace \xi_j^ * = \partial h(\beta)/\partial \beta_j\rbrace \rightarrow 1$ 在 $n\rightarrow \infty$ 时成立。</p>
+<p>由于 $\partial h(\beta)/\partial \beta_0 = 0$，我们有 $\xi_0^ * = \partial h(\beta)/\partial \beta_0$。</p>
+<p>对 $j = 1, \ldots, q$，根据定理1，我们有 $\min _{1\leq j\leq q}|{\beta} _j| \geq \min _{1\leq j\leq q}|\hat{\beta} _j| - \max _{1\leq j\leq q}|\hat{\beta} _j - \beta _j| \geq (a + 1/2)\lambda - \lambda/2 = a\lambda$ 依概率1成立。根据针对非凸罚项的假设2，有 $\text{Pr}\lbrace \partial h(\beta)/\partial \beta _j = \lambda\text{sgn}(\beta _j)\rbrace\rightarrow 1, j = 1, \ldots, q$。根据引理1和定理1，对充分大的 $n$，有 $\text{sgn}(\beta _j) = \text{sgn}(\hat{\beta} _j)$。所以，当 $n\rightarrow \infty$ 时，我们有 $\text{Pr}\lbrace \xi _j^ * = \partial h(\beta)/\partial \beta _j\rbrace\rightarrow 1, j = 1, \ldots, q$。</p>
+<p>对 $j = q+1, \ldots, p$，根据定理1，有 $\text{Pr}\lbrace |\beta _j| \leq |\hat{\beta} _j| + |\beta _j - \hat{\beta} _j|\leq \lambda\rbrace\rightarrow 1$。所以，对SCAD罚项有 $\text{Pr}\lbrace \partial h(\beta)/\partial \beta_j = 0\rbrace\rightarrow 1$。注意到针对非凸罚项的假设2，有 $\text{Pr}\lbrace |\partial h(\beta)/\partial \beta_j| \leq \lambda\rbrace\rightarrow 1$。根据定理1，有 $\text{Pr}\lbrace |s_j(\hat{\beta})|\leq \lambda\rbrace\rightarrow 1, j = q+1, \ldots, p$。所以，我们总是可以找到 $l_j\in [-1, 1]$ 使得 $\text{Pr}\lbrace \xi_j^ * = s_j(\hat{\beta}) + \lambda l_j = \partial h(\beta)/\partial \beta_j\rbrace \rightarrow 1, j = q+1, \ldots, p$ 成立。</p>
+<p>这样就证明了定理2的结论。$\blacksquare$</p>
+<p>可以证明，如果取 $\lambda = n6{-1/2 + \delta}, c_1&lt;\delta&lt;c_2/2$，则局部Oracle性质对 $p = o(\exp(n^{(\delta - c_1)/2}))$ 也成立。这表明非凸惩罚SVM的局部Oracle性质在变量个数随着样本量呈指数增长时也成立。</p>
+<h2 id="4-结语">4 结语</h2>
+<p>传统的机器学习理论主要关注模型的泛化误差、Bayes渐近性质等，而较少关注模型参数的大样本性质。本文借鉴统计中关于高维稀疏化模型的研究，探讨了高维情形下非凸惩罚SVM的系数的变量选择一致性。相关文献还不多见，值得进一步跟踪研究。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" title="高维情形下非凸惩罚SVM的参数一致性" target="_blank" rel="external">https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" title="交替最小化：凸优化下的收敛性分析"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2022/09/scad/"
+                    title="非凸惩罚之SCAD简介"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

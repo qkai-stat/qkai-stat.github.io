@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Valine: 高效的无后端评论系统 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友H君经常唠" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>Valine: 高效的无后端评论系统 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="Valine: 高效的无后端评论系统" />
+<meta property="og:description" content="腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友H君经常唠" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/09/valine-introduction/" />
+<meta property="article:published_time" content="2020-09-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-12T00:00:00+00:00" />
+<meta itemprop="name" content="Valine: 高效的无后端评论系统">
+<meta itemprop="description" content="腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友H君经常唠">
+<meta itemprop="datePublished" content="2020-09-12T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-09-12T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2801">
+
+
+
+<meta itemprop="keywords" content="git," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Valine: 高效的无后端评论系统"/>
+<meta name="twitter:description" content="腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友H君经常唠"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/09/valine-introduction/"
+    >Valine: 高效的无后端评论系统</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/09/valine-introduction/" class="article-date">
+  <time datetime="2020-09-12 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-09-12</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/linux/"> linux </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/git/"> git </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/09/valine-introduction/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2801字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友<a href="https://guyueshui.github.io/">H君</a>经常唠叨，<strong>依托平台大都会受限制而自己往往又无能为力，要尽量去平台化啊</strong>！</p>
+<p>在之前的博客中，我曾分享过利用<a href="https://jiandan94.gitee.io/2020/07/hugo-gitee/">Hugo+Gitee快速构建个人博客</a>实现去平台化的经验，但并没有涉及博客评论如何设置。这篇博客就介绍一款基于<a href="https://leancloud.cn/">LeanCloud</a>的快速、简洁且高效的无后端评论系统——<a href="https://valine.js.org/">Valine</a>。</p>
+<blockquote>
+<p>话说我又不是程序猿，看来以后要抵制程序猿H君的洗脑了。</p>
+</blockquote>
+<h2 id="1-准备工作">1 准备工作</h2>
+<p>实现个人博客评论功能，我们首先自然需要先搭建好个人博客网站，推荐Hugo+Gitee/Github（因为我只会用Hugo搭建，哈哈哈），具体方法可以看网上教程或者我前面的<a href="https://jiandan94.gitee.io/2020/07/hugo-gitee/">经验分享文章</a>。一般来说，Hugo上的博客主题都整合了Valine评论，我们只需要进行相应的配置即可。</p>
+<img src='/hugo+valine/config-valine.png' width="600"/>
+<p>如上图，这是我的博客配置文件<code>config.yml</code>中关于评论系统的配置区域。</p>
+<h2 id="2-开始配置">2 开始配置</h2>
+<p>博客上面的评论留言数据自然要存放于某处，一般是放在服务器上，但并不是人人都有私人服务器。LeanCloud是一个简单易用（主要提供免费套餐）的云服务器，有强大的数据库支持。Valine的配置也即是将个人博客与之对接。</p>
+<p>首先，我们要去<a href="https://www.leancloud.cn/">LeanCloud官网</a>申请一个账号。为了后续的配置可以顺利进行，<strong>请申请国际版的账号</strong>。</p>
+<p>然后，我们登录国际版的LeanCloud，选择创建应用并输入一个你喜欢的名称，例如</p>
+<img src='/hugo+valine/create-app.png' width="600"/>
+<p>接着，点击进入到我们所创建的应用中，依次选择<code>设置</code> &gt; <code>应用Keys</code>，便可以查看当前应用的账号（AppID）和密钥（AppKey）。</p>
+<p>最后，我们只需将上述的AppID和AppKey复制粘贴到博客配置文件<code>config.yml</code>中Vlaine配置区域的对应位置即可。</p>
+<p>Valine的基本配置就结束了。可以看出，使用Valine评论非常简单！其他的参数通过阅读后面的英文介绍即可理解其意义，我将我的设置列举如下</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notify</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>verify</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>placeholder</code></td>
+<td>欢迎留言【填写邮箱后才能接收回复通知】</td>
+</tr>
+<tr>
+<td><code>avatar</code></td>
+<td>mm</td>
+</tr>
+<tr>
+<td><code>meta</code></td>
+<td>nick, mail</td>
+</tr>
+<tr>
+<td><code>pageSize</code></td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>visitor</code></td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>对一些参数设置做一点解释。由于可能需要和留言者交流，所以在评论框放了填写邮箱的提示，然后<code>meta</code>参数设置成可以允许留言者留下自己的昵称（nick）和用来接收评论反馈消息的邮箱（mail）。因为我的博客模板集成了其他的访问量统计方式，因此<code>visitor</code>参数设置false，即不需要通过LeanCLoud进行访问量统计。</p>
+<p>配置好了之后重新发布一下博客，即可在自己的每篇文章下看到评论框</p>
+<img src='/hugo+valine/comment-box.png' width="600"/>
+<p>可见，Valine评论支持Markdown输入和表情输入，功能还是非常友好和强大的！留言者只需输入邮箱（对他人不可见），今后自己的评论有他人回复即会收到邮件通知和评论链接，点击链接便可直接跳转到原先的留言位置进行回复。</p>
+<h2 id="3-评论邮件通知">3 评论邮件通知</h2>
+<p>文章有了新的评论，作者应该要能及时收到通知并快速进入到评论界面进行查看和回复；留言者的评论有了回复，正常情况应该能及时收到通知并快速进入原始评论的位置进行回复。Valine是利用邮箱通知实现该功能的。然而，你直接在<code>config.yml</code>将通知的参数<code>notify</code>设置成true，发现在博客下面评论后并不能收到邮箱通知！！！</p>
+<p>这么尴尬的事情自然还是有解决方案的。这里采用的是<a href="https://github.com/zhaojun1998/Valine-Admin">Valine-Admin</a>的解决方案。</p>
+<p>首先，访问你的LeanCloud主页，进入到与博客绑定的应用中。</p>
+<p>然后，依次选择<code>设置</code> &gt; <code>邮箱模板</code>，将<strong>用于重置密码的邮件主题</strong>和对应的<strong>内容</strong>分别改成下面的内容</p>
+<pre><code class="language-R">## 用于重置密码的邮件主题
+你在 {{appname}} 的评论收到了新的回复
+
+## 内容
+&lt;p&gt;Hi, {{username}}&lt;/p&gt;
+&lt;p&gt;
+你在 {{appname}} 的评论收到了新的回复，请点击查看：
+&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;你的博客主页链接&quot; style=&quot;display: inline-block; padding: 10px 20px; border-radius: 4px; background-color: #3090e4; color: #fff; text-decoration: none;&quot;&gt;马上查看&lt;/a&gt;&lt;/p&gt;
+</code></pre>
+<p>该设置即为在有评论时将评论的内容和地址发送到对应的邮箱中。</p>
+<p>接着，我们需要在LeanCloud上部署一个项目，以实现实时邮箱通知的功能。依次选择<code>云引擎</code> &gt; <code>部署</code>，点击<code>项目部署</code>并采用<code>Git部署</code>，配置Git到 <a href="https://github.com/zhaojun1998/Valine-Admin">https://github.com/zhaojun1998/Valine-Admin</a>并保存</p>
+<img src='/hugo+valine/git-setting.png' width="600"/>
+<p>之后，回到<code>部署</code>页面点击部署</p>
+<img src='/hugo+valine/git-deploy.png' width="600"/>
+<p>看到部署成功后，关闭部署日志窗口</p>
+<img src='/hugo+valine/success.png' width="600"/>
+<p>最后，我们要切换到<code>云引擎</code> &gt; <code>设置</code>中进行必要的变量设置（选择添加变量，填上变量名和值即可），主要包括</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SENDER_EMAIL</td>
+<td>评论通知推送采用的邮箱</td>
+</tr>
+<tr>
+<td>SMTP_PASS</td>
+<td>邮箱密码（163邮箱要授权码）</td>
+</tr>
+<tr>
+<td>SENDER_NAME</td>
+<td>发件人的昵称</td>
+</tr>
+<tr>
+<td>SITE_PASS</td>
+<td>博客网址</td>
+</tr>
+<tr>
+<td>SITE_URL</td>
+<td>博客主页链接（末尾不带/）</td>
+</tr>
+<tr>
+<td>SMTP_SERVICE</td>
+<td>邮箱服务商，支持QQ、163、126、gmail等</td>
+</tr>
+<tr>
+<td>SMTP_USER</td>
+<td>和邮箱保持一致即可</td>
+</tr>
+</tbody>
+</table>
+<p>上述的工作结束后，回到自己的博客进行评论，然后你的邮箱就可以收到评论的通知了，界面如下</p>
+<img src='/hugo+valine/email-notice.jpg' width="600"/>
+<p>评论者没有填写昵称，默认便是Anonymous显示。</p>
+<h2 id="4-休眠策略和定时任务">4 休眠策略和定时任务</h2>
+<p>免费版的LeanCloud是有强制休眠的限制的，无法全天候运行：</p>
+<ul>
+<li>每天必须休眠6小时；</li>
+<li>30分钟内没有外部访问便休眠；</li>
+<li>休眠后如果有新的外部访问请求则会马上启动，但是该请求的邮件会发送失败。</li>
+</ul>
+<p>借用网上的已有经验，我们可以采用的应对措施为：如果不想付费的话，最佳使用方案就设置定时器，每天 7 - 23 点每25分钟访问一次，这样可以保持每天的绝大多数时间邮件服务是正常的。</p>
+<p>具体的休眠策略和定时任务设置，依次在<code>云引擎</code> &gt; <code>定时任务</code>中设置</p>
+<img src='/hugo+valine/clock-setting.png' width="600"/>
+<p>然而，单纯的如此设置依然不能达到我们预想的目的，即不能正常唤醒。网上主流的解决方案有些已经失效了，唤醒过程中会报如下的错误</p>
+<blockquote>
+<p>因流控原因，通过定时任务唤醒体验版实例失败，建议升级至标准版云引擎实例避免休眠</p>
+</blockquote>
+<p>下面介绍一种基于Github TOKEN的解决方式，该方案已经被我验证是成功的了。</p>
+<p>首先，我们在<code>云引擎</code> &gt; <code>设置</code>中设置自己的云引擎域名</p>
+<img src='/hugo+valine/yuming.png' width="600"/>
+<p>我们在自定义环境变量中添加该域名，如下所示</p>
+<img src='/hugo+valine/yuming-setting.png' width="600"/>
+<p>这个域名的好处就是，可以直接访问并管理自己博客的所有评论，不需要再进入到LeanCloud中进行查看。</p>
+<p>然后，我们利用该域名进行休眠策略和定时任务的设置。进入到自己的Github主页，选择<code>setting</code> &gt; <code>Developer settings</code> &gt; <code>Personal access tokens</code>，建立一个新的token，要求如下</p>
+<ul>
+<li>名称必须为<code>GITHUB_TOKEN</code>；</li>
+<li>勾选 repo、admin:repo_hook、workflow 等选项</li>
+</ul>
+<p>接着，我们从<a href="https://github.com/blogimg/WakeLeanCloud">这里</a>FORK一个项目。FORK成功后，进入到项目的<code>settings</code>选择<code>Secrets</code>，添加上述设定的域名</p>
+<img src='/hugo+valine/github-setting.png' width="600"/>
+<p>名称必须为SITE，值为自己的域名。</p>
+<p>最后，给自己的项目点个 star 就能启动了，启动后请切换到 actions，看看是否运行成功。如果想获取该方法的更多细节，请参考下面的信息</p>
+<blockquote>
+<p>若想得到更详细的解决方法，请前往该方案原文章：https://www.antmoe.com/posts/ff6aef7b/</p>
+<p>请多支持作者：Dreamy.TZK</p>
+<p>本解决方案转载自：<a href="https://www.antmoe.com/">小康博客</a>：https://www.antmoe.com/</p>
+</blockquote>
+<h2 id="5-结语">5 结语</h2>
+<p>如果大家感兴趣的话可以试试Valine评论。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/09/valine-introduction/" title="Valine: 高效的无后端评论系统" target="_blank" rel="external">https://qkai-stat.github.io/2020/09/valine-introduction/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/08/ml-pub-introduction/" title="人工智能方向的优秀刊物"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/09/svm/"
+                    title="支持向量机原理"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

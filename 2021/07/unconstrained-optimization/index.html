@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        无约束优化：基本概念总结 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>无约束优化：基本概念总结 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="无约束优化：基本概念总结" />
+<meta property="og:description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2021/07/unconstrained-optimization/" />
+<meta property="article:published_time" content="2021-07-22T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-07-22T00:00:00+00:00" />
+<meta itemprop="name" content="无约束优化：基本概念总结">
+<meta itemprop="description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex">
+<meta itemprop="datePublished" content="2021-07-22T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-07-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2699">
+
+
+
+<meta itemprop="keywords" content="机器学习,优化算法,凸优化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="无约束优化：基本概念总结"/>
+<meta name="twitter:description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2021/07/unconstrained-optimization/"
+    >无约束优化：基本概念总结</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2021/07/unconstrained-optimization/" class="article-date">
+  <time datetime="2021-07-22 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-07-22</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+    <a class="article-tag-link" href="/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/"> 优化算法 </a>
+    <a class="article-tag-link" href="/tags/%E5%87%B8%E4%BC%98%E5%8C%96/"> 凸优化 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2021/07/unconstrained-optimization/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2699字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <blockquote>
+<p>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《<a href="https://book.douban.com/subject/1888111/">Convex Optimization</a>》这本书时的笔记。因此，这些博客的内容结构和书中第5、9-11章节的框架相似，我在这里只不过罗列了书中的一些要点和个人的一点思考。</p>
+</blockquote>
+<p>带有等式约束、不等式约束的凸优化问题可以通过一些技巧转化成无约束问题。因此，研究无约束凸优化问题是学习凸优化算法的基础。本文主要介绍无约束优化问题的基本概念，如下水平集、条件数等。了解和掌握这些概念对认识和分析无约束凸优化问题有重要的帮助。</p>
+<h2 id="1-无约束优化问题">1 无约束优化问题</h2>
+<p>我们研究下面形式的无约束优化问题
+$$
+\min f(x)
+$$
+其中 $f：\mathbb{R}^n\rightarrow \mathbb{R}$ 是<strong>二次可微</strong>凸函数。我们假定该问题存在最优解 $x^*$，对应最优值 $p^ * =\inf_x f(x)=f(x^ *)$。既然 $f$ 是可微凸函数，那么最优点应当满足最优性一阶微分条件，即
+$$
+\nabla f(x^ *)=0
+$$
+这样，最小化 $f$​​ 就变成求解 $n$​​ 个变量 $x_1,\ldots,x_n$​​ 的 $n$​​ 个方程问题了。除了一些特殊情况，我们通常很难解析的求解上述一阶微分问题。实际中，我们一般采用迭代算法进行求解，也即是构造点列 $x^{(0)}$​​，$x^{(1)}$​​，$\ldots$​​ $\in \textrm{dom} f$​​，使得 $k\rightarrow\infty$​​ 时 $f(x^{(k)})\rightarrow p^ *$​​。这样的点列称之为优化问题的极小化点列。实际计算时通常给定容许误差 $\epsilon$​​，当 $f(x^{(k)})-p^ *&lt;\epsilon$​​​​ 时算法终止。</p>
+<h2 id="2-下水平集">2 下水平集</h2>
+<p>函数 $f$ 的 $\alpha$-下水平集（sublevel sets） $C_{\alpha}$ 定义成
+$$
+C_{\alpha} = \lbrace x\in \textrm{dom}f | f(x)\leq \alpha \rbrace
+$$
+根据定义，$\alpha$-下水平集描述的是那些让 $f$ 取值小于等于 $\alpha$ 的 $x$ 所构成的集合，即定义域 $\textrm{dom}f$ 的一个子集。关于凸函数的$\alpha$-下水平集，我们有如下的结论：</p>
+<p><strong>【定理】</strong> 凸函数的 $\alpha$-下水平集仍然是凸集，反之则不成立。</p>
+<p><strong>【证明】</strong> 根据凸集的定义证明即可。假设 $f$ 是凸函数，考虑其 $\alpha$-下水平集 $C_{\alpha}$ 中的任意两点 $x_1$ 和 $x_2$，则
+$$
+f(x_1)\leq \alpha,\quad f(x_2)\leq \alpha
+$$
+结合函数的凸性不难得到
+$$
+\begin{split}
+f(\theta x_1 + (1 - \theta x_2)) &amp;\leq \theta f(x_1) + (1-\theta)f(x_2)\newline
+&amp;\leq \theta \alpha + (1-\theta)\alpha\newline
+&amp;= \alpha
+\end{split}
+$$
+表明 $C_{\alpha}$ 确实是凸集。</p>
+<p>反之不成立。我们考虑函数 $f = -e^{x}$，如下图所示</p>
+<img src="http://jiandan94.gitee.io/md-figures/convex-optimization/alpha-sublevel.png"  width=400/>
+<p>可见，对于任意的 $\alpha$，$f$ 的 $\alpha$-下水平集 $C_{\alpha}$ 都是凸集，但是 $f$ 显然是严格凹的。$\blacksquare$</p>
+<p>我们后续介绍的求解无约束问题的方法需要一个适当的初始点 $x^{(0)}\in \textrm{dom}f$，且其下水平集
+$$
+S = \lbrace x\in \textrm{dom}f | f(x)\leq f(x_0) \rbrace
+$$
+必须是闭集。此外，在下面的内容中我们还将看到下水平集和优化问题之间的重要联系。</p>
+<h2 id="3-强凸性及其含义">3 强凸性及其含义</h2>
+<h3 id="31-强凸函数的次优性条件">3.1 强凸函数的次优性条件</h3>
+<p>关于无约束优化问题，我们大多数情况都假设目标函数在 $S$ 上是强凸的，也即是存在 $m&gt;0$，使得
+$$
+\nabla^2 f(x) \succeq m I \qquad (1)
+$$
+对任意的 $x\in S$ 都成立。</p>
+<p>强凸性可以推出若干有意义的结果。例如，对 $x, y \in S$，我们有
+$$
+f(y) = f(x) + \nabla f(x)^T(y - x) + \frac12 (y - x)^T\nabla^2 f(z)(y - x) \qquad (2)
+$$
+其中 $z$ 属于线段 $[x, y]$。此时，根据强凸性式（1）的结果，式（2）的最后一项不会小于 $1/2\Vert y-x\Vert_2^2$，因此
+$$
+f(y) \geq f(x) + \nabla f(x)^T(y - x) + \frac m2 \Vert y - x\Vert_2^2 \qquad (3)
+$$
+对 $ S $ 中任意的 $x$ 和 $y$ 都成立。当 $m = 0$ 时，式（3）就变回描述凸性的基本不等式；当 $m &gt; 0$ 时，对 $f(y)$ 的下界我们可以比单独用凸性更好的结果。</p>
+<p>现在，我们说明可以利用式（3）给出 $f(x) - p^* $，所得上界结果可表明 $x$ 是其目标值和最优目标值的偏差正比于 $\Vert \nabla f(x)\Vert_2 $ 的次优解。对于任意固定的 $x$，式（3）的不等式右侧是关于 $y$ 的二次函数，它在 $\bar{y} = x - (1/m)\nabla f(x)$ 处取得最小值，即
+$$
+\begin{split}
+f(y) &amp;\geq f(x) + \nabla f(x)^T(y - x) + \frac m2 \Vert y - x\Vert_2^2\newline
+&amp;\leq f(x) + \nabla f(x)^T(\bar{y} - x) + \frac m2 \Vert \bar{y} - x\Vert_2^2\newline
+&amp;= f(x) - \frac{1}{2m}\Vert\nabla f(x)\Vert_2^2
+\end{split}
+$$</p>
+<p>既然该式对任意的 $y\in S$ 都成立，那么可以得到
+$$
+p^ * \geq f(x) - \frac{1}{2m} \Vert \nabla f(x)\Vert_2^2 \qquad (4)
+$$</p>
+<p>由此可见，<strong>任何梯度足够小的点都是近似最优解</strong>。不等式（4）是最优性条件的推广。由于
+$$
+\Vert \nabla f(x)\Vert_2 \leq (2m\epsilon)^{1/2} \Rightarrow f(x) - p^* \leq \epsilon \qquad (5)
+$$</p>
+<p>我们可以将其解释成<strong>次优性</strong>条件。</p>
+<h3 id="32-关于-nabla2-fx-的上界">3.2 关于 $\nabla^2 f(x)$ 的上界</h3>
+<p>不等式（3）表明，$ S $ 所包含的所有下水平集都有界，因此，$ S $ 本身作为一个下水平集也有界。由于 $ \nabla^2 f(x) $ 的最大特征值是 $ x $ 在 $ S $ 上的连续函数，所以它在 $ S $ 上有界，即存在常数 $ M $ 使得
+$$
+\nabla^2 f(x) \preceq MI \qquad (6)
+$$
+对所有 $x\in S$ 都成立。这意味着，对所有的 $x, y\in S$，
+$$
+f(y) \leq f(x) + \nabla f(x)^T (y - x) + \frac{M}{2}\Vert y - x\Vert_2^2 \qquad (7)
+$$
+类似的，对右边关于 $y$ 求极小，又可以得到
+$$
+p^* \leq f(x) - \frac{1}{2M}\Vert \nabla f(x)\Vert_2^2 \qquad (8)
+$$
+这是和式（4）相对应的不等式。</p>
+<h3 id="33-下水平集条件数">3.3 下水平集条件数</h3>
+<p>根据<strong>强凸性</strong>，我们得到了关于Hessian矩阵的不等式（1）和（6），即对任意的 $x\in S$ 都成立
+$$
+mI \preceq \nabla^2 f(x) \preceq MI
+$$
+因此，比值 $\kappa = M/m$ 是矩阵 $\nabla^2 f(x)$ 的<a href="https://baike.baidu.com/item/%E6%9D%A1%E4%BB%B6%E6%95%B0/5293168?fr=aladdin">条件数</a>（其最大特征值和最小特征值之比）的上界。下面我们基于 $f$ 的下水平集给出一个几何解释。</p>
+<p>对于任意满足 $\Vert q\Vert_2 = 1$ 的方向向量 $q$，我们定义凸集 $C\subseteq R^n$ 的宽度如下
+$$
+W(C, q) = \sup_{z\in C} q^Tz - \inf_{z\in C} q^Tz
+$$
+再定义 $C$ 的最小宽度和最大宽度
+$$
+W_{\min} = \inf_{\Vert q\Vert_2 = 1} W(C, q),\quad W_{\max} = \sup_{\Vert q\Vert_2 = 1} W(C, q)
+$$
+于是，凸集 $C$ 的条件数可以表示成
+$$
+\textrm{cond}(C) = \frac{W_{\max}^2}{W_{\min}^2}
+$$</p>
+<p>即最大宽度和最小宽度的平方比值。该式表明，$C$ 的条件数给出了<strong>各向异性或离心率</strong>的一种测度。换句话说，如果 $C$ 的条件数小（接近1），表明集合在所有方向上的宽度近似相等，即几乎是一个球体。如果 $C$ 的条件数大，表明集合在某些方向上的宽度远比其他一些方向的宽度大。</p>
+<p>下面，我们来研究 $f$ 的下水平集和最优性的关系。假定 $f$ 满足 $mI \preceq \nabla^2 f(x) \preceq MI$。令 $C_{\alpha} = \lbrace x| f(x)\leq \alpha\rbrace$，其中 $p^* &lt;\alpha \leq f(x_0)$，以及下面两个集合
+$$
+\begin{split}
+B_{inner} &amp;= \lbrace y | \Vert y - x^* \Vert_2 \leq (2(\alpha - p^* )/M)^{1/2}\rbrace \newline
+B_{outer} &amp;= \lbrace y | \Vert y - x^* \Vert_2 \leq (2(\alpha - p^* )/m)^{1/2}\rbrace
+\end{split}
+$$</p>
+<p>将 $x = x^* $ 带入到式（3）和式（7）中得到
+$$
+p^* + \frac{M}{2}\Vert y - x^* \Vert_2^2 \geq f(y) \geq p^* + \frac{m}{2}\Vert y - x^* \Vert_2^2
+$$</p>
+<p>这意味着 $B_{inner} \subseteq C_{\alpha} \subseteq B_{outer}$ 成立（可以根据集合包含关系的定义来证明）。根据 $B_{inner}$ 和 $B_{outer}$ 的定义，两者分别表示半径为 $2(\alpha - p^* )/M$ 和 $2(\alpha-p^* )/m$ 的球体。那么， $B_{inner}$ 和 $B_{outer}$ 的半径平方之比就给出了下水平集 $C_{\alpha}$ 的条件数的一个上界：
+$$
+\textrm{cond}(C_{\alpha}) \leq \frac{M}{m}
+$$
+我们也可以对最优解处Hessian矩阵的条件数 $\kappa(\nabla^2 f(x^* ))$ 给出一种几何解释。将 $f$ 在 $x^* $ 处进行Taylor展开
+$$
+f(y) = p^* + \frac12 (y-x^* )^T\nabla^2 f(x^* )(y - x^* )
+$$
+可以看出，对于充分靠近 $p^* $ 的 $\alpha$ 有
+$$
+C_{\alpha} \approx \lbrace y |(y-x^* )^T\nabla^2 f(x^* )(y - x^* )\leq 2(\alpha - p^* )\rbrace
+$$
+即中心为 $x^* $ 的椭球可以很好的逼近下水平集。因此
+$$
+\lim_{\alpha\rightarrow p^* } \textrm{cond}(C_{\alpha}) = \kappa (\nabla^2 f(x^* ))
+$$</p>
+<p>我们将发现，对于一些常用的无约束优化算法，$f$ 的<strong>下水平集的条件数是影响其计算效率的重要因素</strong> 。</p>
+<h2 id="4-结语">4 结语</h2>
+<p>本文主要介绍了无约束凸优化问题的一些重要概念。我们着重讨论了强凸性在优化问题中的含义，重点揭示了 $f$ 的下水平集和最优解之间的联系。这些概念将在具体的无约束优化算法的讨论中体现其含义和价值。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2021/07/unconstrained-optimization/" title="无约束优化：基本概念总结" target="_blank" rel="external">https://qkai-stat.github.io/2021/07/unconstrained-optimization/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2021/06/dw/" title="端午"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2021/09/zq2021/"
+                    title="中秋"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

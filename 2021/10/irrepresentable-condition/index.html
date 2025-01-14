@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        LASSO的变量选择一致性之不可表示性条件 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>LASSO的变量选择一致性之不可表示性条件 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="LASSO的变量选择一致性之不可表示性条件" />
+<meta property="og:description" content="高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" />
+<meta property="article:published_time" content="2021-10-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-10-10T00:00:00+00:00" />
+<meta itemprop="name" content="LASSO的变量选择一致性之不可表示性条件">
+<meta itemprop="description" content="高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并">
+<meta itemprop="datePublished" content="2021-10-10T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-10-10T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="12110">
+
+
+
+<meta itemprop="keywords" content="多元统计,变量选择,高维数据分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LASSO的变量选择一致性之不可表示性条件"/>
+<meta name="twitter:description" content="高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2021/10/irrepresentable-condition/"
+    >LASSO的变量选择一致性之不可表示性条件</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="article-date">
+  <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/"> 变量选择 </a>
+    <a class="article-tag-link" href="/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"> 高维数据分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2021/10/irrepresentable-condition/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 12110字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 25分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并进行了深入的研究。目前，LASSO类方法的统计理论和求解算法的相关成果较为丰富，仍有大量学者进行相关的研究。这篇博客与其他几篇博客围绕LASSO方法进行系列的介绍，主要包括LASSO的基本概念、变量选择一致性、参数估计的界、主流求解算法等统计理论和优化算法方面的重要结果。</p>
+<p>本文探讨了Zhao和Yu（2006）关于LASSO模型一致性所提出的不可表示性条件（Irrepresentable Condition）。在<strong>固定维和发散维</strong>的情形下，作者证明了不可表示性条件是LASSO随着样本量增大而选出正确模型的<strong>几乎必要</strong>和充分条件。本文相关的证明技巧和研究结果都很经典，故学习该理论在研究稀疏化技术中非常必要。</p>
+<h2 id="1-背景介绍">1 背景介绍</h2>
+<h3 id="11-问题的提出">1.1 问题的提出</h3>
+<p>考虑如下的线性模型：
+$$
+Y = X\beta^* + \epsilon \qquad (1)
+$$
+其中 $Y = (y_1, \ldots, y_n)^T$​​ 是 $n \times 1$​​ 的响应变量，$X = (X_1, \ldots, X_p) = (x_1^T; \ldots; x_n^T)$​​ 是 $n\times p$​​ 的设计矩阵，这里 $X_j$​​ 是第 $j$​​ 个变量，$ x_i $​​ 是第 $i$​​ 个样本。$\beta^  *  = (\beta_1^ * , \ldots, \beta_p^ * )^T$​​ 是回归系数。$\epsilon = (\epsilon_1, \ldots, \epsilon_n)^T$​​ 均值为0、方差为 $\sigma ^ 2$​​​ 的独立同分布的随机变量。</p>
+<p>由于实际问题中数据可能包含冗余变量，利用全部变量构建的模型将会存在解释性差的问题。对此，我们需要考虑变量选择，关于这个话题可参见我<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">先前博客</a>的相关介绍。本文主要探讨的是经典的变量选择方法——LASSO——的统计性质，即<strong>变量选择一致性</strong>。</p>
+<p>假设 $ \hat{\beta}^ * $ 是如下LASSO模型
+$$
+\begin{equation}
+\hat{\beta}^ * = arg\min_{\beta} \Vert Y - X\beta\Vert_2^2 + \lambda\Vert \beta\Vert_1 \qquad (2)
+\end{equation}
+$$
+的估计。其中 $\lambda&gt;0$​ 是调节参数，控制着系数的压缩程度。</p>
+<blockquote>
+<p>LASSO可以用来进行变量选择，那么它实际模型选择的能力究竟怎样呢？</p>
+</blockquote>
+<p>上述的问题便是我们本文所要介绍的LASSO模型一致性。具体而言，对于给定的数据，LASSO是否可以始终以某一非零的概率挑选出正确的模型？如是，这个概率又是否会随着样本量增大而趋于1（一致性）呢？</p>
+<h3 id="12-早期工作概述">1.2 早期工作概述</h3>
+<p>针对LASSO的参数估计一致性，Knight和Fu（2000）在研究固定维下Bridge估计（比LASSO更一般的估计）的渐近性质（asymptotic properties）时指出，基于一些正则化条件（regularity conditions），当 $\lambda_n = o(n)$ 时，LASSO估计满足  $\hat{\beta}^ * \rightarrow_p \beta^ * $，即参数估计一致性。进一步，若 $\lambda_n = O(n^{\frac12})$，则LASSO估计正确把零系数压缩到零的概率总是为正。然而对他们的结果进行仔细的计算发现，LASSO估计在零系数处的极限概率小于1（Zhang和Huang，2008），表明在没有恰当条件的保证下，LASSO估计没有变量选择一致性。</p>
+<p>针对LASSO的变量选择一致性，Meinshausen和Buhlmann（2006）在研究高维图模型时证明了，基于某些条件，LASSO可以一致地估计出高斯随机变量之间的相关性，该结果对高维情形也成立。值得一提的是，Meinshausen和Buhlmann（2006）也独立给出了类似不可表示条件的结果，但是他们仅在高斯假设下进行了探讨，而Zhao和Yu（2006）中均值0、方差 $\sigma^2$​ 的独立同分布的假设更为一般。</p>
+<p>Zhao和Yu（2006）主要关注的是，能否在某个确定的条件下，LASSO估计具有变量选择一致性？此外，对于有限样本情形，能否在该确定的条件下，存在一个正确的压缩量（调节参数）使得LASSO估计可以挑选出正确的模型？换句话说，他们所关心的不仅是LASSO估计变量选择的渐近性质，还包括有限样本的具体表现。</p>
+<h3 id="13-若干记号与定义">1.3 若干记号与定义</h3>
+<p>为了后续表述方便，在模型（1）稀疏的前提下，不失一般性，我们进一步假设 $ \beta^ * $​ 的前 $q$​ 个系数非零，后 $p-q$​ 个系数为零，并令 $ \beta^ * (1) = (\beta_1^ * , \ldots, \beta_q^ * )^T $​ 和 $ \beta^ * (2) = (\beta_{q+1}^ * , \ldots, \beta_p^ * )^T $​。相应的，我们再令 $ X(1) $​ 为 $X$​ 的前 $q$​ 列，$ X(2) $​ 为 $X$​ 的后 $p-q$​ 列。此外，我们还令 $ C_n = \frac1n X^TX $，则 $ C_n $ 有如下的分块矩阵形式：
+$$
+C_n = \begin{pmatrix}
+C_n^{11} &amp; C_n^{12}\newline
+C_n^{21} &amp; C_n^{22}\newline
+\end{pmatrix}
+$$
+其中 $ C_n^{11} $ 被假设成可逆的。</p>
+<p>变量选择一致性通常仅关注模型正确识别重要和冗余变量的能力。Zhao和Yu（2006）则考虑了一种更强的变量选择一致性，即符号一致性（sign consistency）。符号一致性指的是，模型正确将正系数估计为正、负系数估计为负以及零系数估计为零的能力。关于符号一致性，我们作如下定义：</p>
+<p><strong>【定义1】</strong>（符号一致性）一个估计量 $ \hat{\beta}^ * $ 和真实值 $ {\beta}^ * $ 的符号一致记为 $ \hat{\beta}^ * =_{s} \beta^ * $，当且仅当 $ \textrm{sign}(\hat{\beta}^ * ) = \textrm{sign}(\beta^ * ) $ 成立，其中 $\textrm{sign}(\cdot)$ 是<a href="https://baike.baidu.com/item/%E7%AC%A6%E5%8F%B7%E5%87%BD%E6%95%B0/3198406?fr=aladdin">符号函数</a>。</p>
+<p><strong>【定义2】</strong>（强符号一致性）若存在 $ \lambda_n = f(n) $，使得
+$$
+\begin{equation}
+\lim_{n\rightarrow\infty}P(\hat{\beta}^ * (\lambda_n) =_s \beta^ * ) = 1
+\end{equation}
+$$
+则LASSO估计具有强符号一致性（strongly sign consistency），其中 $ f(n) $ 是关于 $ n $ 和 $ Y $ 与 $ X $ 独立的函数。</p>
+<p><strong>【定义3】</strong>（弱符号一致性）如果
+$$
+\begin{equation}
+\lim_{n\rightarrow\infty}P(\exists \lambda\geq0, \hat{\beta}^* (\lambda) =_s \beta^* ) = 1
+\end{equation}
+$$
+则LASSO估计具有弱符号一致性（general sign consistency）。</p>
+<p>根据定义2，如果强符号一致性成立，则对每个有限的样本，LASSO始终能找到一个相应的调节参数，使得LASSO估计的符号一致性得到一个概率（与样本量 $n$​ 相关，随 $n$​ 增大而趋于1）保证。这说明此时LASSO不仅具有良好的渐近性质，还有较好的有限样本的表现。反观定义3，此时LASSO只有在样本量充分大时才能找到某个合适的调节参数保证符号一致性成立，说明有限样本的表现未知。因此，不难看出“强”、“弱”二字的区别。</p>
+<p>下面给出不可表示性条件的定义：</p>
+<p><strong>【定义4】</strong>（强不可表示性条件）存在一个正的常数向量  $ \eta $​，使得
+$$
+\begin{equation}
+\vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^*(1))\vert \leq \mathbf{1} - \eta
+\end{equation}
+$$
+其中 $ \mathbf{1} $ 是长度 $ p-q $ 元素皆为1的向量，上述不等式对每个分量成立。</p>
+<p><strong>【定义5】</strong>（弱不可表示性条件）
+$$
+\begin{equation}
+\vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^*(1))\vert &lt; \mathbf{1},
+\end{equation}
+$$
+上述不等式对每个分量成立。</p>
+<h2 id="2-证明思路和一个引理">2 证明思路和一个引理</h2>
+<h3 id="21-证明思路">2.1 证明思路</h3>
+<p>这里所谓的证明思路只是个人体会，不是作者真实的证明思路。通过勾勒整个证明的流程，宏观上把握证明的思路，希望有助于读者理解该证明，而不至于困于一处技术细节，或在看完整个证明后仍感到茫然。</p>
+<p>首先，确定证明的目标——LASSO的符号一致性。将该目标具体表述出来，即在有限样本下，给出LASSO估计符号一致的概率或概率下界（和样本量有关），并证明该值随样本量增大而趋于1。为此，我们自然先要找到LASSO估计符号一致的成立条件：若条件充要且概率易于计算并趋于1，就解决了我们的问题。实际上这样的充要条件一般很难找到，但我们只用找到成立的充分条件即可——这基于如下的事实：若条件2是条件1的充分条件，即条件2 $\Rightarrow $ 条件1，则
+$$
+P(\text{条件}1) \geq P(\text{条件}2)
+$$
+换句话说，若某条件1 $\Rightarrow $ LASSO估计符号一致，则
+$$
+P(\hat{\beta}^ * =_s \beta^ * ) \geq P(\text{条件}1)
+$$
+这样将 $P(\text{条件}1)$ 或其下界计算出便可传递给 $P(\hat{\beta}^ * =_s \beta^ * )$，就解决了上述的问题。若 $P(\text{条件}1)$ 和其下界都难以计算，则按照上面的讨论，可以通过不断加强条件，直到可以进行计算分析。</p>
+<p>接着，我们根据上述思路迈出第一步：<strong>寻找LASSO估计符号一致的成立条件</strong>。设想，若 $\hat{\beta}^ * =_s \beta^ * $​ 成立，则 $\hat{\beta}^ * $​ 必先满足变量选择一致，即 $\hat{\beta}^ * $​ 必然要估计成 $ (\hat{\beta}^ * (1)^T, \mathbf{0}^T)^T $​ 这种形式，其中 $ \hat{\beta}^ * (1) $​ 非零。联系LASSO估计和KKT条件的等价性，不难想到，满足符号一致的LASSO估计必然满足 $ \hat{\beta}^ * = (\hat{\beta}^ * (1)^T, \mathbf{0}^T)^T$​ 所对应的KKT条件，即
+$$
+\begin{gather}
+X(1)^TX(1)\hat{\beta}^ * (1) - X(1)^TY = -\frac{\lambda_n}{2}\text{sign}(\hat{\beta}^ * (1)) \qquad (3)\newline
+\vert X(2)^TX(1)\hat{\beta}^ * (1) - X(2)^TY\vert \leq \frac{\lambda_n}{2}\mathbf{1} \qquad (4)
+\end{gather}
+$$
+当然，仅满足KKT条件（3）和（4），只能表明LASSO估计 $\hat{\beta}^ * $ 具有变量选择一致性而非符号一致性。为此，我们需要加强KKT条件（3）和（4），使得可以推出 $\hat{\beta}^ * (1) =_s \beta^ * (1) $，即 $\hat{\beta}^ * =_s \beta^ * $ 成立。</p>
+<p>注意到，若
+$$
+\vert \hat{\beta}^* (1) - \beta^* (1) \vert &lt; \vert \beta^* (1) \vert \qquad (5)
+$$
+则一定成立 $\hat{\beta}^ * (1) =_s \beta^ * (1) $，即KKT条件（3）和（4）加上不等式（5）便可推出 $\hat{\beta}^ * =_s \beta^ * $ 成立。</p>
+<blockquote>
+<p>不难看出式（5）很强，例如，$\hat{\beta}_j^ * (1) = 5, \beta_j^ * (1) = 2$，但不满足（5）式。不过考虑到 $\hat{\beta}^ * $ 是 ${\beta}^ * $ 的估计，$ \vert \hat{\beta}^* (1) - \beta^* (1) \vert $ 通常不会很大；且线性关系强时，$\beta^* (1)$ 一般也不会太小，因此不等式（5）放在这里仍然可以接受。</p>
+</blockquote>
+<p>最后，我们对条件（3）、（4）和（5）进行分析计算，从而传递给出 $P(\hat{\beta}^ * =_s \beta^ * )$ 的下界。</p>
+<p>以上就是整个证明的大致脉络。基于（3）、（4）和（5）与 $P(\hat{\beta}^ * =_s \beta^ * )$ 建立的大小关系就是2.2节所给出的引理。对条件（3）、（4）和（5）分析其成立的概率就是后续各个情形下符号一致性定理所探讨的内容。下面，我们先给出符号一致的概率下界的引理。</p>
+<h3 id="22-符号一致的概率下界">2.2 符号一致的概率下界</h3>
+<p><strong>【引理1】</strong> 假定强不可表示性条件对某个 $ \eta&gt;0 $ 成立，则</p>
+<p>$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) \geq P(A_n \cap B_n)
+$$</p>
+<p>这里</p>
+<p>$$
+\begin{split}
+A_n &amp;= \left\lbrace \vert (C_n^{11})^{-1}W_n(1)\vert &lt; \sqrt{n}\left(\vert \beta^* (1)\vert - \frac{\lambda_n}{2n}\vert (C_n^{11})^{-1}\text{sign}(\beta^* (1))\vert \right) \right\rbrace \newline
+B_n &amp;= \left\lbrace \vert C_n^{21}(C_n^{11})^{-1}W_n(1) - W_n(2)\vert \leq \frac{\lambda_n}{2\sqrt{n}}\eta \right\rbrace
+\end{split}
+$$</p>
+<p>其中 $ W_n(1) = \frac{1}{\sqrt{n}}X(1)^T\epsilon $ 和 $ W_n(2) = \frac{1}{\sqrt{n}}X(2)^T\epsilon $。</p>
+<p><strong>【证明】</strong> 根据2.1节的讨论，在条件（3）、（4）和（5）下，LASSO估计 $\hat{\beta}^ * $ 具有符号一致性。根据1.3节的记号，我们对（3）和（4）进行等价变换有</p>
+<p>$$
+\begin{gather}
+\sqrt{n}C_n^{11}(\hat{\beta}^* (1) - \beta^ * (1))  - W_n(1) = -\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\hat{\beta}^ * (1)) \qquad (6)\newline
+\vert \sqrt{n}C_n^{21}(\hat{\beta}^*(1) - \beta^ * (1)) - W_n(2)\vert \leq \frac{\lambda_n}{2\sqrt{n}}\mathbf{1} \qquad (7)
+\end{gather}
+$$</p>
+<p>其中用到 $ Y = X\beta^* + \epsilon = X(1)\beta^* (1) + \epsilon $ 的关系。</p>
+<p>由于 $C_n^{11}$ 可逆，我们将 $(\hat{\beta}^ * (1) - \beta^ * (1))$​ 从（6）中求解出来，即</p>
+<p>$$
+(\hat{\beta}^* (1) - \beta^* (1)) = \frac{1}{\sqrt{n}}(C_n^{11})^{-1}\left(W_n(1)-\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\hat{\beta}^* (1))\right) \qquad (8)
+$$</p>
+<p>将（8）与（5）结合便可得到LASSO估计的非零系数部分符号一致成立的条件：</p>
+<p>$$
+\left\vert (C_n^{11})^{-1}\left(W_n(1)-\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\hat{\beta}^* (1))\right)\right\vert \leq \sqrt{n}\vert \beta^* (1)\vert \qquad (9)
+$$</p>
+<p>对（9），根据三角不等式我们有</p>
+<p>$$
+\left\vert (C_n^{11})^{-1}\left(W_n(1)-\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\hat{\beta}^* (1))\right)\right\vert \leq \vert (C_n^{11})^{-1}W_n(1)\vert + \frac{\lambda_n}{2\sqrt{n}}\vert (C_n^{11})^{-1}\text{sign}(\hat{\beta}^* (1))\vert
+$$</p>
+<p>显然，若</p>
+<p>$$
+\vert (C_n^{11})^{-1}W_n(1)\vert + \frac{\lambda_n}{2\sqrt{n}}\vert (C_n^{11})^{-1}\text{sign}(\hat{\beta}^* (1))\vert \leq \sqrt{n}\vert \beta^* (1)\vert \qquad (10)
+$$</p>
+<p>成立，我们必然可以推出（9）成立，即LASSO估计符号一致性。将（10）稍作整理，得到</p>
+<p>$$
+\vert (C_n^{11})^{-1}W_n(1)\vert \leq \sqrt{n}\left(\vert \beta^* (1)\vert - \frac{\lambda_n}{2n}\vert (C_n^{11})^{-1}\text{sign}(\beta^* (1)\vert\right) \qquad (11)
+$$</p>
+<p>在（11）中，我们把 $\text{sign}(\hat{\beta}^ * (1))$ 替换成 $\text{sign}({\beta}^ * (1))$，因为此时符号一致性已经成立。注意到，（11）的结果正是引理1中 $A_n$ 的定义内容。换句话说，$A_n$ 成立即可推出LASSO估计和非零系数符号一致。</p>
+<p>给定 $A_n$，我们有 $\hat{\beta}^ * (1) =_s \beta^ * (1) $，此时将（8）带入到（7）中，得到
+$$
+\left\vert C_n^{21}(C_n^{11})^{-1}\left(W_n(1)-\frac{\lambda_n}{2\sqrt{n}}\text{sign}({\beta}^ * (1))\right) - W_n(2)\right\vert \leq \frac{\lambda_n}{2\sqrt{n}}\mathbf{1}
+$$
+利用三角不等式易知，若
+$$
+\vert C_n^{21}(C_n^{11})^{-1}W_n(1) - W_n(2)\vert \leq \frac{\lambda_n}{2n}\left(\mathbf{1} - \vert C_n^{21}(C_n^{11})^{-1}\text{sign}({\beta}^ * (1))\vert \right) \qquad (12)
+$$
+成立，则LASSO估计可将 $\hat{\beta}^ * (2)$ 压缩到零。对（12）式进一步考虑，若强不可表示性条件对某个 $\eta \geq \mathbf{0}$ 成立，则有 $\mathbf{1} - \vert C_n^{21}(C_n^{11})^{-1}\text{sign}({\beta}^ * (1))\vert \geq \eta$，那么若
+$$
+\vert C_n^{21}(C_n^{11})^{-1}W_n(1) - W_n(2)\vert \leq \frac{\lambda_n}{2n} \eta \qquad (13)
+$$
+成立，则必然成立（12）式。注意到（13）就是引理1中 $B_n$ 所定义的内容，也就是说，$B_n$ 在 $A_n$ 给定时对应LASSO正确将系数压缩到零的事件。</p>
+<p>综上所述，当强不可表示性条件对某个 $\eta \geq \mathbf{0}$ 成立时， $A_n\cap B_n \Rightarrow \hat{\beta}^ * (\lambda_n) = _ s \beta^ * $，必有 $P(\hat{\beta}^ * (\lambda_n) = _ s \beta^ * ) \geq P(A_n \cap B_n)$，也就证明了引理1的结论。$\blacksquare$</p>
+<h2 id="3-固定维的lasso符号一致性">3 固定维的LASSO符号一致性</h2>
+<p>在第2节中，我们探讨了LASSO估计符号一致性的证明思路，即先寻找 $\hat{\beta}^ * (\lambda_n) =_s \beta^ * $ 成立的充分条件，再通过计算充分条件成立的概率（概率下界）传递得到 $P(\hat{\beta}^ *(\lambda_n) =_s \beta^ * ) $ 的下界。特别的，我们寻找到了LASSO估计符号一致性成立的充分条件，即 $A_n\cap B_n$。本节，我们将利用引理1作为桥梁，得到固定维的LASSO估计符号一致性。在陈述主要结论之前，我们先给出将用到的两个正则化条件：</p>
+<p><strong>RC1</strong>：$ \lim_{n\rightarrow \infty} C_n = C $，其中  是正定的；</p>
+<p><strong>RC2</strong>：$ \lim_{n\rightarrow \infty} \frac1n \max_{1\leq i\leq n}(x_i^Tx_i) = 0$；</p>
+<p>上面的两个正则化条件在Knight和Fu（2000）中已引入。在低维情形下，设计阵通常列满秩，因此RC1很容易满足。RC2要求每个样本的 $l_2$ 范数有限，因为是固定维情形且设计阵为常数，所以RC2也很容易满足。当然，若考虑随机设计阵，在样本都满足i.i.d.的有限二阶矩的分布，则RC1和RC2同样很容易满足。</p>
+<h3 id="31-强不可表示性条件与强符号一致性">3.1 强不可表示性条件与强符号一致性</h3>
+<p>在1.2小节中我们说过，在没有适当的条件保证下，LASSO估计不具备变量选择一致性。下面的定理表明，当强不可表示性条件成立时，LASSO估计一定满足符号一致性，且有限维下符号一致成立的概率随着样本量 $n$ 的增大呈指数级增大到1。</p>
+<p><strong>【定理1】</strong> 固定 $q, p$ 和 $\beta^* $，且RC1和RC2同时满足，如果强不可表示性条件成立，则LASSO估计具有强符号一致性。具体而言，当强不可表示性条件成立，$\forall \lambda_n$ 满足 $\lambda_n/n \rightarrow 0$ 和 $\lambda_n/ n^{\frac{1+c}{2}} \rightarrow \infty$，其中 $0\leq c\leq 1$，我们有</p>
+<p>$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) = 1 - o(e^{-n^{c}})
+$$</p>
+<p><strong>【证明】</strong> 为讨论方便，现作如下符号规定：</p>
+<p>$$
+\begin{split}
+z_n &amp;= (z_n^1, \ldots, z_n^q)^T = (C_n^{11})^{-1}W_n(1) \newline
+\zeta_n &amp;= (\zeta_n^1, \ldots, \zeta_n^{p-1})^T = C_n^{21}(C_n^{11})^{-1}W_n(1)-W_n(2) \newline
+b_n &amp;= (b_n^1, \ldots, b_n^n)^T = (C_n^{11})^{-1}\text{sign}(\beta^*(1))
+\end{split}
+$$</p>
+<p>结合第2节的讨论，我们有</p>
+<p>$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) \geq P(A_n \cap B_n)
+$$</p>
+<p>根据<a href="https://baike.baidu.com/item/%E5%BE%B7%C2%B7%E6%91%A9%E6%A0%B9%E5%AE%9A%E5%BE%8B/489073?fromtitle=%E5%BE%B7%E6%91%A9%E6%A0%B9%E5%AE%9A%E5%BE%8B&amp;fromid=5355540&amp;fr=aladdin">德·摩根定律</a>，易知 $(A_n\cap B_n)^c = A_n^c \cup B_n^c$，则</p>
+<p>$$
+\begin{split}
+1 - P(A_n\cap B_n) &amp;= P((A_n\cap B_n)^c) = P(A_n^c \cup B_n^c) \newline
+&amp;\leq P(A_n^c) + P(B_n^c) \newline
+&amp;= \sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^*\vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right)\right) + \sum_{i=1}^{p-q}P\left(\vert \zeta_n^i\vert \geq \frac{\lambda_n}{2\sqrt{n}}\eta_i\right)
+\end{split}
+$$</p>
+<p>Knight和Fu（2000）证明了，在RC1和RC2满足下，我们有下面的极限结论：</p>
+<p>$$
+(C_n^{11})^{-1}W_n(1) \rightarrow_d N(\mathbf{0}, (C^{11})^{-1})
+$$</p>
+<p>和</p>
+<p>$$
+C_n^{21}(C_n^{11})^{-1}W_n(1)-W_n(2) \rightarrow_d N(\mathbf{0}, C^{22} - C^{21}(C^{11})^{-1}C^{12})
+$$</p>
+<p>也即是所有的随机变量 $ z_n^i $ 和 $ \zeta_n^i $ 都依分布收敛于均值0和有限方差 $ E(z_n^i)^2, E(\zeta_n^i)^2 \leq s^2 $ 的正态随机变量，其中 $ s &gt;0 $ 是某个常数。基于上述渐近分布的结果，我们可以分析 $P(A_n \cap B_n)$​ 成立的概率。在分析之前，我们先给出下面关于正态分布尾部概率的不等式：</p>
+<p>$$
+1 - \Phi(t) &lt; t^{-1}e^{-\frac12 t^2}
+$$</p>
+<p>对上述结果我们作一个简单的说明。根据<a href="https://baike.baidu.com/item/%E5%88%86%E9%83%A8%E7%A7%AF%E5%88%86%E6%B3%95/9478849?fr=aladdin">分部积分法</a>，易推得下面的结果</p>
+<p>$$
+\begin{split}
+1 - \Phi(t) &amp;= \int_{t}^{+\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac12 x^2}\text{d}x \leq \int_{t}^{+\infty} \frac{1}{x}\cdot xe^{-\frac12 x^2}\text{d}x\newline
+&amp;= \left.\left(-\frac{1}{x}e^{-\frac12 x^2}\right)\right\vert_{x=t}^{+\infty} - \int_{t}^{+\infty} \left(-\frac{1}{x^2}\right)\cdot (-e^{-\frac12 x^2})\text{d}x\newline
+&amp;= t^{-1}e^{-\frac12 t^2} - \int_{t}^{+\infty} \frac{1}{x^2}\cdot e^{-\frac12 x^2}\text{d}x\newline
+&amp;\leq t^{-1}e^{-\frac12 t^2}
+\end{split}
+$$</p>
+<p>当 $ \frac{\lambda_n}{n}\rightarrow 0 $，$ \frac{\lambda_n}{n^{\frac{1+c}{2}}} \rightarrow \infty $ 且 $ 0 \leq c &lt; 1 $，以及 $q, p$​ 固定时，我们有</p>
+<p>$$
+\begin{split}
+\sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^ * \vert - \frac{\lambda_n}{2n}\vert b_n^i\vert\right)\right) &amp;= \sum_{i=1}^{q}P\left( \vert z_n^i\vert \geq \sqrt{n}\vert \beta_i^ * \vert\left(1 + \frac{\lambda_n}{2n}\vert\frac{b_n^i}{\beta_i^ * }\vert \right)\right)\newline
+&amp;\leq \sum_{i=1}^{q}P\left( z_n^i \geq \sqrt{n}\vert \beta_i^ * \vert\left(1 + o(1)\right)\right)\newline
+&amp;= \sum_{i=1}^{q} \left( 1 - \Phi\left(\frac{\sqrt{n}}{\bar{s}_i}\vert \beta_i^ * \vert(1 + o(1))\right) \right)
+\end{split}
+$$</p>
+<p>其中 $ E(z_n^i)^2 = \bar{s}_i^2 &lt; s^2, i=1, \ldots, q $。对上式，进一步可得</p>
+<p>$$
+\begin{split}
+\left( 1 - \Phi\left(\frac{\sqrt{n}}{\bar{s}_i}\vert \beta_i^ * \vert(1 + o(1))\right) \right) &amp;\leq \frac{1}{\frac{\sqrt{n}}{\bar{s}_i}\vert \beta_i^ * \vert(1 + o(1))} e^{-\frac12 \frac{n}{\bar{s}_i^2}\vert \beta_i^ * \vert^2(1 + o(1))^2}\newline
+&amp;= O(n^{-\frac12})\cdot O(e^{-n})\newline
+&amp;= O(n^{-\frac12}e^{-n})\newline
+&amp;= o(e^{-n^c})
+\end{split}
+$$</p>
+<p>因此，我们有</p>
+<p>$$
+\sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^*\vert - \frac{\lambda_n}{2n}\vert b_n^i\vert\right)\right) \leq o(e^{-n^c}) \qquad (14)
+$$</p>
+<p>类似的，令 $ E(\zeta_n^i)^2 = \tilde{s}_i^2 &lt; s^2, i=1, \ldots, q $，则有</p>
+<p>$$
+\begin{split}
+\sum_{i=1}^{p-q}P\left(\vert \zeta_n^i\vert \geq \frac{\lambda_n}{2\sqrt{n}}\eta_i\right) &amp;= \sum_{i=1}^{p-q}\left(1 - \Phi\left(\frac{1}{\tilde{s}_i} \frac{\lambda_n}{2\sqrt{n}}\eta_i\right)\right)\newline
+&amp;\leq \frac{1}{\frac{1}{\tilde{s}_i} \frac{\lambda_n}{2\sqrt{n}}\eta_i}e^{-\frac12 \frac{1}{\tilde{s}_i^2} \frac{\lambda_n^2}{4n}\eta_i^2}\newline
+&amp;= o(n^{-\frac{c}{2}})\cdot o(e^{-n^c})\newline
+&amp;= o(e^{-n^c})
+\end{split} \qquad (15)
+$$</p>
+<p>结合（14）和（15），最终可得</p>
+<p>$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) = 1 - o(e^{-n^c})
+$$</p>
+<p>即定理1所陈述的结论。$\blacksquare$</p>
+<h3 id="32-弱不可表示性条件与弱符号一致性">3.2 弱不可表示性条件与弱符号一致性</h3>
+<p>定理1表明，在强不可表示性条件的保证下，LASSO估计具有强符号一致性。值得注意的是，强不可表示性条件只是一个充分性条件。那么，不可表示性条件和LASSO估计的符号一致性还有什么更深的联系呢？下面的定理表明，弱不可表示性条件是LASSO估计满足弱符号一致性（自然也是满足强符号一致性）的必要条件。</p>
+<p><strong>【定理2】</strong> 固定 $q, p$ 和 $\beta^* $，且RC1和RC2同时满足，若LASSO估计满足弱符号一致性，则必存在某个整数 $ N $，使得当 $ n&gt;N $ 时，弱不可表示性条件一定成立。</p>
+<p><strong>【证明】</strong> 考虑事件集合 $ F_n^1 $，在该集合中存在某个 $ \lambda_n $​ 使得</p>
+<p>$$
+\text{sign}(\hat{\beta}^ * (1)) = \text{sign}(\beta^ *(1))\quad \text{and}\quad \hat{\beta}^ * (2) = \mathbf{0}
+$$</p>
+<p>那么，LASSO估计的弱符号一致性表明，当 $ n \rightarrow \infty $ 时，$ P(F_n^1)\rightarrow 1 $​ 成立。根据引理1，下面两式</p>
+<p>$$
+\begin{align}
+C_n^{11}(\sqrt{n}(\hat{\beta}^* (1) - \beta^ * (1)) - W_n(1)) &amp;= -\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\beta^ * (1)) \qquad (16)\newline
+\vert C_n^{21}(\sqrt{n}(\hat{\beta}^ * (1) - \beta^ * (1)) - W_n(2)) \vert &amp;\leq \frac{\lambda_n}{2\sqrt{n}}\mathbf{1} \qquad (17)
+\end{align}
+$$</p>
+<p>在集合 $ F_n^1 $ 上成立。</p>
+<p>由于 $ C_n^{11} $ 可逆，我们可以将 $ (\hat{\beta}^* (1) - \beta^* (1)) $​ 从（16）式中求解出来，将结果带入到（17）式中，得</p>
+<p>$$
+F_n^1 \subset F_n^2 = \left\lbrace \frac{\lambda_n}{2\sqrt{n}}L_n \leq C_n^{21}(C_n^{11})^{-1}W_n(1) - W_n(2) \leq \frac{\lambda_n}{2\sqrt{n}}U_n \right\rbrace
+$$</p>
+<p>其中</p>
+<p>$$
+\begin{split}
+L_n &amp;= -\mathbf{1} + C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^* (1))\newline
+U_n &amp;= +\mathbf{1} + C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^* (1))
+\end{split}
+$$</p>
+<p>下用反证法证明定理2的结论。假定弱不可表示性条件不成立，则 $\forall N &gt; 0$ 都存在 $n &gt; N$，使得</p>
+<p>$$
+\vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^* (1))\vert \geq \mathbf{1}
+$$</p>
+<p>成立。不失一般性，假定上述不等式左侧项的第一个元素大于1，即 $ C_n^{21}(C_n^{11})^{-1}\text{sign}(\beta^* (1)) \geq 1 $，则</p>
+<p>$$
+[\frac{\lambda_n}{2\sqrt{n}}(L_n)_1, \frac{\lambda_n}{2\sqrt{n}}(U_n)_1] \subset [0, +\infty)
+$$</p>
+<p>对任意 $ \lambda_n &gt; 0 $ 都成立。由于</p>
+<p>$$
+C_n^{21}(C_n^{11})^{-1}W_n(1) - W_n(2) \rightarrow_d N(\mathbf{0}, C^{22} - C^{21}(C^{11})^{-1}C^{12})
+$$</p>
+<p>说明第一个元素为负的概率始终非零，而集合 $F_n^2$ 定义项的第一个元素要求非负，这表明 $F_n^2$ 成立的概率不会达到1，所以</p>
+<p>$$
+\lim\inf P(F_n^1) \leq \lim\inf P(F_n^2) &lt; 1
+$$</p>
+<p>这和LASSO估计弱符号一致性矛盾，故而假设不成立。因此，弱不可表示性条件就是弱符号一致性的必要条件。$\blacksquare$</p>
+<h3 id="33-若干讨论">3.3 若干讨论</h3>
+<h4 id="331-定理中一些条件的探讨">3.3.1 定理中一些条件的探讨</h4>
+<p>由于正则化条件在低（固定）维下较易满足，这里不再讨论。在定理1中，我们用到的两个额外条件：一是不等式（5），保证非零系数符号一致；二是作者所提出的强不可表示性条件，保证LASSO把零系数正确压缩到零。在定理2中，我们用到的一个额外条件是弱不可表示性条件，而没有不等式（5）。这是因为在证明过程中，假设弱不可表示性条件失效，即可推出<strong>一般的变量选择一致性不成立</strong>，则较之更强的符号一致性必然也不成立。因此，不用考虑不等式（5）。</p>
+<p>在2.1小节中已说过，不等式（5）其实很强，且回顾不等式（5）在定理1的证明中的作用，它对一般变量选择一致性的成立并无影响。为了说明这个问题，我们首先回顾Knight和Fu（2000）的工作。在低（固定）维情形下，当RC1和RC2满足时，Knight和Fu（2000）首先通过LASSO的KKT条件指出，LASSO估计在零系数处为零的概率始终为正。根据（6）和（7），可知LASSO估计在零系数处为零的充要条件是</p>
+<p>$$
+\left\vert C_n^{21}(C_n^{11})^{-1}\left(W_n(1)-\frac{\lambda_n}{2\sqrt{n}}\text{sign}(\hat{\beta}^* (1))\right) - W_n(2)\right\vert \leq \frac{\lambda_n}{2\sqrt{n}}\mathbf{1} \qquad (18)
+$$</p>
+<p>一方面 $P(\hat{\beta}^* (2) = \mathbf{0}) \geq P(\hat{\beta}^*  = \mathbf{0})$，而由上式知 $\hat{\beta}^*  = \mathbf{0}$​ 等价于</p>
+<p>$$
+\vert W_n\vert \leq \frac{\lambda_n}{2\sqrt{n}}\mathbf{1}
+$$</p>
+<p>另一方面，$W_n = \frac{1}{\sqrt{n}}X^T\epsilon \sim N(\mathbf{0}, \sigma^2 C_n)$，则上面的概率恒为正（非零），说明 $P(\hat{\beta}^*(2) = \mathbf{0}) &gt; 0$ 必定成立。这就说明了LASSO的稀疏化能力。</p>
+<p>不过，我们仔细推算（18）式成立的概率，发现它可能比1小，也就是说LASSO没有变量选择一致性。这个结论已经由定理2所证实，即弱不可表示性条件不成立的话，肯定不会成立LASSO的变量选择一致性。 其中的关键就在于，$\mathbf{1} - \vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\hat{\beta}^ * (1))\vert$ 的符号不确定性将导致LASSO把零系数压缩到零的这部分概率无法控制。这也是为什么要强行令 $\mathbf{1} - \vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\hat{\beta}^ * (1))\vert \geq  \eta$，$\eta$ 为某个正的向量，就是为了控制相应的概率。从这里可以看出，强不可表示性条件是为了控制LASSO把零系数压缩到零的这部分概率而引入的，不等式（5）则在变量选择一致性的证明中没有起到作用。</p>
+<p>不可表示性条件的引入虽然是为了理论的构建，但是其自身也有一些意义。不妨将冗余变量作为响应变量，重要变量作为自变量，构建两者之间的线性回归模型。那么，对 $X(2)$ 的第 $j$ 列 $X(2)_j$，它关于 $X(1)$ 的回归系数为</p>
+<p>$$
+(X(1)^TX(1))^{-1}X(1)^TX(2)_j = (C_n^{11})^{-1}(C_n^{12})_j
+$$</p>
+<p>其中 $(C_n^{12})_j$ 是 $C_n^{12}$ 的第 $j$ 列。这样，$\vert C_n^{21}(C_n^{11})^{-1}\text{sign}(\hat{\beta}^ * (1))\vert$ 的每个分量就是每个冗余变量对 $X(1)$ 的回归系数关于 $\text{sign}(\beta^ *  (1))$ 的加权和的绝对值。回归系数某种程度可以反映因变量和自变量之间的相关性，要求整体比1小则等价于控制冗余变量和重要变量之间的相关性不能太大。换句话说，冗余变量不能由重要变量表示出来——这也是不可表示性条件名称的由来。当然，为什么对系数求和时要关于 $\text{sign}(\beta^ * (1))$ 加权？这&hellip;..就难以解释了~</p>
+<p>Knight和Fu（2000）指出LASSO的稀疏性质后，Meinshausen和Buhlmann（2006）首次给出强不可表示性条件，并在高斯随机变量的情形下证明了LASSO的变量选择一致性，该结论对高维情形也成立。Meinshausen和Buhlmann（2006）这篇文章早在2004年5月就投到AOS上，从时间上来说早于Zhao和Yu（2006）的工作。虽然Zhao和Yu（2006）考虑均值为0、方差为 $\sigma^2$ 更为一般的随机变量情形，但是这并未对整个证明引起新的困难或提出新的见解。所以，此时再看不等式（5）的加入，它使得变量选择一致性有了新的认识，在证明中也有新的考量（虽然也没难度）。这或许就是不等式（5）的价值吧。</p>
+<p>综上所述，强不可表示性条件是保证LASSO变量选择一致性的关键，不等式（5）则对变量选择一致性提出新的认识。</p>
+<h4 id="332-关于收敛速率">3.3.2 关于收敛速率</h4>
+<p>Knight和Fu（2000）已经指出（文中的定理2），当 $\lambda_n = O(\sqrt{n})$ 时，LASSO估计具有 $\sqrt{n}$-一致性，这里指的是参数估计一致性。然而，根据本文定理1的陈述，LASSO估计的变量选择一致性基于$\lambda_n/ n^{\frac{1+c}{2}} \rightarrow \infty$，其中 $0\leq c\leq 1$。显然，从调节参数 $\lambda_n$ 的角度看，LASSO参数估计一致性和变量选择一致性不相容。</p>
+<p>事实上，Zou（2006）表明，当 $\lambda_n/n \rightarrow 0$ 和 $\lambda_n/\sqrt{n}\rightarrow \infty$ 时，$\frac{n}{\lambda_n}(\hat{\beta}^*  (\lambda_n) - \beta^*  )\rightarrow_p arg\min (V) $​，其中</p>
+<p>$$
+V(u) = u^T C_n u + \sum_{j=1}^p\left( u_j\text{sign}(\beta_j^* )I(\beta_j^* \neq 0) + \vert u_j\vert I(\beta_j^* = 0)\right)
+$$</p>
+<p>上面的 $I(\cdot)$ 是示性函数。这表明，当LASSO保证变量选择一致性时，所对应的估计收敛速率小于 $\sqrt{n}$。</p>
+<p>通过上面的讨论，一个自然而然的问题就是，有办法使LASSO的 $\sqrt{n}$-一致性和变量选择一致性同时达到吗？这是可行的，但不在本文的探讨中。感兴趣的读者可以参考Zou（2006）关于自适应（adaptive LASSO）的文章。</p>
+<h4 id="333-再看ols估计">3.3.3 再看OLS估计</h4>
+<p>结合前面关于LASSO稀疏性的分析可知，LASSO之所以具有稀疏性，是因为 $l_1$ 惩罚衍生出的KKT条件在最优解处具有保证LASSO估计直接为零的条件，即（4）式。OLS也是凸优化，其解自然也有相应的KKT条件，可惜并没有保证估计直接为零的条件。不过，OLS估计优势之一是具有显式解 $(X^TX)^{-1}X^Ty$。套用前文LASSO的分析，$\hat{\beta}^{ols} = (X^TX)^{-1}X^Ty \sim N(\beta^*, \sigma^2 (X^TX)^{-1})$，而连续分布在一点处取零（某个值）的概率为零。换句话说，OLS估计的某个元素恰好为零的概率为零，即OLS估计没有稀疏性。</p>
+<p>虽然OLS没有稀疏性，但是OLS通常不会将零系数估计的很大。为了说明这点，不妨考虑正交设计阵情形，则 $\hat{\beta}_j^{ols} \sim N(\beta_j^* , \sigma^2)$。当 $\beta_j^* = 0$ 时，根据正态随机变量的“<a href="https://baike.baidu.com/item/%E4%B8%89%E8%A5%BF%E6%A0%BC%E7%8E%9B%E5%87%86%E5%88%99">3 $\sigma$ 准则</a>”，OLS估计值基本集中在零点附近。</p>
+<p>进一步，上述的分析建立在误差项为连续分布的前提下。假如人为设定误差项在零点处具有某个正的概率，那么根据上面的逻辑，OLS将零系数估计为零的概率将大于零。为了验证这个观点，不妨假设设计阵正交，考虑
+$$
+\begin{array}{}
+X \in \mathbb{R}^{1000\times8}, X^TX = I, \beta^* = (1,-1,1,-1,0,0,0,0)^T \newline
+P(\epsilon = 0) = p, P(\epsilon \sim N(0,1)) = 1 - p
+\end{array}
+$$
+其中 $p$ 是随机误差在零点处的概率。利用R，我们编写下面的程序来查看OLS估计结果。</p>
+<pre><code class="language-R"># 随机误差产生函数
+epsfun &lt;- function(p){
+  if(runif(1) &lt;= p){
+    return(0)
+  }else{
+    return(rnorm(1))
+  }
+}
+
+samp &lt;- 8
+samn &lt;- 1000
+beta &lt;- c(rep(c(1, -1), 2), rep(0, 4))
+x &lt;- matrix(rnorm(samp*samn), ncol = samp)
+x_qr &lt;- qr.Q(qr(x))
+ols0 &lt;- function(){# 不同的p对应的零系数估计值的绝对均值
+  coef0_est &lt;- function(p){# 概率p对应的零系数估计值的绝对均值
+    y &lt;- x_qr%*%beta + unlist(lapply(rep(p, samn), epsfun))
+    mydata &lt;- data.frame(x_qr, y)
+    colnames(mydata) &lt;- c(paste0(&quot;x&quot;, 1:samp), &quot;y&quot;)
+    lmfit &lt;- lm(y ~ .+0, data = mydata)
+    beta_hat &lt;- coef(lmfit)
+    abssum0 &lt;- mean(abs(beta_hat[5:8]))
+    return(abssum0)
+  }
+  return(unlist(lapply(c(0, 0.1, 0.5, 0.9, 0.99, 0.999, 0.9999), coef0_est)))
+}
+</code></pre>
+<p>以上 $p = (0, 0.1, 0.5, 0.9, 0.99, 0.999, 0.9999)^T$，我们对每个 $p$ 重复实验500次，将不同的  $p$  对应的OLS在零系数处估计的绝对均值（后四个系数估计的绝对均值）画出箱线图，如下所示：</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/lasso-introduction/ols0_est.png" width=400 /></p>
+<p>可见，随着误差在零点处的概率增大，OLS在零系数处估计逐渐趋于零，这几乎印证了上面的假设。不过，由于OLS没有LASSO可以保证系数严格压缩到零的条件，OLS估计实际无法（很难）得到严格零解。另一方面，误差项也不会集中分布在零点处。总之，OLS估计没有稀疏性。</p>
+<p>现在我们来讨论OLS估计的符号一致性。通常，我们对OLS估计的直观感受是，OLS没有稀疏性，但似乎对非零系数的符号估计地较准确。那么，OLS估计符号一致性具体怎样呢？不妨再次假设设计阵正交，根据不等式（5），若某个系数 $\hat{\beta}_j^{ols} (1)$ 满足符号一致的概率，则</p>
+<p>$$
+\begin{split} P(\hat{\beta}_j^{ols}(1) =_s \beta_j^ * (1)) &amp;\geq P(\vert \hat{\beta}_j^{ols}(1) - \beta_j^ * (1) \vert &lt; \vert \beta_j^ * (1)\vert) \newline &amp; = 1 - 2\Phi(-\vert \beta_j^ * (1)\vert/\sigma) \end{split}
+$$
+上式说明，当真实系数绝对值相对随机误差的标准差越大时，OLS估计的符号一致性越容易满足。</p>
+<p>下面我们用前文的模型来进行验证。当 $\beta^* = (3,-3,3,-3,3,-3,3,-3)^T$ 时，OLS的估计（此时误差服从标准正态分布，下同）结果为</p>
+<pre><code class="language-R">Coefficients:
+   Estimate Std. Error t value Pr(&gt;|t|)    
+x1    3.536      1.010   3.501 0.000485 ***
+x2   -4.359      1.010  -4.314 1.76e-05 ***
+x3    3.740      1.010   3.702 0.000226 ***
+x4   -3.672      1.010  -3.634 0.000293 ***
+x5    2.725      1.010   2.697 0.007108 ** 
+x6   -3.351      1.010  -3.317 0.000942 ***
+x7    2.851      1.010   2.822 0.004865 ** 
+x8   -2.827      1.010  -2.798 0.005234 **
+</code></pre>
+<p>可见OLS估计符号一致性满足的很好，而且每个系数估计的显著性也很高。</p>
+<p>当 $\beta^* = (1,-1,1,-1,1,-1,1,-1)^T$​ 时，OLS的估计结果为</p>
+<pre><code class="language-R">Coefficients:
+   Estimate Std. Error t value Pr(&gt;|t|)  
+x1  1.42236    1.01404   1.403   0.1610  
+x2  0.02772    1.01404   0.027   0.9782  
+x3  0.44146    1.01404   0.435   0.6634  
+x4 -0.33551    1.01404  -0.331   0.7408  
+x5  1.69184    1.01404   1.668   0.0955 .
+x6 -0.25667    1.01404  -0.253   0.8002  
+x7  1.67494    1.01404   1.652   0.0989 .
+x8 -0.55520    1.01404  -0.548   0.5841  
+</code></pre>
+<p>其中 $x_2$ 的系数符号就出现了错误，OLS估计的显著性下降很多。</p>
+<p>当 $\beta^* = 0.1\times(1,-1,1,-1,1,-1,1,-1)^T$ 时，OLS的估计结果为</p>
+<pre><code>Coefficients:
+   Estimate Std. Error t value Pr(&gt;|t|)
+x1  -0.5021     0.9898  -0.507    0.612
+x2  -0.8301     0.9898  -0.839    0.402
+x3  -0.2553     0.9898  -0.258    0.796
+x4   0.7577     0.9898   0.765    0.444
+x5   1.1240     0.9898   1.136    0.256
+x6  -0.1385     0.9898  -0.140    0.889
+x7   0.5300     0.9898   0.535    0.592
+x8  -0.9893     0.9898  -0.999    0.318
+</code></pre>
+<p>此时很多系数的符号没有估计对，OLS估计都不显著。</p>
+<p>综上所述，OLS估计的符号一致性并不总能够保证地很好，具体和真实系数绝对值相对随机误差标准差的大小有关。</p>
+<h2 id="4-发散维的lasso符号一致性">4 发散维的LASSO符号一致性</h2>
+<h3 id="41-发散维的假设条件">4.1 发散维的假设条件</h3>
+<p>前面的讨论都是固定维情形，即当样本量 $n\rightarrow\infty$ 时，维数 $p$ 和非零系数的个数 $q$ 保持不变。本节我们讨论LASSO估计量在发散维情形下的变量选择一致性。所谓发散维，即当样本量 $n\rightarrow\infty$ 时，维数 $p$ 和非零系数的个数 $q$ 也随之增长。因此，前面关于模型的假设不再适用，我们转而考虑下面的假设：</p>
+<p>存在 $0\leq c_1&lt; c_2\leq 1$ 和 $M_1, M_2, M_3, M_4 &gt;0$​，使得下面的式子成立：</p>
+<p>$$
+\begin{array}{r}
+\frac{1}{n} X_i^T X_i \leq M_1,, \forall i, \qquad (19) \newline
+\alpha^T C_n^{11} \alpha \geq M_2,, \forall \Vert\alpha\Vert_2^2 = 1, \qquad(20) \newline
+q = O(n^{c_1}), \qquad (21) \newline
+n^{\frac{1 - c_2}{2}} \underset{i=1, \ldots, q}{\min} \vert \beta_i\vert \geq M_3,, \qquad (22)
+\end{array}
+$$</p>
+<p>实际中常常对数据进行标准化处理，每列（变量）均值为零、方差为1，因此条件（19）很容易满足。（20）式则表明，重要变量对应的Gram矩阵具有良好的可逆性。条件（21）表明，随着样本量 $n$ 的增大，非零系数的个数以 $n^{c_1}$ 的同阶速率增长，这和固定维情形截然不同。我们知道，OLS估计具有理想的收敛速率，即 $\sqrt{n}$-收敛。对OLS估计，我们有</p>
+<p>$$
+\hat{\beta}^{ols} = (X^TX)^{-1}X^Ty = \beta^* + \frac{1}{\sqrt{n}}W_n \overset{n\rightarrow\infty}{\longrightarrow_p} \beta^*
+$$</p>
+<p>换句话说，估计的残差按照 $n^{-\frac12}$ 的速率收敛到零。 根据前面的讨论，LASSO的非零估计部分也和 $W_n$ 密切相关。因此，式（22）表明非零系数绝对值最小的项趋于零的速率与 $\sqrt{n}$ 之间差了一个 $n^{c_2}$，即与残差有一定的区分度才能让LASSO正确识别出。联系（21）式进一步可以看出，非零系数绝对值最小的项与残差趋于零的速率差 $n^{c_2}$ 要比非零系数个数的增长速率的 $\sqrt{q}$ 要大，这可以在控制模型参数的同时控制LASSO估计的偏度。</p>
+<h3 id="42-有限-2k-阶矩噪声的情形">4.2 有限 $2k$ 阶矩噪声的情形</h3>
+<p>基于4.1小节的假设，我们有如下的定理：</p>
+<p><strong>【定理3】</strong> 假设 $\epsilon_i$ 是iid的随机噪声，并具有有限的 $2k$ 阶矩，即 $E(\epsilon_i^{2k}) &lt; \infty$ 对某个整数 $k&gt;0$ 成立。若（19）-（22）都成立，则强不可表示性条件可以推出LASSO在 $p = o(n^{(c_2 - c_1)k})$ 时的强符号一致性。特别的，对任意 $\lambda_n$ 满足 $\frac{\lambda_n}{\sqrt{n}}=o(n^{\frac{c_2 - c_1}{2}})$ 和 $\frac{1}{p}(\frac{\lambda_n}{\sqrt{n}})^{2k}\rightarrow \infty$​，我们有
+$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) \geq 1 - O\left(\frac{pn^k}{\lambda_n^{2k}} \right)\rightarrow 1
+$$</p>
+<p><strong>【证明】</strong> 类似定理1的证明，我们有</p>
+<p>$$
+\begin{split}
+1 - P(A_n\cap B_n) &amp;= P((A_n\cap B_n)^c) = P(A_n^c \cup B_n^c) \newline
+&amp;\leq P(A_n^c) + P(B_n^c) \newline
+&amp;= \sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^* \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right)\right) + \sum_{i=1}^{p-q}P\left(\vert \zeta_n^i\vert \geq \frac{\lambda_n}{2\sqrt{n}}\eta_i\right)
+\end{split}
+$$</p>
+<p>其中</p>
+<p>$$
+\begin{split}
+z_n &amp;= (z_n^1, \ldots, z_n^q)^T = (C_n^{11})^{-1}W_n(1) \newline
+\zeta_n &amp;= (\zeta_n^1, \ldots, \zeta_n^{p-1})^T = C_n^{21}(C_n^{11})^{-1}W_n(1)-W_n(2) \newline
+b_n &amp;= (b_n^1, \ldots, b_n^n)^T = (C_n^{11})^{-1}\text{sign}(\beta^* (1))
+\end{split}
+$$</p>
+<p>现在，我们令 $z_n^i = H_A^T \epsilon$，其中 $H_A^T = (h_a^1, \ldots, h_a^q)^T = (C_n^{11})^{-1}(n^{-\frac12}X(1)^T)$​，则</p>
+<p>$$
+H_A^T H_A = (C_n^{11})^{-1}(n^{-\frac12}X(1))((C_n^{11})^{-1}(n^{-\frac12}X(1)))^T = (C_n^{11})^{-1}
+$$</p>
+<p>考虑坐标向量 $e_i = (0, \ldots, 1, \ldots, 0)^T\in \mathbb{R}^q$，其中第 $i$ 个元素为1、其余为零，则</p>
+<p>$$
+e_i^T H_A^T H_A e_i = e_i^T (C_n^{11})^{-1} e_i \leq \frac{1}{M_2}, \forall i=1, \ldots, q
+$$</p>
+<p>因此，我们有 $z_n^i = (h_a^i)^T\epsilon$​，其中</p>
+<p>$$
+\Vert h_a^i\Vert_2^2 \leq \frac{1}{M_2}, \forall i=1, \ldots, q \qquad (23)
+$$</p>
+<p>类似的，我们令 $\zeta_n^i = H_B^T\epsilon$，其中 $H_B^T = C_n^{21}(C_n^{11})^{-1}(n^{-\frac12}X(1)^T) - n^{-\frac12}X(2)^T$​，则</p>
+<p>$$
+H_B^TH_B = \frac1nX(2)^T(I - X(1)(X(1)^TX(1))^{-1}X(1)^T)X(2)
+$$</p>
+<p>由于 $I - X(1)(X(1)^TX(1))^{-1}X(1)^T$ 是<a href="https://blog.csdn.net/niu_123ming/article/details/86371308">投影矩阵</a>，则其特征值为0或1，因此</p>
+<p>$$
+\Vert h_b^i\Vert_2^2 \leq M_1, \forall i=1, \ldots, q \qquad (24)
+$$</p>
+<p>同时注意到</p>
+<p>$$
+\vert \frac{\lambda_n}{n}b_n\vert = \frac{\lambda_n}{n}\vert (C_n^{11})^{-1}\text{sign}(\beta^* (1))\vert \leq \frac{\lambda_n}{nM_2}\Vert \text{sign}(\beta^* (1))\Vert_2 = \frac{\lambda_n}{nM_2}\sqrt{q} \qquad (25)
+$$</p>
+<p>结合（23）和（24），当 $E(\epsilon_i^{2k}) &lt;\infty$ 时，可以推出 $E(z_n^i)^{2k}&lt;\infty$ 和 $E(\zeta_n^i)^{2k}&lt;\infty$ 成立。此外，当随机变量具有有限的 $2k$​ 阶矩时，我们可推出它的尾部概率满足下面的界：</p>
+<p>$$
+P(z_n^i &gt; t) = O(t^{-2k})
+$$</p>
+<p>因此，对 $\lambda_n /\sqrt{n} = o(n^{\frac{c_2 - c_1}{2}})$，利用（25），我们可以得到</p>
+<p>$$
+\sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^ * \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right)\right) = qO\left( \left(\sqrt{n}\left(\vert \beta_i^ * \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right) \right)^{-2k} \right)
+$$</p>
+<p>而</p>
+<p>$$
+\begin{split}
+n^{\frac{1-c_2}{2}}\frac{\lambda_n}{2n} \vert b_n^i\vert &amp;\leq n^{\frac{1-c_2}{2}} \frac{\lambda_n}{nM_2}\sqrt{q} \newline
+&amp;= \frac{\lambda_n}{n^{\frac{1 + c_2}{2}}M_2}O(n^{\frac{c_1}{2}}) \newline
+&amp;= O\left(\frac{\lambda_n}{n^{\frac12} n^{c_2 - c_1}} \right) \newline
+&amp;= o(1)
+\end{split}
+$$</p>
+<p>因此，可以推出</p>
+<p>$$
+\begin{split}
+\sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^ * \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right)\right) &amp;= q O\left( \left(\sqrt{n}\left(\vert \beta_i^ * \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right) \right)^{-2k} \right) \newline
+&amp;= q O\left( \left( n^{\frac{c_2}{2}}\left(n^{\frac{1-c_2}{2}}\vert \beta_i^ * \vert - n^{\frac{1-c_2}{2}}\frac{\lambda_n}{2n} \vert b_n^i\vert \right) \right)^{-2k} \right) \newline
+&amp;= q O\left(\left(n^{\frac{c_2}{2}}\left(n^{\frac{1-c_2}{2}}\vert \beta_i^ * \vert + o(1) \right)\right)^{-2k} \right) \newline
+&amp;= q O(n^{-kc_2}) \newline
+&amp;= o\left(\frac{pn^k}{\lambda_n^{2k}} \right)
+\end{split}
+$$</p>
+<p>类似的，我们可以推出</p>
+<p>$$
+\sum_{i=1}^{p-q}P\left(\vert \zeta_n^i\vert \geq \frac{\lambda_n}{2\sqrt{n}}\eta_i\right) = (p-q)O\left(\frac{n^k}{\lambda^{2k}} \right) = O\left(\frac{pn^k}{\lambda^{2k}} \right)
+$$</p>
+<p>注意到 $p = o(n^{k(c_2 - c_1)})$，则存在 $\lambda_n &gt; 0 $ 使得 $\frac{\lambda_n}{\sqrt{n}}=o(n^{\frac{c_2 - c_1}{2}})$ 和 $\frac{1}{p}(\frac{\lambda_n}{\sqrt{n}})^{2k}\rightarrow \infty$ 成立。至此，定理3证明完毕。$\blacksquare$</p>
+<p>定理3表明，当强不可表示性条件成立以及噪声具有有限 $2k$ 阶矩时，LASSO可以一致地选择出正确的模型。例如，当噪声具有有限的2阶矩时，根据定理3可知，数据的维度可以以低于 $n^{c_2 - c_1}$ 的速率（可能比 $n$ 要小，即仍是低维）增长，而此时LASSO在强不可表示性条件的保证下可以一致地选择出真实模型。如果噪声的所有 $2k$ 阶矩都有限，那么此时数据的维度可以以任意多项式的速率增长。特别地，当噪声是高斯噪声时，我们可以得到一个更强结论，具体如下一小节所述。</p>
+<h3 id="43-高斯噪声的情形">4.3 高斯噪声的情形</h3>
+<p>当噪声是高斯噪声时，我们有下面的定理：</p>
+<p><strong>【定理3】</strong> 假设 $\epsilon_i$ 是iid的随机噪声，且（19）-（22）都成立。如果存在 $0\leq c_3&lt; c_2 - c_1$ 使得 $p = O(e^{n^{c_3}})$ 成立，则强不可表示性条件可以推出LASSO的强符号一致性。特别的，对 $\lambda_n \propto n^{\frac{1+c_4}{2}}$ 其中 $c_3 &lt; c_4 &lt; c_2 - c_1$，</p>
+<p>$$
+P(\hat{\beta}^* (\lambda_n) =_s \beta^* ) \geq 1 - o(e^{-n^{c_3}}) \rightarrow 1
+$$</p>
+<p><strong>【证明】</strong> 由于 $\lambda_n \propto n^{\frac{1+c_4}{2}}$ 和 $c_3 &lt; c_4 &lt; c_2 - c_1$，根据（25）式立即可推出</p>
+<p>$$
+\begin{split}
+n^{\frac{1-c_2}{2}}\frac{\lambda_n}{2n} \vert b_n^i\vert &amp;\leq n^{\frac{1-c_2}{2}} \frac{\lambda_n}{nM_2}\sqrt{q} \newline
+&amp;= n^{\frac{1-c_2}{2}}\frac{O(n^{\frac{1+c_4}{2}})}{nM_2}O(n^{\frac{c_1}{2}}) \newline
+&amp;= \frac{O(n^{\frac{2+c_4 - (c_2 - c_1)}{2}})}{nM_2} \newline
+&amp;= o(1)
+\end{split}
+$$</p>
+<p>则根据定理1中正态随机变量尾部概率的界和（23）式可知</p>
+<p>$$
+\begin{split}
+\sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq \sqrt{n}\left(\vert \beta_i^* \vert - \frac{\lambda_n}{2n} \vert b_n^i\vert \right)\right)  &amp;= \sum_{i=1}^{q}P\left(\vert z_n^i\vert \geq n^{\frac{c_2}{2}}\left(n^{\frac{1-c_2}{2}}\vert \beta_i^* \vert - n^{\frac{1-c_2}{2}}\frac{\lambda_n}{2n} \vert b_n^i\vert \right) \right) \newline
+&amp;\leq \sum_{i=1}^{q}P\left( \vert z_n^i\vert \geq n^{\frac{c_2}{2}}\left(n^{\frac{1-c_2}{2}}\vert \beta_i^* \vert + o(1) \right) \right) \newline
+&amp;\leq \sum_{i=1}^{q}P\left( \vert z_n^i\vert \geq n^{\frac{c_2}{2}}\left(M_3 + o(1) \right) \right) \newline
+&amp;\leq \sum_{i=1}^{q}\left( 1 - \Phi(M_2n^{\frac{c_2}{2}}(M_3 + o(1)))\right) \newline
+&amp;= qO(1 - \Phi(M_2M_3n^{\frac{c_2}{2}})) \newline
+&amp;= o(e^{-n^{c_3}})
+\end{split}
+$$</p>
+<p>类似的，可以推出</p>
+<p>$$
+\sum_{i=1}^{p-q}P\left(\vert \zeta_n^i\vert \geq \frac{\lambda_n}{2\sqrt{n}}\eta_i\right) = (p-q)O\left(1 - \Phi\left(\frac{1}{M_1}\frac{\lambda_n}{\sqrt{n}}\eta \right) \right) = o(e^{-n^{c_3}})
+$$</p>
+<p>这样就证明了定理4的结论。$\blacksquare$</p>
+<h2 id="5-结语">5 结语</h2>
+<p>本篇博客主要以Zhao和Yu（2006）所提出的“不可表示性条件”为主介绍了LASSO的变量选择一致性。通过前文的分析和探讨，我们知道LASSO具有稀疏属性，但其变量选择一致性则需要额外的条件来保证。此外，当维度发散时，LASSO估计仍然可以在若干条件下保证良好的稀疏性，其中维数的变动特征和噪声有关。当噪声为高斯噪声时，LASSO可以在高维甚至超高维情形下达到良好的变量选择一致性。</p>
+<h2 id="6-参考文献">6 参考文献</h2>
+<p>[1] Fu W, Knight K. Asymptotics for lasso-type estimators[J]. The Annals of statistics, 2000, 28(5): 1356-1378.</p>
+<p>[2] Meinshausen N, Bühlmann P. High-dimensional graphs and variable selection with the lasso[J]. The annals of statistics, 2006, 34(3): 1436-1462.</p>
+<p>[3] Zhao P, Yu B. On model selection consistency of Lasso[J]. The Journal of Machine Learning Research, 2006, 7: 2541-2563.</p>
+<p>[4] Zhang CH, Huang J. The sparsity and bias of the lasso selection in high-dimensional linear regression[J]. The Annals of Statistics, 2008, 36(4): 1567-1594.</p>
+<p>[5] Zou H. The adaptive lasso and its oracle properties[J]. Journal of the American statistical association, 2006, 101(476): 1418-1429.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" title="LASSO的变量选择一致性之不可表示性条件" target="_blank" rel="external">https://qkai-stat.github.io/2021/10/irrepresentable-condition/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2021/09/zq2021/" title="中秋"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/"
+                    title="交替最小化：凸优化下的收敛性分析"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

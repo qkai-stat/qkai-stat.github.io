@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        线性模型的理论与求解 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>线性模型的理论与求解 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="线性模型的理论与求解" />
+<meta property="og:description" content="本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2018/04/lm/" />
+<meta property="article:published_time" content="2018-04-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-04-20T00:00:00+00:00" />
+<meta itemprop="name" content="线性模型的理论与求解">
+<meta itemprop="description" content="本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R">
+<meta itemprop="datePublished" content="2018-04-20T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-20T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="7254">
+
+
+
+<meta itemprop="keywords" content="多元统计,回归分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="线性模型的理论与求解"/>
+<meta name="twitter:description" content="本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2018/04/lm/"
+    >线性模型的理论与求解</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2018/04/lm/" class="article-date">
+  <time datetime="2018-04-20 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-04-20</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/"> 回归分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/04/lm/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 7254字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 15分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的<code>R</code>软件求解算法，并做了相应的模拟。</p>
+<p>设在线性模型中：$y\in \mathbb{R}^n$，$X\in \mathbb{R}^{n\times p}$，$n$ 表示观测数，$p$ 表示变量数。$\beta \in \mathbb{R}^p$ 表示回归系数。$\epsilon \sim N\left( 0,\sigma ^2I_n \right) $，是为独立同分布的高斯随机变量。</p>
+<h2 id="1-估计量的表达式">1 估计量的表达式</h2>
+<h3 id="11-最小二乘估计量">1.1 最小二乘估计量</h3>
+<ul>
+<li><strong>有截距项的参数估计：</strong></li>
+</ul>
+<p>首先令带有截距项的线性模型表达式为：</p>
+<p>$$
+y=1\beta _0+X\beta+\epsilon
+$$</p>
+<p>根据最小二乘思想可知目标函数为 $f\left( \beta _0,\beta  \right) =\lVert y-1\beta _0-X\beta  \rVert _{2}^{2}
+$，所以将 $f\left( \beta _0,\beta  \right) $ 展开有：</p>
+<p>$$
+\begin{split}
+f\left( \beta _0,\beta \right) =&amp;y^{\mathrm{T}}y+\beta _01^{\mathrm{T}}1\beta _0+2\beta ^{\mathrm{T}}X^{\mathrm{T}}1\beta _0
+\newline
+&amp;+\beta ^{\mathrm{T}}X^{\mathrm{T}}X\beta -2\beta _01^{\mathrm{T}}y-2y^{\mathrm{T}}X\beta
+\end{split}
+$$</p>
+<p>然后分别对 $\beta_0$，$\beta$ 求偏导并令为零：</p>
+<p>$$
+\begin{split}
+\frac{\partial f}{\beta _0}&amp;=2\cdot 1^{\mathrm{T}}1\beta _0+2\beta ^{\mathrm{T}}X ^{\mathrm{T}}1-2y ^{\mathrm{T}}1=0
+\newline
+\frac{\partial f}{\beta }&amp;=2X^{\mathrm{T}}1\beta _0+2X^{\mathrm{T}}X\beta -2X ^{\mathrm{T}}y=0
+\end{split}
+$$</p>
+<p>由上式第1式求得：$\hat{\beta}_0=\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y-\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\beta =\bar{y}-\bar{x}^{\mathrm{T}}\hat{\beta} $，其中 $\bar{X}=\left( \bar{x}_1,\cdots ,\bar{x}_p \right) ^{\mathrm{T}}$ 表示由 $X$ 的每一列的均值组成的列向量。然后将求得的结果带入到第2式中，有：</p>
+<p>$$
+X^{\mathrm{T}}1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y-X^{\mathrm{T}}1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\beta +X^{\mathrm{T}}X\beta -X^{\mathrm{T}}y=0
+$$</p>
+<p>整理可得：</p>
+<p>$$
+-X^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] y+X^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] X\beta =0
+$$</p>
+<p>注意到矩阵 $I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}$ 是对称幂等的，并且 $\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) X$ 可以看成是 $X$ 的每个元素减去所在列的均值得到的新矩阵（就是每一列元素进行中心化）。则记</p>
+<p>$$
+X_c=\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] X
+$$</p>
+<p>所以可以得到</p>
+<p>$$
+X_{c}^{\mathrm{T}}X_c\beta =X_{c}^{\mathrm{T}}y
+$$</p>
+<p>故而得到有截距的最小二乘参数估计为：</p>
+<p>$$
+\begin{split}
+\hat{\beta}_0&amp;=\bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta}
+\newline
+\hat{\beta}&amp;=\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>对所得到的估计进行分析，显然有：</p>
+<p>$$
+\begin{split}
+E\hat{\beta}&amp;=E\left[ \left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}X _{c}^{\mathrm{T}}y \right]
+\newline
+&amp;=E\left[ \left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}X _{c}^{\mathrm{T}}\left( 1\beta  _0+X\beta +\epsilon \right) \right]
+\newline
+&amp;=\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}X _{}^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) \left( 1\beta  _0+X\beta  \right)
+\newline
+&amp;=\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}X _{}^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) X\beta
+\newline
+&amp;=\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}X _{c}^{\mathrm{T}}X _c\beta
+\newline
+&amp;=\beta
+\end{split}
+$$</p>
+<p>这里利用了 $\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) $ 对称幂等的性质。同理有</p>
+<p>$$
+\begin{split}
+E\hat{\beta}_0&amp;=E\left( \bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta} \right)
+\newline
+&amp;=\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}Ey-\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\beta
+\newline
+&amp;=\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}\left( 1\beta _0+X\beta \right) -\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\beta
+\newline
+&amp;=\beta _0
+\end{split}
+$$</p>
+<p><strong>因此 $\beta_0$，$\beta$ 都是无偏估计量。</strong> 下面考虑他们的方差，则有</p>
+<p>$$
+\begin{split}
+Var\left( \hat{\beta} \right) &amp;=Var\left( \left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}y \right)
+\newline
+&amp;=\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}Var\left( y \right) X_{c}^{}\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}
+\newline
+&amp;=\sigma ^2\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}
+\end{split}
+$$</p>
+<p>和</p>
+<p>$$
+\begin{split}
+Var\left( \hat{\beta}_0 \right) &amp;=Var\left( \bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta} \right)
+\newline
+&amp;=Var\left[ \left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y-\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y \right]
+\newline
+&amp;=\frac{\sigma ^2}{n^2}\left[ 1^{\mathrm{T}}1-0-0+1^{\mathrm{T}}X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X^{\mathrm{T}}1 \right]
+\newline
+&amp;=\sigma ^2\left( \frac{1}{n}+\bar{X}^{\mathrm{T}}\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}\bar{X} \right)
+\end{split}
+$$</p>
+<p>上式只需注意到 $1^{\mathrm{T}}X_{c}=1^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) X=0$ 即可。最后，计算 $\beta_0$ 和 $\beta$ 之间的协方差：</p>
+<p>$$
+\begin{split}
+Cov\left( \hat{\beta}_0,\hat{\beta} \right) &amp;=Cov\left( \bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta},\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y \right)
+\newline
+&amp;=\sigma ^2\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}\left( I-X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}} \right) X _{c}\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}
+\newline
+&amp;=\sigma ^2\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}\left( X _{c}\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}-X\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1} \right)
+\newline
+&amp;=-\sigma ^2\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}
+\newline
+&amp;=-\sigma ^2\bar{X}^{\mathrm{T}}\left( X _{c}^{\mathrm{T}}X _c \right) ^{-1}
+\end{split}
+$$</p>
+<ul>
+<li><strong>不带截距项的参数估计：</strong></li>
+</ul>
+<p>假设 $\hat{\beta}$ 是参数 $\beta$ 的最小二乘估计量，$\hat{y}$ 是相应的 $y$ 的最小二乘估计，则根据最小二乘估计的思想，最小化以下目标函数即可：</p>
+<p>$$
+\hat{\beta}=\mathrm{arg}\ \mathop {\min} \limits_\beta\lVert y-X\beta \rVert _{2}^{2}
+$$</p>
+<p>令 $f\left( \beta \right) =\lVert y-X\beta \rVert _{2}^{2}$，对 $\beta$ 进行求导有：</p>
+<p>$$
+\begin{split}
+\frac{\partial f\left( \beta \right)}{\partial \beta}&amp;=-2X^{\mathrm{T}}y+2X^{\mathrm{T}}X\beta
+\newline
+\frac{\partial ^2f\left( \beta \right)}{\partial \beta ^2}&amp;=2X^{\mathrm{T}}X
+\end{split}
+$$</p>
+<p>根据极值的必要条件，令上式为零有：</p>
+<p>$$
+\hat{\beta}=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+$$</p>
+<p>显然在求解中<strong>并不需要</strong> 假定 $\epsilon$ 一定服从正态分布。</p>
+<p>对所得到的估计进行分析，显然有：</p>
+<p>$$
+\begin{split}
+E\hat{\beta}&amp;=E\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+\newline
+&amp;=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}X\beta
+\newline
+&amp;=\beta
+\end{split}
+$$</p>
+<p><strong>因此 $\hat{\beta}$ 是无偏估计量。</strong> 下面考虑他的方差：</p>
+<p>$$
+\begin{split}
+Var\left( \hat{\beta} \right) &amp;=Var\left( \left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y \right)
+\newline
+&amp;=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}Var\left( y \right) X\left( X^{\mathrm{T}}X \right) ^{-1}
+\newline
+&amp;=\sigma ^2\left( X^{\mathrm{T}}X \right) ^{-1}
+\end{split}
+$$</p>
+<h3 id="12-极大似然估计量">1.2 极大似然估计量</h3>
+<p>首先给出多元正态联合密度函数公式：</p>
+<p>$$
+f\left( x|\mu ,\Sigma \right) =\left[ \left( 2\pi \right) ^{-\frac{n}{2}}|\Sigma |^{-\frac{1}{2}} \right] \exp \left[ -\frac{1}{2}\left( x-\mu \right) ^{\mathrm{T}}\Sigma ^{-1}\left( x-\mu \right) \right]
+$$</p>
+<p>其中 $x$ 服从 $N(\mu, \Sigma)$ 分布。在本问题中，我们假定 $\Sigma =\sigma ^2I$，也就是随机变量是独立同分布于高斯分布的。</p>
+<p>因此，根据极大似然原理得到似然函数：</p>
+<p>$$
+\mathscr{L}\left( \beta ,\sigma ^2 \right) =\left( 2\pi \sigma ^2 \right) ^{-\frac{n}{2}}\exp \left[ -\frac{1}{2\sigma ^2}\left( y-X\beta \right) ^{\mathrm{T}}\left( y-X\beta \right) \right]
+$$</p>
+<p>取对数得到对数似然函数：</p>
+<p>$$
+\ln \mathscr{L}\left( \beta ,\sigma ^2 \right) =-\frac{n}{2}\ln \left( 2\pi \sigma ^2 \right) -\frac{1}{2\sigma ^2}\left( y-X\beta \right) ^{\mathrm{T}}\left( y-X\beta \right)
+$$</p>
+<p>上式分别对 $\beta$ 和 $\sigma^2$ 求偏导：</p>
+<p>$$
+\begin{split}
+\frac{\partial \ln \mathscr{L}}{\partial \beta}&amp;=-\frac{1}{2\sigma ^2}\left( -2X^{\mathrm{T}}y+X^{\mathrm{T}}X\beta \right) =0
+\newline
+\frac{\partial \ln \mathscr{L}}{\partial \sigma ^2}&amp;=-\frac{n}{2\sigma ^2}+\frac{1}{2\sigma ^4}\left( y-X\beta \right) ^{\mathrm{T}}\left( y-X\beta \right)
+\end{split}
+$$</p>
+<p>显然根据第1式得到 $\beta$ 的极大似然估计量为：</p>
+<p>$$
+\hat{\beta}=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+$$</p>
+<p>并且我们还可以得到 $\sigma^2$ 的估计量：</p>
+<p>$$
+\hat{\sigma}^2=\frac{RSS}{n}
+$$</p>
+<p>其中 $RSS=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right) $ 是残差平方和。</p>
+<blockquote>
+<p>从这里可以看出，<strong>在正态分布的假设下，最大似然法和最小二乘法的得到的估计量是一致的。</strong> 因此，线性模型下使用最小二乘法或者极大似然法估计系数都可以。然而，这种等价性在<a href="/2018/06/glm/">其他分布类型</a>的回归问题中不成立。</p>
+</blockquote>
+<h2 id="2-方差分析">2 方差分析</h2>
+<h3 id="21-带截距项的方差分解">2.1 带截距项的方差分解</h3>
+<p>首先给出模型总的离差平方和（$SYY$），回归平方和（$SS_{Reg}$）和残差平方和（$RSS$）的定义：</p>
+<p>$$
+\begin{split}
+SYY&amp;=\left( y-\bar{y}1 \right) ^{\mathrm{T}}\left( y-1\bar{y} \right)
+\newline
+SS_{Reg}&amp;=\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( \hat{y}-1\bar{y} \right)
+\newline
+RSS&amp;=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right)
+\end{split}
+$$</p>
+<p>则对 $SYY$ 有：</p>
+<p>$$
+\begin{split}
+SYY&amp;=\left( y-\hat{y}+\hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( y-\hat{y}+\hat{y}-1\bar{y} \right)
+\newline
+&amp;=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right) +\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( \hat{y}-1\bar{y} \right)+2\left( y-\hat{y} \right) ^{\mathrm{T}}\left( \hat{y}-1\bar{y} \right)
+\newline
+&amp;=SS_{\mathrm{Re}g}+RSS+2\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right)
+\end{split}
+$$</p>
+<p>考虑带有截距项的模型的参数估计：</p>
+<p>$$
+\begin{split}
+\hat{\beta}_0&amp;=\bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta}
+\newline
+\hat{\beta}&amp;=\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>由此可以得到 $\hat{y}$ 为：</p>
+<p>$$
+\begin{split}
+\hat{y}&amp;=1\hat{\beta}_0+X\hat{\beta}
+\newline
+&amp;=1\left[ \left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y-\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y \right]+X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\newline
+&amp;=1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y+\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\newline
+&amp;=1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}y+X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>所以：</p>
+<p>$$
+\begin{split}
+y-\hat{y}&amp;=\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] y-X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\newline
+\hat{y}-1\bar{y}&amp;=X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>所以：</p>
+<p>$$
+\begin{split}
+\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right) &amp;=y^{\mathrm{T}}X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] y
+\newline
+&amp;\quad-y^{\mathrm{T}}X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>而 $\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] $ 对称幂等，则有：</p>
+<p>$$
+\begin{split}
+X _{c}^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] &amp;=X^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right] ^2
+\newline
+&amp;=X^{\mathrm{T}}\left[ I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right]
+\newline
+&amp;=X _{c}^{\mathrm{T}}
+\end{split}
+$$</p>
+<p>所以得到 $\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right)$。这样我们就得到一个重要的<strong>分解恒等式：</strong></p>
+<p>$$
+SYY=RSS+SS_{\mathrm{Reg}}
+$$</p>
+<p><strong>注意，在按照前面各个方差的定义下，只有带截距项的模型才使得上式成立。</strong> 通常的模型都是带有截距的，因此在实际运用中，按照前面定义的不同离差是比较常见的。</p>
+<blockquote>
+<p>在本节不同离差的定义下，不带截距项的模型分解恒等式不一定成立。</p>
+</blockquote>
+<h3 id="22-通用型方差分解式">2.2 通用型方差分解式</h3>
+<p>除了以上形式的方差类型的定义方式外，还有一种模型方差分解的定义：</p>
+<p>$$
+\begin{split}
+SYY&amp;=y^{\mathrm{T}}y
+\newline
+SS_{Reg}&amp;=\hat{y}^{\mathrm{T}}\hat{y}
+\newline
+RSS&amp;=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right)
+\end{split}
+$$</p>
+<p>将上式中的 $RSS$ 乘开得到：</p>
+<p>$$
+RSS=y^{\mathrm{T}}y+\hat{y}^{\mathrm{T}}\hat{y}-2y^{\mathrm{T}}\hat{y}
+$$</p>
+<p>考虑不带截距项的模型有 $\hat{\beta}=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y$，所以 $\hat{y}=X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y$，故而有：</p>
+<p>$$
+\begin{split}
+\hat{y}^{\mathrm{T}}\hat{y}&amp;=y^{\mathrm{T}}X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+\newline
+&amp;=y^{\mathrm{T}}X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+\newline
+y^{\mathrm{T}}\hat{y}&amp;=y^{\mathrm{T}}X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y=\hat{y}^{\mathrm{T}}\hat{y}
+\end{split}
+$$</p>
+<p>所以将上式结果带入到 $RSS$ 中得到：</p>
+<p>$$
+\begin{split}
+RSS&amp;=y^{\mathrm{T}}y+\hat{y}^{\mathrm{T}}\hat{y}-2y^{\mathrm{T}}\hat{y}=y^{\mathrm{T}}y+\hat{y}^{\mathrm{T}}\hat{y}-2\hat{y}^{\mathrm{T}}\hat{y}
+\newline
+&amp;=y^{\mathrm{T}}y-\hat{y}^{\mathrm{T}}\hat{y}
+\newline
+&amp;=SYY-SS_{\mathrm{Re}g}
+\end{split}
+$$</p>
+<p>这样就证明了方差分解公式成立。</p>
+<blockquote>
+<p>在本节方差的定义下，带截距项模型的分解恒等式也成立。</p>
+</blockquote>
+<p>通过上述分析可以看出，如果是带有截距项的模型，一般按照第一种定义进行分解；如果是不带截距项的模型，则按照式第二种定义进行分解。</p>
+<h3 id="23-方差分析表">2.3 方差分析表</h3>
+<ul>
+<li><strong>带截距项的模型</strong></li>
+</ul>
+<p>对带截距项的模型有：</p>
+<p>$$
+\begin{split}
+\hat{\beta}_0&amp;=\bar{y}-\bar{X}^{\mathrm{T}}\hat{\beta}
+\newline
+\hat{\beta}&amp;=\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}y
+\end{split}
+$$</p>
+<p>根据2.1节各个离差的定义，假定设计矩阵 $X$ 列满秩且 $\epsilon \sim N\left( 0,\sigma ^2I_n \right)$。</p>
+<p>虑总离差平方和 $SYY$：</p>
+<p>$$
+\begin{split}
+SYY&amp;=\left( y-1\bar{y} \right) ^{\mathrm{T}}\left( y-1\bar{y} \right)
+\newline
+&amp;=y^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) ^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) y
+\newline
+&amp;=y^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) y
+\end{split}
+$$</p>
+<p>注意到 $P_1=1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}}$ 对称、幂等且 $I-P_1$ 秩为 $n-1$。对 $y=1\beta _0+X\beta+\epsilon $，容易得到 $y\sim N\left( \hat{\mu},\sigma ^2I_n \right) $，其中 $\hat{\mu}=1\beta _0+X\beta$，故而：</p>
+<p>$$
+\frac{SYY}{\sigma ^2}=\left( y/\sigma \right) ^{\mathrm{T}}\left( I-P_1 \right) \left( y/\sigma \right) \sim \chi _{n-1}^{2}\left( \frac{\hat{\mu}^{\mathrm{T}}\left( I-P_1 \right) \hat{\mu}}{\sigma ^2} \right)
+$$</p>
+<p>考虑残差平方和 $RSS$：</p>
+<p>$$
+\begin{split}
+RSS &amp;=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right)
+\newline
+&amp;=\left( y-1\hat{\beta}_0-X\hat{\beta} \right) ^{\mathrm{T}}\left( y-1\hat{\beta}_0-X\hat{\beta} \right)
+\newline
+&amp;=y^{\mathrm{T}}\left( I-P_1-P _{X_c}+P_1P _{X_c}+P _{X_c}P_1 \right) y
+\end{split}
+$$</p>
+<p>其中 $P_{X_c}$ 秩为 $p$ 且满足：</p>
+<p>$$
+\begin{split}
+P_{X_c}&amp;=X_c\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}
+\newline
+&amp;=\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}
+\newline
+&amp;=\left( I-P_1 \right) X\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}X _{c}^{\mathrm{T}}
+\end{split}
+$$</p>
+<p>所以有 $\left( I-P _1 \right) P _{X _c}=P _{X _c}$，同理可以验证 $P _{X _c}\left( I-P _1 \right) =P _{X _c}$ 也成立。则对 $\left( I-P _1-P _{X _c}+P _1P _{X _c}+P _{X _c}P _1 \right) $ 有：</p>
+<p>$$
+\begin{split}
+&amp;I-P _1-P _{X _c}+P _1P _{X _c}+P _{X _c}P _1
+\newline
+&amp;=I-\left( I-P _1 \right) P _{X _c}-P _1+P  _{X _c}P _1
+\newline
+&amp;=I-P _{X _c}-P _1+P _{X _c}P _1
+\newline
+&amp;=I-P _1-P _{X _c}\left( I-P _1 \right)
+\newline
+&amp;=I-P _1-P _{X _c}
+\end{split}
+$$</p>
+<p>可以验证 $I-P_1-P_{X_c}$ 是对称、幂等的且秩为 $n-p-1$，因此</p>
+<p>$$
+\frac{RSS}{\sigma ^2}=\left( \frac{y}{\sigma} \right) ^{\mathrm{T}}\left( I-P_1-P_{X_c} \right) \left( \frac{y}{\sigma} \right) \sim \chi _{n-p-1}^{2}
+$$</p>
+<p>这里的卡方分布中心没有偏移是因为</p>
+<p>$$
+\begin{split}
+\hat{\mu}^{\mathrm{T}}\left( I-P _1-P _{X _c} \right) &amp;=\left( 1\beta  _0+X\beta \right) ^{\mathrm{T}}\left( I-P _1-P _{X _c} \right)
+\newline
+&amp;=\left( \beta  _01^{\mathrm{T}}-\beta  _01^{\mathrm{T}}P _1 \right) -\beta  _01^{\mathrm{T}}P _{X _c}+\beta^{\mathrm{T}}X^{\mathrm{T}}-\beta^{\mathrm{T}}X^{\mathrm{T}}P _1-\beta^{\mathrm{T}}X^{\mathrm{T}}P _{X _c}
+\newline
+&amp;=0-0+\beta^{\mathrm{T}}X^{\mathrm{T}}\left( I-P _1 \right) -\beta^{\mathrm{T}}X^{\mathrm{T}}P _{X _c}
+\newline
+&amp;=0
+\end{split}
+$$</p>
+<p>考虑回归平方和 $SS _{Reg}$：</p>
+<p>$$
+\begin{split}
+SS _{Reg}&amp;=\left( \hat{y}-1\bar{y} \right) ^{\mathrm{T}}\left( \hat{y}-1\bar{y} \right)
+\newline
+&amp;=y^{\mathrm{T}}X _c\left( X  _{c}^{\mathrm{T}}X _c \right) ^{-1}X  _{c}^{\mathrm{T}}y
+\newline
+&amp;=y^{\mathrm{T}}P _{X _c}y
+\end{split}
+$$</p>
+<p>结合 $y\sim N\left( \hat{\mu},\sigma ^2I_n \right)$，$\hat{\mu}=1\beta _0+X\beta+\mu$，故而</p>
+<p>$$
+\frac{SS_{Reg}}{\sigma ^2}=\left( y/\sigma \right) ^{\mathrm{T}}P_{X_c}\left( y/\sigma \right) \sim \chi _{p}^{2}\left( \frac{\tilde{\mu}^{\mathrm{T}}P _{X_c}\tilde{\mu}}{\sigma ^2} \right)
+$$</p>
+<blockquote>
+<p>观察到 $\left( I-P_1-P_{X_c} \right) \times P_{X_c}=0$，故而 $RSS$ 和 $SS_{Reg}$ 是独立同分布的。</p>
+</blockquote>
+<p>综合上述可得到带截距项的模型方差分析表</p>
+<table>
+<thead>
+<tr>
+<th align="left">方差来源</th>
+<th align="left">平方和</th>
+<th align="left">自由度 $df$</th>
+<th align="left">均方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">回归</td>
+<td align="left">$SS_{Reg}$</td>
+<td align="left">$p$</td>
+<td align="left">$SS_{Reg}/p$</td>
+</tr>
+<tr>
+<td align="left">残差</td>
+<td align="left">$RSS$</td>
+<td align="left">$n-p-1$</td>
+<td align="left">$RSS/(n-p-1)$</td>
+</tr>
+<tr>
+<td align="left">总离差</td>
+<td align="left">$SYY$</td>
+<td align="left">$n-1$</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>不带截距的模型</strong></li>
+</ul>
+<p>对不带截距项的模型有：</p>
+<p>$$
+\hat{\beta}=\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y
+$$</p>
+<p>根据式2.2各个离差的定义，假定设计矩阵 $X$ 列满秩且 $\epsilon \sim N\left( 0,\sigma ^2I_n \right) $。</p>
+<p>考虑总离差平方和 $SYY$：</p>
+<p>其中 $y=X\beta +\epsilon \sim \left( \tilde{\mu},\sigma ^2I_n \right) $，$\tilde{\mu}=X\beta $，故而</p>
+<p>$$
+\frac{SYY}{\sigma ^2}=\left( y/\sigma \right) ^{\mathrm{T}}\left( y/\sigma \right) \sim \chi _{n}^{2}\left( \frac{\tilde{\mu}^{\mathrm{T}}\tilde{\mu}}{\sigma ^2} \right)
+$$</p>
+<p>考虑残差平方和 $RSS$</p>
+<p>$$
+\begin{split}
+RSS=\left( y-\hat{y} \right) ^{\mathrm{T}}\left( y-\hat{y} \right) &amp;=\left( y-X\hat{\beta} \right) ^{\mathrm{T}}\left( y-X\hat{\beta} \right)
+\newline
+&amp;=\left( y-X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y \right) ^{\mathrm{T}}\left( y-X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}y \right)
+\newline
+&amp;=y^{\mathrm{T}}\left( I-P_X \right) y
+\end{split}
+$$</p>
+<p>其中 $P_X=X\left( X^{\mathrm{T}}X \right) ^{-1}X^{\mathrm{T}}$ 是空间 $\mathscr{R}\left( X \right) $ 的正交投影算子。根据矩阵知识， $I-P_X$ 对称、幂等且秩为 $n-p$，所以</p>
+<p>$$
+\frac{RSS}{\sigma ^2}=\left( y/\sigma \right) ^{\mathrm{T}}\left( I-P_X \right) \left( y/\sigma \right) \sim \chi _{n-p}^{2}
+$$</p>
+<p>这里的卡方分布也是没有中心偏移的。</p>
+<p>考虑回归平方和 $SS_{Reg}$</p>
+<p>$$
+SS_{Reg}=\hat{y}^{\mathrm{T}}\hat{y}=y^{\mathrm{T}}P_Xy
+$$</p>
+<p>结合 $y=X\beta +\epsilon \sim N\left( \tilde{\mu},\sigma ^2I_n \right)$，$\tilde{\mu}=X\beta +\mu $，故而</p>
+<p>$$
+\frac{SS_{Reg}}{\sigma ^2}=\left( y/\sigma \right) ^{\mathrm{T}}P_X\left( y/\sigma \right) \sim \chi _{p}^{2}\left( \frac{\tilde{\mu}^{\mathrm{T}}P_X\tilde{\mu}}{\sigma ^2} \right)
+$$</p>
+<blockquote>
+<p>通过上述分析，观察到 $\left( I-P_X \right) \times P_X=0$，故而 $RSS$ 和 $SS_{Reg}$ 是独立同分布的。</p>
+</blockquote>
+<p>最后，综合上述可得到不带截距项的模型方差分析表</p>
+<table>
+<thead>
+<tr>
+<th align="left">方差来源</th>
+<th align="left">平方和</th>
+<th align="left">自由度 $df$</th>
+<th align="left">均方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">回归</td>
+<td align="left">$SS_{Reg}$</td>
+<td align="left">$p$</td>
+<td align="left">$SS_{Reg}/p$</td>
+</tr>
+<tr>
+<td align="left">残差</td>
+<td align="left">$RSS$</td>
+<td align="left">$n-p$</td>
+<td align="left">$RSS/(n-p)$</td>
+</tr>
+<tr>
+<td align="left">总离差</td>
+<td align="left">$SYY$</td>
+<td align="left">$n$</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-统计显著性检验">3 统计显著性检验</h2>
+<h3 id="31-模型显著性">3.1 模型显著性</h3>
+<ul>
+<li><strong>带截距项的模型</strong></li>
+</ul>
+<p>在这个检验前提下，我们的原假设和备择假设通常是</p>
+<p>$$
+\begin{split}
+&amp;H_0:\beta=0
+\newline
+&amp;H_1:\beta\ne 0
+\end{split}
+$$</p>
+<p>根据前述可知</p>
+<p>$$
+\begin{split}
+&amp;\frac{RSS}{\sigma^2}\ \sim \chi_{n-p-1}^{2}
+\newline
+&amp;\frac{SS_{Reg}}{\sigma^2} \sim \chi_{p}^{2}\left( \frac{\hat{\mu}^{\mathrm{T}}P_{X_c}\hat{\mu}}{\sigma^2} \right)
+\end{split}
+$$</p>
+<p>其中 $\hat{\mu}=1\beta _0+X\beta$，故而当原假设成立时有 $\hat{\mu}=1\beta _0$，因此</p>
+<p>$$
+\begin{split}
+\hat{\mu}^{\mathrm{T}}\left( I-P _1-P _{X _c} \right) \hat{\mu}&amp;=\beta  _{0}^{2}1^{\mathrm{T}}\left( I-P _1-P _{X _c} \right) 1
+\newline
+&amp;=\beta  _{0}^{2}\left( 1^{\mathrm{T}}1-1^{\mathrm{T}}1-1^{\mathrm{T}}P  _{X _c}1 \right)
+\newline
+&amp;=-\beta  _{0}^{2}1^{\mathrm{T}}P _{X _c}1
+\end{split}
+$$</p>
+<p>而对 $1^{\mathrm{T}}P_{X_c}1$ 有</p>
+<p>$$
+\begin{split}
+1^{\mathrm{T}}P_{X_c}1&amp;=1^{\mathrm{T}}X_c\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}1
+\newline
+&amp;=1^{\mathrm{T}}\left( I-1\left( 1^{\mathrm{T}}1 \right) ^{-1}1^{\mathrm{T}} \right) X\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}1
+\newline
+&amp;=\left( 1^{\mathrm{T}}-1^{\mathrm{T}} \right) X\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}1
+\newline
+&amp;=0
+\end{split}
+$$</p>
+<p>所以 $\hat{\mu}^{\mathrm{T}}\left( I-P_1-P_{X_c} \right) \hat{\mu}=0$，同理可知 $\hat{\mu}^{\mathrm{T}}P_{X_c}\hat{\mu}=0$，故而在原假设成立的条件下有</p>
+<p>$$
+\begin{split}
+\frac{RSS}{\sigma^2}\ &amp;\sim \chi_{n-p-1}^{2}
+\newline
+\frac{SS_{Reg}}{\sigma^2} &amp;\sim \chi_{p}^{2}
+\end{split}
+$$</p>
+<p>所以，在 $H_0$ 成立的条件下有</p>
+<p>$$
+F_0=\frac{SS_{Reg}/p}{RSS/\left( n-p-1 \right)}\sim F_{p,n-p-1}
+$$</p>
+<p>这样当给定置信水平 $\alpha$，在原假设成立的条件下回归平方和 $SS_{Reg}$ 较小，而残差平方和 $RSS$则较大，因此检验统计量 $F_0$ 就应该较小。那么，拒绝原假设的条件就是 $F_0\ge F_{\alpha ,p,n-p-1}$。 这里 $F_{\alpha ,p,n-p-1}$ 表示上侧 $\alpha$ 分位数（下同）。</p>
+<ul>
+<li><strong>不带截距项的模型</strong></li>
+</ul>
+<p>在这个检验前提下，我们的原假设和备择假设通常是</p>
+<p>$$
+\begin{split}
+&amp;H_0:\beta _1=\beta _2=\cdots =\beta _p=0
+\newline
+&amp;H_1:\beta _j\ne 0,\mathrm{至少对一}个j\mathrm{成立}
+\end{split}
+$$</p>
+<p>类似的，当原假设成立时有 $\hat{\mu}=0$，则</p>
+<p>$$
+\begin{split}
+\frac{RSS}{\sigma^2}\ &amp;\sim \chi_{n-p}^{2}
+\newline
+\frac{SS_{Reg}}{\sigma^2} &amp;\sim \chi_{p}^{2}
+\end{split}
+$$</p>
+<p>所以，在原假设成立的条件下有</p>
+<p>$$
+F_0=\frac{SS_{Reg}/p}{RSS/\left( n-p \right)}~F_{p,n-p}
+$$</p>
+<p>拒绝原假设的条件同前。</p>
+<h3 id="32-单个系数的检验">3.2 单个系数的检验</h3>
+<p>单个系数的检验通常和从模型中增删变量有关。一般来说，增加一个额外的变量到模型中去，不会使得回归平方和 减小，也不会使得残差平方和 $SS_{Reg}$ 增大。但是，回归平方和 $SS_{Reg}$ 的一点点增大能否充分的保证在模型中引入了一个冗余变量？我们之所以关心，是因为增加一个冗余变量到模型中确实会增大均方误差，因而将模型的可用性降低了。</p>
+<p>检验任何一个单独的回归系数 $\beta_j$ 的假设通常是</p>
+<p>$$
+\begin{split}
+&amp;H_0:\beta _j=0
+\newline
+&amp;H_1:\beta _j\ne 0
+\end{split}
+$$</p>
+<ul>
+<li><strong>带截距项的模型</strong></li>
+</ul>
+<p>对带截距项的模型有</p>
+<p>$$
+\hat{\beta}=\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}X_{c}^{\mathrm{T}}y
+$$</p>
+<p>因为 $E\hat{\beta}=\beta$ 和 $Var\left( \hat{\beta} \right) =\sigma ^2\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}$，显然有</p>
+<p>$$
+\frac{\hat{\beta}_j-\beta _j}{\sqrt{\sigma ^2C _{jj}}}\sim N\left( 0,1 \right)
+$$</p>
+<p>其中 $C_{jj}$ 是矩阵 $\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}$ 第 个对角元。但是由于一般情况下 $\sigma^2$ 未知，所以我们再考虑 $RSS$ 有</p>
+<p>$$
+\frac{RSS}{\sigma ^2}\ \sim \chi _{n-p-1}^{2}
+$$</p>
+<p>所以有</p>
+<p>$$
+\frac{\left( n-p-1 \right) s^2}{\sigma ^2}\sim \chi _{n-p-1}^{2}
+$$</p>
+<p>其中 $s^2$ 是样本的方差，是可以通过样本计算得到的。那么，在原假设成立的条件下有</p>
+<p>$$
+t_0 = \frac{\hat{\beta}_j}{\sqrt{s^2C _{jj}}} \sim t _{n-p-1}
+$$</p>
+<p>因此，给定置信水平 $\alpha$ 在原假设成立的条件下，上式 $t_0$ 的绝对值就不会特别大。那么，拒绝 $H_0$ 的条件就是：$| t_0 |&gt;t_{\alpha /2,n-p-1}$。</p>
+<p>对于截距项有</p>
+<p>$$
+\frac{\hat{\beta}_0-\beta _0}{\sqrt{\sigma ^2\left( 1/n+\bar{X}^{\mathrm{T}}\left( X _{c}^{\mathrm{T}}X_c \right) ^{-1}\bar{X} \right)}}\sim N\left( 0,1 \right)
+$$</p>
+<p>因此</p>
+<p>$$
+t_0 = \frac{\hat{\beta}_j}{\sqrt{s^2(1/n + \bar{X} ^{\mathrm{T}}(X _c^{\mathrm{T}}X _c)^{-1}\bar{X})}} \sim t _{n-p-1}
+$$</p>
+<p>综述，给定置信水平 $\alpha$ 在原假设 $H_0$ 成立的条件下，拒绝 $H_0$ 的条件就是：$| t_0 |&gt;t_{\alpha /2,n-p-1}$。</p>
+<ul>
+<li><strong>不带截距项的模型</strong></li>
+</ul>
+<p>对不带截距项的模型有</p>
+<p>$$
+\hat{\beta}=\left( X_{}^{\mathrm{T}}X_{} \right) ^{-1}X_{}^{\mathrm{T}}y
+$$</p>
+<p>类似的，因为 $E\hat{\beta}=\beta $ 和 $E\hat{\beta}=\beta $，所以</p>
+<p>$$
+\frac{\hat{\beta}_j-\beta_j}{\sqrt{\sigma ^2C _{jj}}} \sim N\left( 0,1 \right)
+$$</p>
+<p>其中 $C_{jj}$ 是矩阵 $(X^{\mathrm{T}}X)^{-1}$ 第 $j$ 个对角元。但是由于一般情况下 $\sigma^2$ 未知，所以我们再考虑 $RSS$ 有</p>
+<p>$$
+\frac{RSS}{\sigma ^2}\ \sim \chi _{n-p}^{2}
+$$</p>
+<p>所以有</p>
+<p>$$
+\frac{\left( n-p \right) s^2}{\sigma ^2} \sim \chi _{n-p}^{2}
+$$</p>
+<p>其中 $s^2$ 是样本的方差。那么在原假设成立的条件下有</p>
+<p>$$
+t_0 = \frac{\hat{\beta}_j}{\sqrt{s^2C _{jj}}} \sim t _{n-p}
+$$</p>
+<p>综述，给定置信水平 $\alpha$ 在原假设 $H_0$ 成立的条件下，拒绝 $H_0$ 的条件就是：$| t_0 |&gt;t_{\alpha /2,n-p}$。</p>
+<h2 id="4-区间估计">4 区间估计</h2>
+<h3 id="41-单个回归系数的置信区间">4.1 单个回归系数的置信区间</h3>
+<ul>
+<li><strong>带截距项的区间估计</strong></li>
+</ul>
+<p>根据3.2节的分析和讨论，对于不带截距项的模型有</p>
+<p>$$
+\frac{\hat{\beta}_j-\beta _j}{\sqrt{s^2C _{jj}}}\sim t _{n-p-1}
+$$</p>
+<p>所以，给定置信水平 $\alpha$ 下 $\beta_j$ 置信区间为：</p>
+<p>$$
+\hat{\beta} _{j} - t _{\alpha /2,n-p-1}\sqrt{s^2C _{jj}}\le \beta _j\le \hat{\beta}_j+t _{\alpha /2,n-p-1}\sqrt{s^2C _{jj}}
+$$</p>
+<ul>
+<li><strong>不带截距项的区间估计</strong></li>
+</ul>
+<p>类似的，给定置信水平 $\alpha$ 下 $\beta_j$ 置信区间为</p>
+<p>$$
+\hat{\beta} _{j} - t _{\alpha /2,n-p}\sqrt{s^2C _{jj}}\le \beta _j\le \hat{\beta}_j+t _{\alpha /2,n-p}\sqrt{s^2C _{jj}}
+$$</p>
+<h3 id="42-回归系数的联合置信区域">4.2 回归系数的联合置信区域</h3>
+<p>前面的置信区间都是针对单个系数进行的，因此置信水平只对一个区间有效。但是，很多问题中需要让置信水平对所有的区间有效，这就是联合置信区域（simultaneous confidence intervals）。</p>
+<ul>
+<li><strong>带截距项的模型</strong></li>
+</ul>
+<p>由3.2节可知</p>
+<p>$$
+\left( \hat{\beta}-\beta \right) \sim N\left( 0,\sigma ^2\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1} \right)
+$$</p>
+<p>所以</p>
+<p>$$
+\frac{\left( \hat{\beta}-\beta \right) ^{\mathrm{T}}\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}\left( \hat{\beta}-\beta \right)}{\sigma ^2}\sim \chi _{p}^{2}
+$$</p>
+<p>这里 $\sigma^2$ 未知，为构造检验统计量再考虑 $RSS$ 有</p>
+<p>$$
+\frac{RSS}{\sigma ^2} \sim \chi _{n-p-1}^{2}
+$$</p>
+<p>所以得到</p>
+<p>$$
+\frac{\left( \hat{\beta}-\beta \right) ^{\mathrm{T}}\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}\left( \hat{\beta}-\beta \right) /p}{RSS/\left( n-p-1 \right)} \sim F_{p,n-p-1}
+$$</p>
+<p>那么在置信水平 $\alpha$ 下，所有的回归系数需要满足</p>
+<p>$$
+\frac{\left( \hat{\beta}-\beta \right) ^{\mathrm{T}}\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}\left( \hat{\beta}-\beta \right) /p}{RSS/\left( n-p-1 \right)}\le F_{\alpha ,p,n-p-1}
+$$</p>
+<ul>
+<li><strong>不带截距项的模型</strong></li>
+</ul>
+<p>同理可知，对于不带截距项的模型，在给定置信水平 $\alpha$ 下全部系数需要满足</p>
+<p>$$
+\frac{\left( \hat{\beta}-\beta \right) ^{\mathrm{T}}\left( X_{c}^{\mathrm{T}}X_c \right) ^{-1}\left( \hat{\beta}-\beta \right) /p}{RSS/\left( n-p-1 \right)}\le F_{\alpha ,p,n-p}
+$$</p>
+<p>对于前述联合置信区域的不等式描述的是一个<strong>椭圆约束区域。</strong> 当 $p=2$ 时，这个区域相当简单；但是当 $p\geq 2$ 时，问题就变得复杂的多。</p>
+<h2 id="5-模拟分析">5 模拟分析</h2>
+<p>我在<a href="/2019/07/simplelm/">简单回归分析</a>中介绍了<code>R</code>求解线性模型的方法，这里我们根据前面的理论分析结果，用<code>R</code>编写系数求解的函数、单个系数的显著性检验函数。<strong>这些代码附在最后供参考。</strong></p>
+<p>我们考虑模型</p>
+<p>$$
+y=1\beta _0+X\beta+\epsilon
+$$</p>
+<p>其中 $\beta _0=3$，$\beta=\left( 1,3,2,1,4,5,2,6 \right) ^{\mathrm{T}}$，$y\in \mathbb{R}^{100}$。根据前述分析，使用最小二乘法进行估计，在<code>R</code>软件中得到结果如下</p>
+<p><img src="/linearmodel/mylm-withb.png" alt=""></p>
+<p>可以看出估计得结果很好，模型和单个系数都通过了检验。</p>
+<p>当然，我们可以对相同的数据使用<code>R</code>软件求解带截距的线性模型，得到的结果如下图所示。可以看出，两者是一致的。</p>
+<p><img src="/linearmodel/rlm-withb.png" alt=""></p>
+<p>此外，我们也可以对模型考虑不带截距项的估计。这样得到的结果如下图所示</p>
+<p><img src="/linearmodel/mylm-withoutb.png" alt=""></p>
+<p>对比<code>R</code>软件内置函数求解的结果</p>
+<p><img src="/linearmodel/rlm-withoutb.png" alt=""></p>
+<p>首先，两者得到的结果是一样的。<strong>其次，我们发现对于一个本身带有截距项的模型使用不带截距项的方法求解，得到的效果就不好。</strong> 因为可以看到变量 $x_4$ 的系数估计没有通过检验。</p>
+<p>我们可以通过计算模型得到的残差，如学生化残差，通过分析残差的分布和对应的正态分布之间的异同，从而对回归结果做出分析和判断。如下图所示，是带截距模型的学生化残差分布图（左）以及不带截距的学生化残差分布图（右）</p>
+<p><img src="/linearmodel/studenterro.jpg" width="800" /></p>
+<p>从图上可以看出来，使用正确的模型得到的残差分布和正态分布较为接近，说明估计的效果好；而使用错误的模型得到的结果，残差分布和正态分布相差较大，估计的效果不好。</p>
+<h2 id="6-自编函数代码">6 自编函数代码</h2>
+<h3 id="61-模型求解">6.1 模型求解</h3>
+<p>实际使用，主要运行该代码即可。这个代码整合了参数估计、检验等代码，将结果合并输出。</p>
+<pre><code class="language-r">##求解线性模型
+mylm &lt;- function(x,y,method = &quot;ols&quot;,intercept = T){#
+  # 本程序用来求解线性模型参数估计 区间估计和假设检验
+  # method可选：ols,max 前者最小二乘 后者极大似然估计
+  # intercept为T表示模型带截距 为F表示模型不带截距 
+
+  # 求解估计量
+  b &lt;- mylmestimate(x,y,method = method,intercept = intercept)
+  
+  # 求解离差平方和分解
+  rsquare &lt;- mylmsquare(x,y,b,intercept = intercept)
+  
+  # 单个系数检验
+  indivi &lt;- mylmindivi(x,y,b,intercept = intercept)
+  
+  # 模型检验
+  lmtest &lt;- mylmtest(x,y,b,intercept = intercept)
+  
+  if(intercept){
+    bname &lt;- c(&quot;(Intercept)&quot;,paste0(rep(&quot;x&quot;,p),1:p))
+  }
+  else{
+    bname &lt;- paste0(rep(&quot;x&quot;,p),1:p)
+  }
+  
+  estimate.test &lt;- data.frame(
+    &quot;Beta&quot; = bname,
+    &quot;Estimate&quot; = b,
+    &quot;t.value&quot; = indivi$Tt,
+    &quot;P.value&quot; = indivi$Tp,
+    &quot;Sig.&quot; = indivi$Ts
+  )
+  
+  # 输出结果
+  if(intercept){
+    cat(&quot;Coefficients:&quot;,&quot;&quot;,&quot;\n&quot;)
+    print(estimate.test)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;Multiple R-squared:&quot;,(rsquare$sreg/rsquare$syy),&quot;&quot;)
+    cat(&quot;Adjusted R-squared:&quot;,(1-(rsquare$rss*(n-1))/(rsquare$syy*(n-p-1))),&quot;\n&quot;)
+    cat(&quot;F-statistic:&quot;,lmtest$f0,&quot;&quot;)
+    cat(&quot;on&quot;,p,&quot;&quot;)
+    cat(&quot;and&quot;,(n-p-1),&quot;&quot;)
+    cat(&quot;DF,&quot;,&quot;&quot;,&quot;&quot;)
+    cat(&quot;p-value:&quot;,lmtest$p,&quot;&quot;)
+  }
+  else{
+    cat(&quot;Coefficients:&quot;,&quot;&quot;,&quot;\n&quot;)
+    print(estimate.test)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;Multiple R-squared:&quot;,(rsquare$sreg/rsquare$syy),&quot;&quot;)
+    cat(&quot;Adjusted R-squared:&quot;,(1-(rsquare$rss*n)/(rsquare$syy*(n-p))),&quot;\n&quot;)
+    cat(&quot;F-statistic:&quot;,lmtest$f0,&quot;&quot;)
+    cat(&quot;on&quot;,p,&quot;&quot;)
+    cat(&quot;and&quot;,(n-p),&quot;&quot;)
+    cat(&quot;DF,&quot;,&quot;&quot;,&quot;&quot;)
+    cat(&quot;p-value:&quot;,lmtest$p,&quot;&quot;)
+  }
+}
+</code></pre>
+<h3 id="62-参数估计">6.2 参数估计</h3>
+<pre><code class="language-r">##求解线性模型参数估计
+mylmestimate &lt;- function(x,y,method = &quot;ols&quot;,intercept = T){#
+  
+  n &lt;- length(y)
+  
+  if(method == &quot;ols&quot;){
+    if(intercept){
+      xbar0 &lt;- apply(x,2,mean) # 按x的列计算均值
+      xbar1 &lt;- matrix(rep(xbar0,n),nrow = n,byrow = T)
+      xcenter &lt;- x - xbar1 # 得到按列中心化的矩阵x
+      
+      # 得到最小二乘估计
+      b1 &lt;- solve(t(xcenter)%*%xcenter)%*%t(xcenter)%*%y
+      b0 &lt;- mean(y) - t(xbar0)%*%b1
+      
+      b &lt;- c(b0,b1)
+    }
+    else{
+      # 得到最小二乘估计
+      b &lt;- solve(t(x)%*%x)%*%t(x)%*%y
+    }
+  }
+  else{
+    if(intercept){
+      xbar0 &lt;- apply(x,2,mean) # 按x的列计算均值
+      xbar1 &lt;- matrix(rep(xbar0,n),nrow = n,byrow = T)
+      xcenter &lt;- x - xbar1 # 得到按列中心化的矩阵x
+      
+      # 得到极大似然估计
+      b1 &lt;- solve(t(xcenter)%*%xcenter)%*%t(xcenter)%*%y
+      b0 &lt;- mean(y) - t(xbar0)%*%b1
+      
+      b &lt;- c(b0,b1)
+    }
+    else{
+      # 得到极大似然估计
+      b &lt;- solve(t(x)%*%x)%*%t(x)%*%y
+    }
+  }
+  
+  return(b)
+}
+</code></pre>
+<h3 id="63-假设检验">6.3 假设检验</h3>
+<pre><code class="language-r">##求解线性模型假设检验
+mylmtest &lt;- function(x,y,b,intercept = T){
+  
+  n &lt;- dim(x)[1]
+  p &lt;- dim(x)[2]
+  
+  if(intercept){
+    
+    ybar &lt;- mean(y)
+    yhat &lt;- b[1] + x%*%b[2:(p+1)]#计算回归值
+    
+    # 计算各个离差平方和
+    rss &lt;- t((y - yhat))%*%(y - yhat)
+    sreg &lt;- t((yhat - ybar))%*%(yhat - ybar)
+    
+    # 计算检验统计量
+    f0 &lt;- (sreg/p)/(rss/(n - p - 1))
+    
+    # 输出p值
+    p &lt;- 1 - pf(f0,p,n-p-1)
+  }
+  else{
+    yhat &lt;- x%*%b#计算回归值
+    
+    # 计算各个离差平方和
+    rss &lt;- t((y - yhat))%*%(y - yhat)
+    sreg &lt;- t(yhat)%*%(yhat)
+    
+    # 计算检验统计量
+    f0 &lt;- (sreg/p)/(rss/(n - p))
+    
+    # 输出p值
+    p &lt;- 1 - pf(f0,p,n-p)
+  }
+  
+  modeltest &lt;- data.frame(&quot;f0&quot; = f0,&quot;p&quot; = p)
+  
+  return(modeltest)
+}
+</code></pre>
+<h3 id="64-单个系数检验">6.4 单个系数检验</h3>
+<pre><code class="language-r">##求解线性模型单个系数检验
+mylmindivi &lt;- function(x,y,b,intercept = T){
+  
+  n &lt;- dim(x)[1]
+  p &lt;- dim(x)[2]
+  
+  if(intercept){
+    
+    yhat &lt;- b[1] + x%*%b[2:(p+1)]#计算回归值
+    s &lt;- t((y - yhat))%*%(y - yhat)/(n-p-1) #计算MSE
+    
+    xbar0 &lt;- apply(x,2,mean) # 按x的列计算均值
+    xbar1 &lt;- matrix(rep(xbar0,n),nrow = n,byrow = T)
+    xcenter &lt;- x - xbar1 # 得到按列中心化的矩阵x
+    
+    cc &lt;- solve(t(xcenter)%*%xcenter)
+    diagc &lt;- diag(cc)
+    
+    Tt &lt;- 1:(p+1);Tp &lt;- Tt;Ts &lt;- Tt
+    Tt[1] &lt;- b[1]/sqrt(s*(1/n + t(xbar0)%*%cc%*%xbar0))
+    Tp[1] &lt;- 2*(1 - pt(Tt[1],n-p-1))
+    if(Tp[1] &lt; 0.001 ){# 判断置信度
+      Ts[1] &lt;- c(&quot;***&quot;)
+    }
+    else if(Tp[1] &lt; 0.01 &amp;&amp; Tp[1] &gt;= 0.001){
+      Ts[1] &lt;- c(&quot;**&quot;)
+    }
+    else if(Tp[1] &lt; 0.05 &amp;&amp; Tp[1] &gt;= 0.01){
+      Ts[1] &lt;- c(&quot;*&quot;)
+    }
+    else if(Tp[1] &lt; 0.1 &amp;&amp; Tp[1] &gt;= 0.05){
+      Ts[1] &lt;- c(&quot;.&quot;)
+    }
+    else{
+      Ts[1] &lt;- c(&quot; &quot;)
+    }
+    
+    for(i in 2:(p+1)){
+      Tt[i] &lt;- b[i]/sqrt(s*diagc[i-1])
+      Tp[i] &lt;- 2*(1 - pt(Tt[i],n-p-1))
+      if(Tp[i] &lt; 0.001 ){# 判断置信度
+        Ts[i] &lt;- c(&quot;***&quot;)
+      }
+      else if(Tp[i] &lt; 0.01 &amp;&amp; Tp[i] &gt;= 0.001){
+        Ts[i] &lt;- c(&quot;**&quot;)
+      }
+      else if(Tp[i] &lt; 0.05 &amp;&amp; Tp[i] &gt;= 0.01){
+        Ts[i] &lt;- c(&quot;*&quot;)
+      }
+      else if(Tp[i] &lt; 0.1 &amp;&amp; Tp[i] &gt;= 0.05){
+        Ts[i] &lt;- c(&quot;.&quot;)
+      }
+      else{
+        Ts[i] &lt;- c(&quot; &quot;)
+      }
+    }
+  }
+  else{
+    yhat &lt;- x%*%b#计算回归值
+    s &lt;- t((y - yhat))%*%(y - yhat)/(n-p) #计算MSE
+      
+    cc &lt;- solve(t(x)%*%x)
+    diagc &lt;- diag(cc)
+      
+    Tt &lt;- 1:p;Tp &lt;- Tt;Ts &lt;- Tt
+    
+    for(i in 1:p){
+      Tt[i] &lt;- b[i]/sqrt(s*diagc[i])
+      Tp[i] &lt;- 2*(1 - pt(Tt[i],n-p))
+      if(Tp[i] &lt; 0.001 ){# 判断置信度
+        Ts[i] &lt;- c(&quot;***&quot;)
+        }
+      else if(Tp[i] &lt; 0.01 &amp;&amp; Tp[i] &gt;= 0.001){
+        Ts[i] &lt;- c(&quot;**&quot;)
+      }
+      else if(Tp[i] &lt; 0.05 &amp;&amp; Tp[i] &gt;= 0.01){
+        Ts[i] &lt;- c(&quot;*&quot;)
+      }
+      else if(Tp[i] &lt; 0.1 &amp;&amp; Tp[i] &gt;= 0.05){
+        Ts[i] &lt;- c(&quot;.&quot;)
+      }
+      else{
+        Ts[i] &lt;- c(&quot; &quot;)
+      }
+    }
+  }
+  
+  indivitest &lt;- data.frame(&quot;Tt&quot; = Tt,&quot;Tp&quot; = Tp,&quot;Ts&quot; = Ts)
+  return(indivitest)
+}
+</code></pre>
+<h3 id="65-区间估计">6.5 区间估计</h3>
+<pre><code class="language-r">##求解线性模型区间估计
+mylminterval &lt;- function(x,y,b,alpha = 0.05,intercept = T){
+  
+  n &lt;- dim(x)[1]
+  p &lt;- dim(x)[2]
+  
+  if(intercept){
+    
+    Ti &lt;- matrix(0,nrow = (p+1),ncol = 2)
+    
+    yhat &lt;- b[1] + x%*%b[2:(p+1)]#计算回归值
+    s &lt;- t((y - yhat))%*%(y - yhat)/(n-p-1) #计算MSE
+    
+    xbar0 &lt;- apply(x,2,mean) # 按x的列计算均值
+    xbar1 &lt;- matrix(rep(xbar0,n),nrow = n,byrow = T)
+    xcenter &lt;- x - xbar1 # 得到按列中心化的矩阵x
+    
+    cc &lt;- solve(t(xcenter)%*%xcenter)
+    diagc &lt;- diag(cc)
+    
+    Ti[1,1] &lt;- b[1] - qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+    Ti[1,2] &lt;- b[1] + qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+    
+    for(i in 2:(p+1)){
+      
+      Ti[i,1] &lt;- b[i] - qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+      Ti[i,2] &lt;- b[i] + qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+      
+    }
+  }
+  else{
+    
+    Ti &lt;- matrix(0,nrow = p,ncol = 2)
+    
+    yhat &lt;- x%*%b#计算回归值
+    s &lt;- t((y - yhat))%*%(y - yhat)/(n-p) #计算MSE
+    
+    cc &lt;- solve(t(x)%*%x)
+    diagc &lt;- diag(cc)
+    
+    for(i in 1:p){
+      
+      Ti[i,1] &lt;- b[i] - qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+      Ti[i,2] &lt;- b[i] + qt((1-alpha/2),n-p-1)*sqrt(s*diagc[1])
+      
+    }
+  }
+  
+  colnames(Ti) &lt;- c(&quot;LowerBound&quot;,&quot;UpperBound&quot;)
+  return(Ti)
+}
+</code></pre>
+<h3 id="66-离差平方和分解">6.6 离差平方和分解</h3>
+<pre><code class="language-r">##求解线性模型离差平方和分解
+mylmsquare &lt;- function(x,y,b,intercept = T){
+  if(intercept){
+    
+    ybar &lt;- mean(y)
+    yhat &lt;- b[1] + x%*%b[2:(p+1)]#计算回归值
+    
+    # 计算各个离差平方和
+    rss &lt;- t((y - yhat))%*%(y - yhat)
+    sreg &lt;- t((yhat - ybar))%*%(yhat - ybar)
+    syy &lt;- t((y - ybar))%*%(y - ybar)
+  }
+  else{
+    yhat &lt;- x%*%b#计算回归值
+    
+    # 计算各个离差平方和
+    rss &lt;- t((y - yhat))%*%(y - yhat)
+    sreg &lt;- t(yhat)%*%(yhat)
+    syy &lt;- t(y)%*%y
+  }
+  
+  rsquare &lt;- data.frame(&quot;syy&quot; = syy,&quot;rss&quot; = rss,&quot;sreg&quot; = sreg)
+  return(rsquare)
+}
+</code></pre>
+<h3 id="67-各种残差">6.7 各种残差</h3>
+<pre><code class="language-r">##求解线性模型各种残差
+mylmresidual &lt;- function(x,y,b,intercept = T){
+  
+  n &lt;- dim(x)[1]
+  p &lt;- dim(x)[2]
+  
+  if(intercept){
+    
+    yhat &lt;- b[1] + x%*%b[2:(p+1)]# 计算回归值
+    sig.hat &lt;- t(y - yhat)%*%(y - yhat)/(n-p-1)# 计算方差估计值
+     
+    # 计算帽子矩阵对角元
+    xbar0 &lt;- apply(x,2,mean) # 按x的列计算均值
+    xbar1 &lt;- matrix(rep(xbar0,n),nrow = n,byrow = T)
+    xcenter &lt;- x - xbar1 # 得到按列中心化的矩阵x
+    p1 &lt;- matrix(1/n,nrow = n,ncol = n)
+    h &lt;- p1 + xcenter%*%solve(t(xcenter)%*%xcenter)%*%t(xcenter)
+    diagh &lt;- diag(h)
+    
+    # 计算原始残差
+    originres &lt;- y - yhat
+    
+    # 计算standardized residuals
+    standres &lt;- (y - yhat)/sqrt(sig.hat*rep(1,n))
+    
+    # 计算student residuals
+    studres &lt;- (y - yhat)/sqrt(sig.hat*(1 - diagh))
+    
+    # 计算PRESS residual
+    pressres &lt;- (y - yhat)/(1 - diagh)
+  }
+  else{
+    yhat &lt;- x%*%b# 计算回归值
+    sig.hat &lt;- t((y - yhat))%*%(y - yhat)/(n-p)# 计算方差估计值
+    
+    # 计算原始残差
+    originres &lt;- y - yhat
+    
+    # 计算帽子矩阵对角元
+    h &lt;- x%*%solve(t(x)%*%x)%*%t(x)
+    diagh &lt;- diag(h)
+    
+    # 计算standardized residuals
+    standres &lt;- (y - yhat)/sqrt(sig.hat*rep(1,n))
+    
+    # 计算student residuals
+    studres &lt;- (y - yhat)/sqrt(sig.hat*(1 - diagh))
+    
+    # 计算PRESS residual
+    pressres &lt;- (y - yhat)/(1 - diagh)
+  }
+  
+  lmres &lt;- data.frame(&quot;oringinal.Residual&quot; = originres,
+                      &quot;Standardized.Residual&quot; = standres,
+                      &quot;Student.Residual&quot; = studres,
+                      &quot;PRESS.Residual&quot; = pressres)
+  return(lmres)
+}
+</code></pre>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2018/04/lm/" title="线性模型的理论与求解" target="_blank" rel="external">https://qkai-stat.github.io/2018/04/lm/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2018/04/yyqm/" title="夜雨清明"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2018/05/nlm/"
+                    title="非线性模型的参数估计和统计性质"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        支持向量机原理 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由Cortes和Vapnik二人于1995年为解决二分类问" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>支持向量机原理 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="支持向量机原理" />
+<meta property="og:description" content="支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由Cortes和Vapnik二人于1995年为解决二分类问" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/09/svm/" />
+<meta property="article:published_time" content="2020-09-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-21T00:00:00+00:00" />
+<meta itemprop="name" content="支持向量机原理">
+<meta itemprop="description" content="支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由Cortes和Vapnik二人于1995年为解决二分类问">
+<meta itemprop="datePublished" content="2020-09-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-09-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="4452">
+
+
+
+<meta itemprop="keywords" content="机器学习," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="支持向量机原理"/>
+<meta name="twitter:description" content="支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由Cortes和Vapnik二人于1995年为解决二分类问"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/09/svm/"
+    >支持向量机原理</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/09/svm/" class="article-date">
+  <time datetime="2020-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-09-21</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/09/svm/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4452字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由<a href="https://link.springer.com/article/10.1007/BF00994018">Cortes和Vapnik</a>二人于1995年为解决二分类问题而提出。SVM有坚实的统计理论基础，且决策函数具有很强的几何含义。因其在模式识别等数据分析问题中的优越表现，SVM如今已发展成为一门成熟的机器学习理论。本期我们来一起学习SVM的基本概念及在R中的使用方法。</p>
+<h2 id="1-线性支持向量机">1 线性支持向量机</h2>
+<h3 id="11-硬间距支持向量机">1.1 硬间距支持向量机</h3>
+<p>我们先来看一种简单的情形。假设我们得到的分类数据是<strong>线性可分的</strong>，也就是我们可以构造数据变量的一个不含交互项的线性函数作为分类的决策函数便可以实现分类的目的。例如下图（a）所示，对得到的二元变量数据（黑点+1和白点-1所示），我们直接用一条直线（三维空间是平面，三维以上是超平面）便可以实现分类的目的。这种情形便是前述的线性可分数据。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/linear-case.png" width="300" /></p>
+<p>显然，对于上述的线性可分数据，我们只要把直线稍微倾斜一点便可以得到一个新的分类直线。那么，对于线性可分数据，如何寻找一条最优的分类超平面呢？</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/hard-svm.png" width="300" /></p>
+<p>仔细观察图（a），对于不同的分类直线$l$，我们是始终可以将其向两类数据进行平移直至恰好接触数据点（直线$l_+$和直线$l_-$，如图（b）所示），显然分类直线$l$处在临界直线中间是合理的。我们自然希望得到的分类直线能够尽可能的将两类数据分开。换句话说，边界之间的$l_+$和直线$l_-$距离应当尽可能的大——当然，这是一种直觉上的判断，也是SVM理论的前提。</p>
+<blockquote>
+<p>如果你不认同这种直觉上的判断，那么…你可以静静的想一想看~</p>
+</blockquote>
+<p>上述直观的认识便是硬间距（hard-margin）SVM的理论基础。现在我们用一些数学符号进行更为细致的描述。令$(x_i,y_i)$，$i=1,\ldots,n$是第$i$个观测数据，其中$x_i$是一个$p$维的向量，$y_i\in{+1,-1}$是分类标签。</p>
+<p>假设我们的分类超平面为
+$$
+w^Tx+b=0
+$$
+其中$w\in R^p$是超平面的法向量，$b$是超平面的截距项。按照前面直观的认识，我们的分类超平面需要最大化临界平面之间的距离，也即是
+$$
+\max d_{l_{+}l_-}
+$$
+该模型没有体现分类超平面对数据分类，故而我们需要加上以下约束条件：
+$$
+\begin{split}
+w^Tx_i + b &amp;\geq +\eta, y_i = +1;\newline
+w^Tx_i + b &amp;\leq -\eta, y_i = -1.
+\end{split}
+$$
+这里$\eta&gt;0$为临界平面相对分类超平面移动值。注意到，如果令$w/\eta \rightarrow w$和$b/\eta \rightarrow b$，那么上述的模型就可以等价的写成
+$$
+\begin{split}
+&amp;\max d_{l_{+}l_-}\newline
+&amp;y_i(w^Tx_i + b) \geq 1, i = 1,\ldots,n\newline
+\end{split}
+$$
+现在，我们来看看临界距离如何表示。根据<a href="https://baike.baidu.com/item/%E7%82%B9%E5%88%B0%E5%B9%B3%E9%9D%A2%E8%B7%9D%E7%A6%BB">简单的几何知识</a>，空间中任意一点$(x_i,y_i)$到给定平面的距离表示
+$$
+d=\frac{\vert w^Tx_i+b\vert}{\Vert w\Vert}
+$$
+经过$w/\eta \rightarrow w$和$b/\eta \rightarrow b$的变换之后，临界超平面上的点带入到超平面方程中等于1。那么临界平面之间的距离便为
+$$
+d_{l_{+}l_-}=\frac{2}{\Vert w\Vert}
+$$</p>
+<p>因此，最终的模型可以等价得写成
+$$
+\begin{split}
+&amp;\min \frac12 \Vert w\Vert_2^2\newline
+&amp;y_i(w^Tx_i + b) \geq 1, i = 1,\ldots,n\newline
+\end{split}
+$$</p>
+<blockquote>
+<p>很容易看出最小化$\Vert w\Vert$等价于最小化$\Vert w\Vert_2^2$.</p>
+</blockquote>
+<p>以上便是硬间距SVM模型，也是最简单、最理想化的SVM分类模型。</p>
+<h3 id="12-软间距支持向量机">1.2 软间距支持向量机</h3>
+<p>虽然硬间距SVM思想朴素，但是足以阐释SVM核心思想——最小化经验风险的同时最小化结构风险。尽管如此，硬间距SVM要求构建的分类超平面完全正确的分类所有训练数据，这显得非常严格。这样要求100%正确训练的模型容易产生过拟合，从而降低<a href="https://baike.baidu.com/item/%E6%B3%9B%E5%8C%96%E8%83%BD%E5%8A%9B/3323240?fr=aladdin">模型的泛化能力</a>。</p>
+<p>为了提升硬间距SVM的泛化能力以及扩大其应用场景，我们在训练SVM的过程中，<strong>允许数据被错误分类</strong>，这就得到了软间距（soft-margin）SVM，如图（c）所示。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/soft-svm.png" width="300" /></p>
+<p>从硬间距SVM的模型看出，不等式约束条件代表着分类超平面对数据的分类约束。我们允许数据被错误分类，也即是$y_i(w^Tx_i + b)$大于一个小于1的数即可。换句话说，存在$\xi_i\geq0$，满足
+$$
+y_i(w^Tx_i + b)\geq 1-\xi_i
+$$
+另一方面，违反约束的数据太多，我们得到的模型也不好。因此，我们在提升SVM的泛化能力同时，又希望违反约束的训练数据不能太多。</p>
+<p>综上所述，软间距SVM模型就写成
+$$
+\begin{split}
+&amp;\min \frac12 \Vert w\Vert_2^2 + c\sum_{i=1}^n \xi_i\newline
+&amp;y_i(w^Tx_i + b)\geq 1-\xi_i\newline
+&amp;\xi_i\geq0,i = 1,\ldots,n\newline
+\end{split}
+$$
+其中$c\geq0$是调节参数，需事先给定，表示对违反约束的惩罚程度，数值越大表示模型期望的违反约束数据越少。实际使用时，$c$要通过交叉验证来确定最优值。</p>
+<p>软间距SVM描述的场景更加丰富，因此在实际问题中，我们也只采用该种形式的SVM模型。</p>
+<h2 id="2-模型的求解">2 模型的求解</h2>
+<p>SVM的求解算法一般通过优化其对偶模型得到最优解。为了方便描述，我们将软间距SVM模型写成矩阵形式
+$$
+\begin{split}
+&amp;\min \frac12 \Vert w\Vert_2^2 + ce^T\xi\newline
+&amp;D(Xw + 1b)\geq e-\xi\newline
+\end{split}
+$$
+其中$X=(x_1^T,\ldots,x_n^T)^T\in R^{n\times p}$是数据矩阵；$D$是对角元素为$y_1,\ldots,y_n$的对角矩阵；$e$是一个长度为$n$、所有元素为1的向量；$\xi=(\xi_1,\ldots,\xi_n)$是一个长度为$n$的向量。</p>
+<p>首先，我们可以得到相应的Lagrangian方程
+$$
+L=\frac12 \Vert w\Vert_2^2 + ce^T\xi-\alpha^T(D(Xw + eb)- e+\xi)
+$$
+其中$\alpha=(\alpha_1,\ldots,\alpha_n)\geq0$是Lagrangian乘子向量。</p>
+<p>接着，我们分别对$w$，$b$和$\xi$求偏导数并令为零得到
+$$
+\begin{split}
+&amp;\frac{\partial L}{\partial w}=w-X^TD\alpha=0\newline
+&amp;\frac{\partial L}{\partial b}=-\alpha^TDe=0\newline
+&amp;\frac{\partial L}{\partial \xi}=ec-\alpha-\xi=0
+\end{split}
+$$
+将上式结果带回到Lagrangian方程中，可以得到
+$$
+L=e^T\alpha - \frac12\alpha^TDXX^TD\alpha
+$$
+结合约束条件可以得到SVM的<a href="https://jiandan94.gitee.io/2020/09/dual-problem/">对偶模型</a>为
+$$
+\begin{split}
+&amp; \min \frac12\alpha^TDXX^TD\alpha - e^T\alpha\newline
+&amp; 0\leq \alpha \leq ec
+\end{split}
+$$
+这是一个二次优化问题（quadratic programming problem，QPP），有很多成熟的算法可以求解。当然，很多学者针对SVM设计了一些计算快速的算法，如SMO、LIBSVM等。我们可以在R中利用程序包轻易的求解SVM模型，因此不再详述具体的算法。</p>
+<p>求出$\alpha$之后，我们根据Lagrangian的偏导数结果可得最终的决策函数为
+$$
+f(x)=w^Tx+b=\sum_{i=1}^n \alpha_iy_ix_i^Tx + b
+$$
+可见，最终的决策函数只和$\alpha_i&gt;0$对应的训练数据$(x_i,y_i)$有关。</p>
+<blockquote>
+<p>那些$\alpha_i&gt;0$对应的训练数据$(x_i,y_i)$“支持”着最终的分类超平面的构建，因此被称为支持向量。这便是支持向量机名称的由来。</p>
+</blockquote>
+<p>另一方面，优化SVM的过程需要满足<a href="https://jiandan94.gitee.io/2020/09/lagrangian-and-kkt/">KKT条件</a>，其中之一为
+$$
+\alpha_i(y_i(w^Tx_i+b)-1+\xi_i)=0
+$$
+可见，当$\alpha_i&gt;0$时，必有$(y_i(w^Tx_i+b)-1+\xi_i)=0$，<strong>此时不难看出数据点对应临近平面上的点或者错分类的点</strong>。由此看来，SVM模型的构建正是依赖于这些训练数据点。</p>
+<blockquote>
+<p>如果是硬间距SVM，$\alpha_i&gt;0$对应的便只是临界平面上的点——这更加可以看出”支持“二字的含义。</p>
+</blockquote>
+<h2 id="3-非线性支持向量机">3 非线性支持向量机</h2>
+<p>软间距SVM有一个很大的缺陷，即依赖于数据是线性可分的假设。实际上，很多问题中的数据是非线性可分的，如图（d）所示。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/nonlinear-case.png" width="300" /></p>
+<p>这种情形应当如何处理呢？</p>
+<p>Cortes和Vapnik采用了一种非常巧妙的方式。他们借助函数映射，将低维数据映射到高维空间中，使得原来不能线性可分的数据变得线性可分（这样的映射可以证明是始终存在的），如图（e）所示。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/kernel-transformation.png" width="500" /></p>
+<p>假设这种映射为
+$$
+x\in R^p\rightarrow \phi(x)\in \mathscr{F}
+$$
+那么重复前面的优化过程不难得到需要优化的对偶模型为
+$$
+\begin{split}
+&amp; \min \frac12\alpha^TD\phi(X)\phi(X)^TD\alpha - 1^T\alpha\newline
+&amp; 0\leq \alpha \leq 1c
+\end{split}
+$$
+一般来说，求解出具体的映射函数形式非常困难（或者根本就无法求出），我们如何解决该问题呢？Cortes和Vapnik注意到，SVM模型优化的过程中始终是保内积运算的。因此，他们利用<a href="https://jiandan94.gitee.io/2020/09/rkhs-and-kernel/">空间映射和核函数</a>的对应关系，将高维空间的内积运算$\phi(X)\phi(X)^T$转换成核矩阵$K(X,X^T)$的计算，从而实现非线性SVM的优化！</p>
+<blockquote>
+<p>核函数是一种特殊的函数，它与某个映射$\phi$的内积运算对应。映射函数难以给出，但可以根据核函数的特征来给定某种形式的核函数。由于我们不知道具体的映射，因此给定核函数是一种可行且简便的尝试。</p>
+</blockquote>
+<p>常见的核函数有：</p>
+<ul>
+<li>线性核：$K(x_i,x_j)=x_i^Tx_j$；</li>
+<li>高斯核：$K(x_i,x_j)=\exp(-\frac{\Vert x_i-x_j\Vert^2}{\sigma})$，$\sigma&gt;0$；</li>
+<li>Sigmoid核：$K(x_i,x_j)=\tanh(\beta x_i^Tx_j + \theta)$，$\beta&gt;0,\theta&lt;0$；</li>
+</ul>
+<p>前面提到的核矩阵$K(X,X^T)$是一个$n\times n$的矩阵，其中第$(i,j)$元素为$\kappa(x_i,x_j)$。</p>
+<p>最后，我们得到非线性SVM的分类超平面为
+$$
+f(x)=\tilde{w}^T\phi(x)+b=\sum_{i=1}^n \alpha_iy_i\kappa(x_i,x) + b
+$$
+我们仍然可以看到，最终的超平面的构建只和$\alpha_i&gt;0$对应的训练样本点有关。</p>
+<h2 id="4-r求解支持向量机">4 R求解支持向量机</h2>
+<p>目前在R中比较常用的SVM求解程序包是<code>e1071</code>包和<code>kernlab</code>包，这里用<code>e1071</code>包给一个SVM问题的算例。我们首先安装并载入该程序包：</p>
+<pre><code class="language-R">install.packages(&quot;e1071&quot;)
+library(e1071)
+</code></pre>
+<p>我们用R中的鸢尾花数据集建立SVM模型，该数据中包含三种鸢尾花（分别标记为setosa、versicolor和virginica）的花萼和花瓣数据，最早由1936年Fisher发表的一篇重要论文给出。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/head-iris.png" width="600" /></p>
+<p>我们以花瓣的长度核宽度为变量做出数据的图像，可见setosa和另外两种花很好的区分开来。我们下面选择versicolor和virginica进行SVM建模。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/plot-iris.png" width="400" /></p>
+<p>e1071中求解SVM的函数为<code>ksvm</code>，它的基本用法如下</p>
+<pre><code class="language-R">svm(formula, data= NULL, subset, na.action = na.omit , scale= TRUE)  
+# formula为拟合的公式
+# data为数据集
+</code></pre>
+<p>参数<code>na.action</code>用于指定当样本数据中存在无效的空数据时系统应该进行的处理。默认值<code>na.omit</code>表明程序会忽略那些数据缺失的样本。另外一个可选的赋值是<code>na.fail</code>，它指示系统在遇到空数据时给出一条错误信息。参数<code>scale</code>为一个逻辑向量，指定特征数据是否需要标准化（默认标准化为均值0，方差1）。索引向量<code>subset</code>用于指定那些将被来训练模型的采样数据。</p>
+<p>我们首先拟合一个基本的模型</p>
+<pre><code class="language-R">partdata &lt;- subset(iris, Species %in% c(&quot;versicolor&quot;,&quot;virginica&quot;))
+fit &lt;- svm(Species~Petal.Length + Petal.Width, data = partdata)
+</code></pre>
+<p>查看结果为</p>
+<pre><code class="language-R">&gt; summary(fit)
+
+Call:
+svm(formula = Species ~ Petal.Length + Petal.Width, data = partdata)
+Parameters:
+   SVM-Type:  C-classification 
+ SVM-Kernel:  radial 
+       cost:  1 
+Number of Support Vectors:  23
+ ( 12 11 )
+Number of Classes:  2 
+Levels: 
+ versicolor virginica
+</code></pre>
+<p>通过<code>summary</code>函数可以得到关于模型的相关信息。其中，<code>SVM-Type</code>项目说明本模型的类别为C-SVM（SVM发展至今已有很多类型的SVM，上述介绍的为最基本的C-SVM）；<code>SVM-Kernel</code>项说明本模型所使用的核函数为高斯内积函数且核函数；<code>cost</code>项目说明本模型确定的约束违反成本为1。而且我们还可以看到，模型找到了23个支持向量：第一类包含有12个支持向量，第二类包含有11个支持向量。</p>
+<p>当然，我们还可以利用程序包得到分类的示意图，可见模型还是训练的不错的。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/svm/fit-svm.png" width="500" /></p>
+<p>更加详细的使用方式，有兴趣的读者可以自行阅读相关文档进行实践。</p>
+<h2 id="5-结语">5 结语</h2>
+<p>本文我们主要介绍了经典支持向量机的基本概念核求解算法，并用一个简单的案例介绍R求解SVM的方式。支持向量机发展至今已有很多类型，但基本的思想是共同的。感兴趣的读者可以进一步阅读相关文献材料。</p>
+<p><strong>参考文献</strong></p>
+<p>[1] Cortes C, Vapnik V. Support-vector networks[J]. Machine learning, 1995, 20(3): 273-297.</p>
+<p>[2] Suykens J A K, Vandewalle J. Least squares support vector machine classifiers[J]. Neural processing letters, 1999, 9(3): 293-300.</p>
+<p>[3] Schölkopf B, Smola A J, Williamson R C, et al. New support vector algorithms[J]. Neural computation, 2000, 12(5): 1207-1245.</p>
+<p>[4] Mangasarian O L, Musicant D R. Lagrangian support vector machines[J]. Journal of Machine Learning Research, 2001, 1(Mar): 161-177.</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/09/svm/" title="支持向量机原理" target="_blank" rel="external">https://qkai-stat.github.io/2020/09/svm/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/09/valine-introduction/" title="Valine: 高效的无后端评论系统"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/09/lagrangian-and-kkt/"
+                    title="拉格朗日乘子法和KKT条件"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

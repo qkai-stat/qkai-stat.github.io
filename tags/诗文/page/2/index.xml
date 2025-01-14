@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>诗文 on KAI&#39;s Blog</title>
+    <link>https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/</link>
+    <description>Recent content in 诗文 on KAI&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 21 Sep 2021 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Git-Submodule的基本使用</title>
+      <link>https://qkai-stat.github.io/2020/07/git-submodule/</link>
+      <pubDate>Tue, 28 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/git-submodule/</guid>
+      <description>1 什么是Git-Submodule 在进行项目开发和管理的过程中，我们经常遇到这种情况：自己的A项目需要引用另一B项目中的内容，直接将B项目中</description>
+    </item>
+    
+    <item>
+      <title>R绘制热力图</title>
+      <link>https://qkai-stat.github.io/2020/07/r-heatmap/</link>
+      <pubDate>Mon, 27 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/r-heatmap/</guid>
+      <description>热力图最初来源于网络，是以特殊高亮的形式显示访客热衷的页面区域和访客所在的地理区域的图示。在如今的大数据时代，热力图可是直接推动大数据发展的</description>
+    </item>
+    
+    <item>
+      <title>Git基本操作</title>
+      <link>https://qkai-stat.github.io/2020/07/git-basic-operation/</link>
+      <pubDate>Sat, 25 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/git-basic-operation/</guid>
+      <description>1 Git的工作原理 关于Git的简单介绍可以参照我的这篇博客。安装好Git之后，我们就要学会利用Git建立本地项目的代码仓库，以及同远程仓库进</description>
+    </item>
+    
+    <item>
+      <title>Git简介</title>
+      <link>https://qkai-stat.github.io/2020/07/git-introduction/</link>
+      <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/git-introduction/</guid>
+      <description>1 Git的历史 Git是一个分布式版本控制系统，由Linux的创始人Linus在开发Linux系统的过程中，为了各个参与者维护系统而开发的分布</description>
+    </item>
+    
+    <item>
+      <title>RStudio-Server与远程交互</title>
+      <link>https://qkai-stat.github.io/2020/07/rstudio-server/</link>
+      <pubDate>Sun, 05 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/rstudio-server/</guid>
+      <description>0 写在前面 作为经常用R跑程序、处理数据的你是否有过这样的苦恼：台式机性能强大但携带不便，笔记本携带自如但性能薄弱，每次只能在两台电脑间来回操</description>
+    </item>
+    
+    <item>
+      <title>变量选择与LASSO</title>
+      <link>https://qkai-stat.github.io/2020/04/lasso-introduction/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/04/lasso-introduction/</guid>
+      <description>1 为什么要做变量选择？ 变量选择又叫模型选择，因为选出不同的变量自然就建立出不同的模型。近30年来，变量选择理论繁荣发展并逐渐渗透到各个领域中</description>
+    </item>
+    
+    <item>
+      <title>股票数据的合并</title>
+      <link>https://qkai-stat.github.io/2020/03/stockbind/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/03/stockbind/</guid>
+      <description>1 背景介绍 最近，有朋友跟我说起股票数据处理的问题。由于课程要求，学生需在软件中下载股票指数数据 和对应的成分股收盘价数据，然后对指数和收盘价做</description>
+    </item>
+    
+    <item>
+      <title>逻辑回归模型</title>
+      <link>https://qkai-stat.github.io/2020/03/logistic-regression/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/03/logistic-regression/</guid>
+      <description>1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例</description>
+    </item>
+    
+    <item>
+      <title>偶遇秋雨</title>
+      <link>https://qkai-stat.github.io/2019/11/oyqy/</link>
+      <pubDate>Mon, 25 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2019/11/oyqy/</guid>
+      <description>远行不经意，归途暮雨袭。 阑风入沉阁，竹斋听雨息。 乱蝉声渐渐，梧桐叶槭槭。 雁阵来时路，年年有归期。</description>
+    </item>
+    
+    <item>
+      <title>漫谈最小二乘法</title>
+      <link>https://qkai-stat.github.io/2019/08/forum-ols/</link>
+      <pubDate>Fri, 02 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2019/08/forum-ols/</guid>
+      <description>如果随便逮到一个统计专业的学生问他“统计方法谁家强”，相信大部分人会异口同声得说“最小二乘法”。 的确，最小二乘法是一种非常重要的统计方法，它</description>
+    </item>
+    
+    <item>
+      <title>简单回归分析的R实现</title>
+      <link>https://qkai-stat.github.io/2019/07/simplelm/</link>
+      <pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2019/07/simplelm/</guid>
+      <description>1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185</description>
+    </item>
+    
+    <item>
+      <title>望月有感</title>
+      <link>https://qkai-stat.github.io/2019/05/wyyg/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2019/05/wyyg/</guid>
+      <description>风清露重晓月寒， 跫音嘶语破门关。 玉兔何知人间苦， 捣碎桐叶一地残。</description>
+    </item>
+    
+    <item>
+      <title>久雨初晴有感</title>
+      <link>https://qkai-stat.github.io/2018/11/jycqyg/</link>
+      <pubDate>Thu, 01 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/11/jycqyg/</guid>
+      <description>远山疏林轻雾笼，暖阳探窗听晨钟。 庭前初落银杏雨，芳华凋零又几重。 不期秋霜侵柳绿，可怜金风老梧桐。 昨日阆苑尚新蕊，行人行色行匆匆。</description>
+    </item>
+    
+    <item>
+      <title>七夕</title>
+      <link>https://qkai-stat.github.io/2018/08/qx/</link>
+      <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/08/qx/</guid>
+      <description>晴岚裙腰山染黛， 空谷幽幽暗香来。 时人剪却好风光， 月下说与娇娘猜。</description>
+    </item>
+    
+    <item>
+      <title>人工神经网络</title>
+      <link>https://qkai-stat.github.io/2018/08/ann/</link>
+      <pubDate>Sun, 05 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/08/ann/</guid>
+      <description>1 背景介绍 人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回</description>
+    </item>
+    
+    <item>
+      <title>R制作词云</title>
+      <link>https://qkai-stat.github.io/2018/07/wordcloud-introduction/</link>
+      <pubDate>Sun, 22 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/07/wordcloud-introduction/</guid>
+      <description>顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停</description>
+    </item>
+    
+    <item>
+      <title>广义线性模型及其一般求解方式</title>
+      <link>https://qkai-stat.github.io/2018/06/glm/</link>
+      <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/06/glm/</guid>
+      <description>1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的</description>
+    </item>
+    
+    <item>
+      <title>非线性模型的参数估计和统计性质</title>
+      <link>https://qkai-stat.github.io/2018/05/nlm/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/05/nlm/</guid>
+      <description>这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应</description>
+    </item>
+    
+    <item>
+      <title>线性模型的理论与求解</title>
+      <link>https://qkai-stat.github.io/2018/04/lm/</link>
+      <pubDate>Fri, 20 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/04/lm/</guid>
+      <description>本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R</description>
+    </item>
+    
+    <item>
+      <title>夜雨清明</title>
+      <link>https://qkai-stat.github.io/2018/04/yyqm/</link>
+      <pubDate>Wed, 04 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2018/04/yyqm/</guid>
+      <description>惊雷起， 一霎清明夜雨袭。 帘外风轻， 潺潺春语， 入梦浇睡意。 心思尽去残花里。 流水无情空悲寂。 明朝晓看红湿处， 杨柳依依， 梨花风起， 愁染缙纭堤。</description>
+    </item>
+    
+  </channel>
+</rss>

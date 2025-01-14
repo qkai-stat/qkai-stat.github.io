@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        简单回归分析的R实现 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>简单回归分析的R实现 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="简单回归分析的R实现" />
+<meta property="og:description" content="1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2019/07/simplelm/" />
+<meta property="article:published_time" content="2019-07-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-26T00:00:00+00:00" />
+<meta itemprop="name" content="简单回归分析的R实现">
+<meta itemprop="description" content="1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185">
+<meta itemprop="datePublished" content="2019-07-26T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-26T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2403">
+
+
+
+<meta itemprop="keywords" content="多元统计,r语言,回归分析," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="简单回归分析的R实现"/>
+<meta name="twitter:description" content="1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2019/07/simplelm/"
+    >简单回归分析的R实现</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2019/07/simplelm/" class="article-date">
+  <time datetime="2019-07-26 00:00:00 &#43;0000 UTC" itemprop="datePublished">2019-07-26</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/"> 多元统计 </a>
+    <a class="article-tag-link" href="/tags/r%E8%AF%AD%E8%A8%80/"> r语言 </a>
+    <a class="article-tag-link" href="/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/"> 回归分析 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2019/07/simplelm/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2403字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="1-导言">1 导言</h2>
+<p>回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，1857-1936) 在研究父母和其子女身高的遗传关系问题中，统计了1078对夫妇的平均身高以及他们的一个成年儿子的身高数据。</p>
+<p>他们将孩子的身高作为自变量 $x$，父母的平均身高作为因变量 $y$，然后将两者画在同一张直角坐标系上。结果，他们发现这些数据点“惊人的”位于一条直线的附近，并且经过计算得到了直线的拟合方程:</p>
+<p>$$ y = 33.73 + 0.516x $$</p>
+<blockquote>
+<p>这个结果看起来是违背直觉的。因为统计的结果表明，高个子父母的子女有低于父母身高的趋势；而矮个子的子女则有高于父母的趋势。高尔顿解释说，<strong>自然界存在某种约束力将人的身高向某个“平均数”靠拢——或者说是“回归”——也即是统计学上回归的涵义。</strong></p>
+</blockquote>
+<p>那么本文的主题便是了解线性回归模型并通过<code>R</code>来解决线性回归分析中的若干问题。</p>
+<h2 id="2-基础回顾">2 基础回顾</h2>
+<p>回归的概念来源于实际问题，那么现在我们所说的线性回归分析问题具体指的是什么呢？一般说来，如果我们研究的问题中的 $p$ 个自变量 $x_1$, $x_2$, &hellip;, $x_p$ 和因变量 $y$ 的关系形式如下所示</p>
+<p>$$ y_i = \beta_0 + \beta_1x_{i1} + \cdots + \beta_px_{ip} + \epsilon_i $$</p>
+<p>那么我们就说这是一个线性回归问题，其中 $\epsilon_i$ 是随机误差项，$i$ 表示第 $i$ 个观测。在线性回归问题中我们的核心任务就是估计出未知参数 $\beta_0$, $\beta_1$, $\cdots$, $\beta_p$ 的值。</p>
+<blockquote>
+<p>注意，线性回归问题的确定并不是通过自变量的形式，而是问题中待估计的未知参数最高次都为一次且关于未知参数呈线性关系。例如 $y = \beta_0 + \beta_1x_1^2 + \epsilon$；$y = \beta_0 + \beta_1x_1x_2 + \epsilon$ 都是线性回归问题。</p>
+</blockquote>
+<p>通常在线性回归中估计未知参数方法是<a href="/2019/08/forum-ols/">最小二乘法（OLS）</a>，而为了保证估计值能够很好的解释模型，我们又有如下前提条件：</p>
+<ul>
+<li><strong>正态性</strong>：$\epsilon_i$ 服从正态分布；</li>
+<li><strong>独立性</strong>：$\epsilon_i$ 之间是独立的；</li>
+<li><strong>线性性</strong>：$x$ 和 $y$ 必须线性相关；</li>
+<li><strong>同方差性</strong>：$\epsilon_i$ 的方差不变。</li>
+</ul>
+<p>这些条件又被称为<strong>高斯—马尔可夫条件，</strong> 它们保证了在经典线性回归中最小二乘估计的优越性。</p>
+<h2 id="3-求解线性回归模型函数">3 求解线性回归模型函数</h2>
+<h3 id="31-极大似然法">3.1 极大似然法</h3>
+<p>最小二乘法和极大似然法都可以用来求解线性回归模型，我们在往期文章中讨论过最小二乘法，这里对似然法进行简单介绍。</p>
+<p>假设我们得到下面一组观测数据：</p>
+<p>$$ (x_1, y_1), (x_2, y_2), \cdots, (x_n, y_n) $$</p>
+<p>那么根据高斯-马尔可夫假设，我们可以得到残差估计的<strong>似然函数</strong> 为</p>
+<p>$$ \mathscr{L} = \prod_{i=1}^n \frac{1}{\sqrt{2\pi}\sigma}\exp\left[-\frac{(y_i - x_i^T\hat{\beta} - \hat{\beta}_0)^2}{2\sigma^2}\right] $$</p>
+<blockquote>
+<p>这个式子的成立还需要假设残差分布的均值为0，标准差为 $\sigma$。这个假设是可行的。因为残差如果均值不为零，可以将其移到模型的截距项里。</p>
+</blockquote>
+<p>如何通过上面的函数得到系数的估计值呢？<strong>极大似然的思想便是，让这些估计值使得似然函数达到最大！</strong> 这个想法很朴素：每个观测数据随机且互相独立，我们一次搜集便得到眼前的数据，那么<strong>自然而然认为这些数据组合出现的概率是最大的。</strong></p>
+<p>不过，数据已经搜集好便不能改动。<strong>我们自然想到，系数的估计值便是让这些数据对应的概率可能性最大——也即是似然函数最大。</strong></p>
+<p>现在假装大家已经理解了极大似然的原理，下面我们来求解它。直接最大化不太可行，我们通常对似然函数取对数得到对数似然函数</p>
+<p>$$ \ln\mathscr{L} = -\frac{n}{2}\ln(2\pi\sigma^2) - \sum_{i = 1}^n\frac{(y_i - x_i^T\hat{\beta} - \hat{\beta}_0)^2}{2\sigma^2} $$</p>
+<p>然后再分别对各个参数进行优化。限于篇幅，不再赘述。</p>
+<h3 id="32-r求解线性回归模型">3.2 R求解线性回归模型</h3>
+<p>我们可以利用现有软件进行模型求解。在R中求解线性回归问题的最基本函数就是<code>lm()</code>，其格式为：</p>
+<pre><code class="language-r{.line-numbers}">myfit &lt;- lm(formula, data)
+# formula 是要拟合的模型形式，用一个R公式表示
+# data 就是模型的数据构成的数据框
+</code></pre>
+<p>下面我们解释一下<code>formula</code>具体的形式，首先看下表总结的<code>formula</code>中常用的符号</p>
+<table>
+<thead>
+<tr>
+<th align="left">符号</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>~</code></td>
+<td align="left">分隔符号，左边为因变量，右边为自变量</td>
+</tr>
+<tr>
+<td align="left"><code>+</code></td>
+<td align="left">分隔自变量</td>
+</tr>
+<tr>
+<td align="left"><code>:</code></td>
+<td align="left">自变量的交互项，如 <code>xz</code> 可以表示成 <code>x:z</code></td>
+</tr>
+<tr>
+<td align="left"><code>*</code></td>
+<td align="left">自变量的所有交互项，如 <code>x*z*w</code> 展开即为 <code>x+z+w+x:z+x:w+z:w+x:z:w</code></td>
+</tr>
+<tr>
+<td align="left"><code>^</code></td>
+<td align="left">交互项可以达到某个次数，如<code>(x+z+w)^2</code>展开即为<code>x+z+w+x:z+x:w+z:w</code></td>
+</tr>
+<tr>
+<td align="left"><code>.</code></td>
+<td align="left">除因变量外的所有自变量</td>
+</tr>
+<tr>
+<td align="left"><code>-1</code></td>
+<td align="left">删除截距项</td>
+</tr>
+<tr>
+<td align="left"><code>I()</code></td>
+<td align="left">如<code>x+I((z+w)^2)</code>等价于<code>x+h</code>，<code>h</code>是<code>z+w</code>平方构成的新变量</td>
+</tr>
+</tbody>
+</table>
+<p>如果自变量为 $x_1$, $x_2$ 和 $x_3$ 而预测变量为 $y$，我们假定的线性模型形式为：</p>
+<p>$$ y = \beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_3 + \epsilon $$</p>
+<p>那么<code>formula</code>可以写成：</p>
+<pre><code class="language-r{.line-numbers}">y ~ x1 + x2 + x3
+# 或者为 y ~ .
+</code></pre>
+<p>其他形式的模型<code>formula</code>的表达式还请读者自行琢磨。</p>
+<p>当模型拟合成功后，我们使用<code>summary()</code>函数来得到拟合的具体结果。而其他常用的获取线性回归模型拟合结果的函数如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>summary()</code></td>
+<td align="left">拟合情况概述，包括系数显著性、模型显著性等</td>
+</tr>
+<tr>
+<td align="left"><code>coefficients()</code></td>
+<td align="left">拟合系数</td>
+</tr>
+<tr>
+<td align="left"><code>fitted()</code></td>
+<td align="left">因变量拟合值</td>
+</tr>
+<tr>
+<td align="left"><code>residuals()</code></td>
+<td align="left">残差值</td>
+</tr>
+<tr>
+<td align="left"><code>plot()</code></td>
+<td align="left">画出模型诊断图</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-实例分析">4 实例分析</h2>
+<p>下面我们将用实例具体介绍<code>lm()</code>函数的使用方法。</p>
+<h3 id="41-简单线性回归">4.1 简单线性回归</h3>
+<p>本例中我们使用基础安装中的数据集<code>women</code>数据，它记录了15个年龄在30~39岁间女性的身高和体重信息，我们现在来探究体重关于身高的关系。</p>
+<pre><code class="language-r{.line-numbers}">myfit &lt;- lm(weight~height, data = women)
+summary(myfit) # 展示拟合详细结果
+</code></pre>
+<p>程序的输出结果如下所示</p>
+<p><img src="/lm/simpleols.png" alt=""></p>
+<p>这里主要给读者解释这么几项指标的含义：</p>
+<ul>
+<li>
+<p><code>Residuals</code>  体重预测值和真实值之差的统计信息，从左到右分别为最小值、下四分位数、中位数、上四分位数和最大值。</p>
+</li>
+<li>
+<p><code>Coefficients</code> 第一列<code>Estimate</code>中<code>Intercept</code>对应的数值为截距项，height对应的即为身高变量前的估计系数。</p>
+</li>
+<li>
+<p><code>Multiple R-squared</code>  介于0-1之间，越接近1说明线性关系越强。</p>
+</li>
+<li>
+<p><code>p-value</code>  模型的F检验统计量的<code>p</code>值，值越小说明模型越可靠。</p>
+</li>
+</ul>
+<p>因此本例中体重和身高的回归方程为：</p>
+<p>$$ \hat{Weight} = -87.51667 + 3.45\times Height $$</p>
+<p>根据<code>R</code>方 (<code>Multiple R-squared</code>) 和<code>p</code>值 (<code>p-value</code>) 可知模型是可靠的。此外，我们可以作图观察最终的拟合结果。</p>
+<p><img src="/lm/simplefig.jpg" alt=""></p>
+<h3 id="42-具有交互项的线性回归">4.2 具有交互项的线性回归</h3>
+<p>继续考虑上例，如果模型中存在一个交互项比如一个平方项，那么即有：</p>
+<pre><code class="language-r{.line-numbers}">myfit &lt;- lm(weight~height + I(height^2), data = women)
+summary(myfit) # 展示拟合详细结果
+</code></pre>
+<p>程序的输出结果如下所示。</p>
+<p><img src="/lm/jiaohu.png" alt=""></p>
+<p>可以看到通过比较<code>R</code>方、<code>p</code>值，添加了平方项的线性模型效果更好。我们同样可以做出相应的图像。
+<img src="/lm/jiaohufig.jpg" alt=""></p>
+<h2 id="5-写在最后">5 写在最后</h2>
+<p>本文主要介绍了<code>R</code>中线性回归分析的简单操作方法。不过，这里仅仅涉及线性回归分析的冰山一角，关于线性回归问题中的回归诊断和异常点的判断等内容，限于篇幅这里就不做介绍了。有兴趣的读者可以学习《R in action》第8章中关于回归的讲解。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2019/07/simplelm/" title="简单回归分析的R实现" target="_blank" rel="external">https://qkai-stat.github.io/2019/07/simplelm/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2019/05/wyyg/" title="望月有感"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2019/08/forum-ols/"
+                    title="漫谈最小二乘法"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

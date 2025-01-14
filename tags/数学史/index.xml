@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数学史 on KAI&#39;s Blog</title>
+    <link>https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/</link>
+    <description>Recent content in 数学史 on KAI&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 07 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>非凸惩罚之SCAD简介</title>
+      <link>https://qkai-stat.github.io/2022/09/scad/</link>
+      <pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2022/09/scad/</guid>
+      <description>变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出LASSO后，基于正则化模型的变量选择研究日益壮大、独领风潮。LAS</description>
+    </item>
+    
+    <item>
+      <title>高维情形下非凸惩罚SVM的参数一致性</title>
+      <link>https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/</link>
+      <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/</guid>
+      <description>传统的支持向量机模型（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失+罚项的结构，其中SVM采用的是hing</description>
+    </item>
+    
+    <item>
+      <title>交替最小化：凸优化下的收敛性分析</title>
+      <link>https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/</link>
+      <pubDate>Sat, 25 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/</guid>
+      <description>交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对Beck（2015）的翻译。 1 问题的</description>
+    </item>
+    
+    <item>
+      <title>LASSO的变量选择一致性之不可表示性条件</title>
+      <link>https://qkai-stat.github.io/2021/10/irrepresentable-condition/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/10/irrepresentable-condition/</guid>
+      <description>高维稀疏化技术是大数据分析的重要方法之一。以LASSO为代表的模型选择方法，在过去的20多年间（20世纪90年代以来）得到了众多学者的关注并</description>
+    </item>
+    
+    <item>
+      <title>中秋</title>
+      <link>https://qkai-stat.github.io/2021/09/zq2021/</link>
+      <pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/09/zq2021/</guid>
+      <description>数更寒雨今方休，天凉月高怕登楼。 湖边垂緌声切切，陌上枰仲影悠悠。 谁家俦侣吹芦管，何处羁人醉离愁。 原道西风恁无情，玉壶光转白人头。</description>
+    </item>
+    
+    <item>
+      <title>无约束优化：基本概念总结</title>
+      <link>https://qkai-stat.github.io/2021/07/unconstrained-optimization/</link>
+      <pubDate>Thu, 22 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/07/unconstrained-optimization/</guid>
+      <description>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex</description>
+    </item>
+    
+    <item>
+      <title>端午</title>
+      <link>https://qkai-stat.github.io/2021/06/dw/</link>
+      <pubDate>Mon, 14 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/06/dw/</guid>
+      <description>时清日长蛩音噪， 沉香燎尽暑难消。 昏昏酣睡方初醒， 楫舟梦寻故乡遥。</description>
+    </item>
+    
+    <item>
+      <title>R包制作简易教程2</title>
+      <link>https://qkai-stat.github.io/2021/05/rpackagemake2/</link>
+      <pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/05/rpackagemake2/</guid>
+      <description>在往期的博客中，我和大家分享了仅含有R代码的R包制作的简易教程。实际中，我们的函数文件可能既包含R代码又包含C++代码，那么此时的R包制作会</description>
+    </item>
+    
+    <item>
+      <title>R包制作简易教程1</title>
+      <link>https://qkai-stat.github.io/2021/04/rpackagemake1/</link>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/04/rpackagemake1/</guid>
+      <description>在使用R时，最常见的操作就是通过 install.packages() 安装某个R包以及 library()载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学</description>
+    </item>
+    
+    <item>
+      <title>效率瓶颈突破：Rcpp简介</title>
+      <link>https://qkai-stat.github.io/2021/04/rcpp-synopsis/</link>
+      <pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2021/04/rcpp-synopsis/</guid>
+      <description>在数据分析时，代码的运行速率常常是我们所关心的话题之一。小Q往期的文章中也有介绍通过并行计算提升R运行速率的文章。然而R代码自身的运行速率偏</description>
+    </item>
+    
+    <item>
+      <title>有偏估计</title>
+      <link>https://qkai-stat.github.io/2020/11/biased-estimate/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/11/biased-estimate/</guid>
+      <description>有偏估计是统计学中一个重要的概念，与之对应的是无偏估计。从字面意思看，有偏估计意为有偏差的参数估计，而无偏估计则是没有偏差的参数估计。在实际</description>
+    </item>
+    
+    <item>
+      <title>主成分分析原理</title>
+      <link>https://qkai-stat.github.io/2020/10/pca/</link>
+      <pubDate>Sat, 24 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/10/pca/</guid>
+      <description>主成分分析（principle component analysis，PCA）是经典的降维分析工具之一，在数据挖掘、图像处理、信号分析等众多领域被广泛的研究和应</description>
+    </item>
+    
+    <item>
+      <title>再生希尔伯特空间与核函数</title>
+      <link>https://qkai-stat.github.io/2020/09/rkhs-and-kernel/</link>
+      <pubDate>Thu, 24 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/09/rkhs-and-kernel/</guid>
+      <description>在运用SVM处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space</description>
+    </item>
+    
+    <item>
+      <title>对偶模型理论基础</title>
+      <link>https://qkai-stat.github.io/2020/09/dual-problem/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/09/dual-problem/</guid>
+      <description>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex</description>
+    </item>
+    
+    <item>
+      <title>拉格朗日乘子法和KKT条件</title>
+      <link>https://qkai-stat.github.io/2020/09/lagrangian-and-kkt/</link>
+      <pubDate>Tue, 22 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/09/lagrangian-and-kkt/</guid>
+      <description>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex</description>
+    </item>
+    
+    <item>
+      <title>支持向量机原理</title>
+      <link>https://qkai-stat.github.io/2020/09/svm/</link>
+      <pubDate>Mon, 21 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/09/svm/</guid>
+      <description>支持向量机（support vector machine，SVM）是经典的机器学习模型之一，最早由Cortes和Vapnik二人于1995年为解决二分类问</description>
+    </item>
+    
+    <item>
+      <title>Valine: 高效的无后端评论系统</title>
+      <link>https://qkai-stat.github.io/2020/09/valine-introduction/</link>
+      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/09/valine-introduction/</guid>
+      <description>腾讯在2018年就宣布以后申请的公众号不再支持留言评论功能。确实，无法和读者进行直接的交流沟通会严重打击分享者的热情。所以我的好友H君经常唠</description>
+    </item>
+    
+    <item>
+      <title>人工智能方向的优秀刊物</title>
+      <link>https://qkai-stat.github.io/2020/08/ml-pub-introduction/</link>
+      <pubDate>Sun, 16 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/08/ml-pub-introduction/</guid>
+      <description>人工智能（Artificial Intelligence，AI）是计算机科学（Computer Science，CS）领域的分支之一，通常包含机</description>
+    </item>
+    
+    <item>
+      <title>解密文章作者之谜</title>
+      <link>https://qkai-stat.github.io/2020/08/author-detection/</link>
+      <pubDate>Wed, 12 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/08/author-detection/</guid>
+      <description>文本分析是指对文本的表示及其特征项的选取；文本分析是文本挖掘、信息检索的一个基本问题，它把从文本中抽取出的特征词进行量化来表示文本信息。 ——</description>
+    </item>
+    
+    <item>
+      <title>Hugo&#43;Gitee搭建个人专属博客</title>
+      <link>https://qkai-stat.github.io/2020/07/hugo-gitee/</link>
+      <pubDate>Fri, 31 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://qkai-stat.github.io/2020/07/hugo-gitee/</guid>
+      <description>相较于QQ、微博、CSDN等博客（空间）平台，个人专属博客有很多优势：网站主题可定制性更强，博客写作更自由，保存与迁移更灵活，不会被删帖（哈</description>
+    </item>
+    
+  </channel>
+</rss>

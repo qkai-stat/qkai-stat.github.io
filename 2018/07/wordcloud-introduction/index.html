@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        R制作词云 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>R制作词云 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="R制作词云" />
+<meta property="og:description" content="顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2018/07/wordcloud-introduction/" />
+<meta property="article:published_time" content="2018-07-22T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-07-22T00:00:00+00:00" />
+<meta itemprop="name" content="R制作词云">
+<meta itemprop="description" content="顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停">
+<meta itemprop="datePublished" content="2018-07-22T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2194">
+
+
+
+<meta itemprop="keywords" content="数据可视化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="R制作词云"/>
+<meta name="twitter:description" content="顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2018/07/wordcloud-introduction/"
+    >R制作词云</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2018/07/wordcloud-introduction/" class="article-date">
+  <time datetime="2018-07-22 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-07-22</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/"> 数据可视化 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/07/wordcloud-introduction/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2194字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <blockquote>
+<p>顾名思义，词云就是由词汇组成类似云彩的图形。对于篇幅庞大的文本而言，使用词云进行描述可以过滤掉很多冗杂而无意义的信息，诸如空格、标点符号、停词（像 and，or，but 等）等。</p>
+</blockquote>
+<h2 id="1-什么是词云">1 什么是词云？</h2>
+<p>词云是近几年来比较新潮的一个名词，是很多媒体或者社交软件用来展现文本中“关键词”出现频率的有效手段。</p>
+<p><strong>观看者一眼扫过就可以快速获取文本中的高频词汇信息。</strong> 因此，词云在文本可视化展示中有着很强的表现力。</p>
+<p>词云制作需要词和相应频率的信息，但通常我们面临的是原始文本数据。因此，本文试着完整展示整个过程——先从原始文本数据出发，经过必要的数据清洗，最后实现画词云的目的。</p>
+<p>在实现过程中需要借助强大的文本处理包<code>tm</code>包和<code>SnowballC</code>包，以及具有较大可操作性的词云制作包<code>wordcloud2</code>包，大家提前在 R 中安装好。</p>
+<pre><code class="language-R">install.packages(&quot;tm&quot;)
+install.packages(&quot;SnowballC&quot;)
+install.packages(&quot;wordcloud2&quot;)
+</code></pre>
+<h2 id="2-案例导入">2 案例导入</h2>
+<blockquote>
+<p>本案例是Brett Lantz所著的《机器学习与R语言》中的相关章节内容的重现。</p>
+</blockquote>
+<p>我们考虑垃圾短信分类问题——现实中很多人深受垃圾短信其害，因此我们希望设计一套算法通过分析短信中的文本内容来判断其是否为垃圾短信从而采取规避措施。</p>
+<pre><code class="language-R">sms_raw &lt;- read.csv(&quot;sms_spam.csv&quot;,stringsAsFactors = F)
+str(sms_raw)
+ 'data.frame':    5559 obs. of  2 variables:
+ $ type: chr  &quot;ham&quot; &quot;ham&quot; &quot;ham&quot; &quot;spam&quot; ...
+ $ text: chr  &quot;Hope you are having a good week. Just checking in&quot; &quot;K..give  back my thanks.&quot; &quot;Am also doing in cbe only. But have to pay.&quot;  &quot;complimentary 4 STAR Ibiza Holiday or 拢10,000 cash needs your URGENT  collection. 09066364349 NOW from Landline&quot;| __truncated__ ...
+</code></pre>
+<p>可见该数据包含两个变量，分别是短信的标签（type）：垃圾（spam）和正常（ham）以及短信内容（text）。</p>
+<h2 id="3-程序设计">3 程序设计</h2>
+<p>为了分别得到垃圾短信和正常短信的词云，首先采用<code>subset</code>函数按照短信标签将spam和ham的短信内容分别提取出来。</p>
+<pre><code class="language-R">sms_spam &lt;- subset(sms_raw,type == “spam”)# 选取所有的垃圾信息  
+sms_ham &lt;- subset(sms_raw,type == “ham”)# 选取所有的正常信息
+</code></pre>
+<p>以正常短信为例，考虑先将所有的正常短信内容拼接到一起。</p>
+<pre><code class="language-R">composition &lt;- paste0(sms_ham,collapse = ' ')# 将所有信息拼合在一起
+</code></pre>
+<p>接下来就是词云制作过程中的重要也是困难部分——<strong>文本处理。</strong></p>
+<p>通常短信内容包含了很多冗杂的信息比如前面提到的标点等，显然对于本问题能提供的有效信息微乎其微，因此我们需要在制作词云前将他们移除出去。这里就需要R中强大的<code>tm</code>包和<code>SnowballC</code>包。</p>
+<pre><code class="language-R">sms_corpus &lt;- VCorpus(VectorSource(composition))# 建立语料库
+sms_corpus_clean &lt;- tm_map(sms_corpus,content_transformer(tolower))# 全部转换成小写字母
+sms_corpus_clean &lt;- tm_map(sms_corpus_clean,removeNumbers)# 移除数字
+sms_corpus_clean &lt;- tm_map(sms_corpus_clean,removeWords,stopwords())# 移除停词
+replacePunctuation &lt;- function(x){gsub(&quot;[[:punct:]]+&quot;,&quot; &quot;,x)}
+sms_corpus_clean &lt;- tm_map(sms_corpus_clean,removePunctuation)# 移除标点
+sms_corpus_clean &lt;- tm_map(sms_corpus_clean,stemDocument)# 提取词干
+sms_corpus_clean &lt;- tm_map(sms_corpus_clean,stripWhitespace)# 移除多余空格
+</code></pre>
+<p>至此文本处理工作就结束了，我们可以通过命令</p>
+<pre><code class="language-R">str(sms_corpus_clean)
+ List of 1
+ $ 1:List of 2
+  ..$ content: chr &quot;c chope good week just check kgive back thank also  cbe pay aiya discuss later lar pick u much buzi pleas ask mu&quot;|  __truncated__
+  ..$ meta   :List of 7
+  .. ..$ author       : chr(0)
+  .. ..$ datetimestamp: POSIXlt[1:1], format: &quot;2018-09-08 07:08:14&quot;...
+</code></pre>
+<p>看到短信文本内容已经转换成意义较强的词汇（当然，你可能觉得里面仍然包括一些无意义的词汇，这通常和你所采用的<strong>停词</strong>表有关）。在制作词云前还有一项关键的步骤就是计算词频。</p>
+<pre><code>wordfreq &lt;- termFreq(sms_corpus_clean[[1]])# 计算词频
+wordfreq &lt;- sort(wordfreq,decreasing = T)# 词频排序
+</code></pre>
+<p>最后我们就可以使用<code>wordcloud2</code>包制作词云了。在<code>wordcloud2</code>包中制作词云的命令就是<code>wordcloud2</code>函数，它的基本使用方式如下。</p>
+<pre><code class="language-R">wordcloud2(data, size = 1, minSize = 0, gridSize =  0,  
+           fontFamily = NULL, fontWeight = 'normal',  
+           color = 'random-dark', backgroundColor = &quot;white&quot;,  
+           minRotation = -pi/4, maxRotation = pi/4, rotateRatio = 0.4,  
+           shape = 'circle', ellipticity = 0.65, widgetsize = NULL)  
+# 常用参数：
+# （1）data：词云生成数据，包含具体词语以及频率；
+# （2）size：字体大小，默认为1，一般来说该值越小，生成的形状轮廓越明显；
+# （3）fontFamily：字体，如‘微软雅黑’；
+# （4）fontWeight：字体粗细，包含‘normal’，‘bold’以及‘600’；
+# （5）color：字体颜色，可以选择‘random-dark’以及‘random-light’，其实就是颜色色系；
+# （6）backgroundColor：背景颜色，支持R语言中的常用颜色，如‘gray’，‘blcak’，
+# （7）minRontatin与maxRontatin：字体旋转角度范围的最小值以及最大值，选定后，字体会在该范围内随机旋转；
+# （8）rotationRation：字体旋转比例，如设定为1，则全部词语都会发生旋转；
+# （9）shape：词云形状选择，默认是‘circle’，即圆形。还可以选择#   ‘cardioid’（苹果形或心形），‘star’（星形），‘diamond’（钻石），‘triangle-forward’（三角形），‘triangle’（三角形），‘pentagon’（五边形）；
+</code></pre>
+<p>通过对两种信息的内容处理，我们使用<code>wordcloud2</code>函数做出两者的词云图形。</p>
+<img src="http://jiandan94.gitee.io/md-figures/wordcloud/手机短信词云.png" width="600"/>
+<p>相信大家通过这两幅图就可以判断出左侧是来自于垃圾短信内容。比较右侧图片可以看出，左侧的高频词汇类似free和prize等很具有煽动性，这正是很多广告短信的特点。</p>
+<h2 id="4-其他参数调试">4 其他参数调试</h2>
+<p>当然我们可以改变函数中的一些参数，从而画出不同形式、形状的词云。例如，设置<code>shape</code>为<code>star</code>画出星形词云。</p>
+<pre><code class="language-R">wordcloud2(data,size = 1,shape = &quot;star&quot;)# 星形
+</code></pre>
+<p>我们还利用<code>wordcloud2</code>包中的<code>letterCloud</code>函数，通过设置参数<code>word</code>为R画出字母R形的词云图。</p>
+<pre><code class="language-R">letterCloud(data, word =&quot;R&quot;, wordSize = 2)# 字母R形
+</code></pre>
+<p>此外，<code>wordcloud2</code>还有一个非常好用的功能，就是可以将词云的图形画成由用户输入的一张黑色图案。例如，我们可以输入一张奔跑的马形图案，然后利用该图案绘制马形词云图。</p>
+<pre><code class="language-R">wordcloud2(data,size = 1,figPath = &quot;fig/ma.png&quot;)# 马
+</code></pre>
+<img src="http://jiandan94.gitee.io/md-figures/wordcloud/不同形式词云.png" width="600"/>
+<h2 id="5-结语">5 结语</h2>
+<p>本期我们主要学习了R中词云的制作方法，通过<code>wordcloud2</code>包实现各种词云的制作方式。其中，可以允许用户使用自定义的图案作词云图极大的丰富了词云的开发。不过，在制作词云过程中文本数据的处理始终是一个难点，这里没有详述这方面内容，需要读者自己了解这方面的知识。</p>
+<h3 id="参考文献">参考文献</h3>
+<p>Brett Lantz, 《机器学习与R语言》</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2018/07/wordcloud-introduction/" title="R制作词云" target="_blank" rel="external">https://qkai-stat.github.io/2018/07/wordcloud-introduction/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2018/06/glm/" title="广义线性模型及其一般求解方式"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2018/08/ann/"
+                    title="人工神经网络"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

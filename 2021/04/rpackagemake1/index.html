@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        R包制作简易教程1 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="在使用R时，最常见的操作就是通过 install.packages() 安装某个R包以及 library()载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>R包制作简易教程1 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="R包制作简易教程1" />
+<meta property="og:description" content="在使用R时，最常见的操作就是通过 install.packages() 安装某个R包以及 library()载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2021/04/rpackagemake1/" />
+<meta property="article:published_time" content="2021-04-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-25T00:00:00+00:00" />
+<meta itemprop="name" content="R包制作简易教程1">
+<meta itemprop="description" content="在使用R时，最常见的操作就是通过 install.packages() 安装某个R包以及 library()载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学">
+<meta itemprop="datePublished" content="2021-04-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2021-04-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3847">
+
+
+
+<meta itemprop="keywords" content="R语言,算法," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="R包制作简易教程1"/>
+<meta name="twitter:description" content="在使用R时，最常见的操作就是通过 install.packages() 安装某个R包以及 library()载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2021/04/rpackagemake1/"
+    >R包制作简易教程1</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2021/04/rpackagemake1/" class="article-date">
+  <time datetime="2021-04-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-04-25</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+    <a class="article-tag-link" href="/tags/%E7%AE%97%E6%B3%95/"> 算法 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2021/04/rpackagemake1/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3847字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>在使用R时，最常见的操作就是通过 <code>install.packages()</code> 安装某个R包以及 <code>library()</code>载入并使用该R包。这些R包的开发者很多来自于活跃在统计、数据分析、机器学习等领域的学者和教授。有时，某个新模型被提出后，作者就已经开发出相应的R包供他人使用。因此，R包的持续更新和开发使得R用户可以站在众多领域的最前沿。</p>
+<blockquote>
+<p>诚然，正是得益于大家的分享，才铸就了R的强大。</p>
+</blockquote>
+<p>普通人虽然难以开发出专业的R包分享给他人使用，但是掌握R包开发的基本方法仍然是有益的——可以把自己的代码集中管理，以便调用。本文便是R包制作的一个简易教程。</p>
+<h2 id="1-准备工作">1 准备工作</h2>
+<p>在R包开始制作前，我们要为其配置相关的环境。首先，我已经默认大家已经安装了R和RStudio两个软件。R包的开发需要用到一系列程序包，可以用下面的命令安装</p>
+<pre><code class="language-R">install.packages(c(&quot;devtools&quot;, &quot;roxygen2&quot;, &quot;testthat&quot;, &quot;knitr&quot;))
+# devtools 可以自动化一些开发工作，减少R包开发的痛苦
+# roxygen2 将R包的帮助文档写作变得便捷
+# testthat 用来构建测试
+# knitr    则是一个动态文档成工具
+</code></pre>
+<p>我们可以使用下面的命令检测是否所有的工具都已安装：</p>
+<pre><code class="language-R">library(devtools)
+# 载入需要的程辑包：usethis
+has_devel()
+# Your system is ready to build packages!
+</code></pre>
+<p>环境配置好后，接着我们介绍本文制作R包所用到的3个R函数代码：</p>
+<pre><code class="language-R">1. awensvm.R
+2. clipDCD_Main.R
+3. gaussian_kernel.R
+</code></pre>
+<p>其中代码1是主功能函数，用来实现我在2019年提出的AWENSVM模型；代码2是用来求解该模型的核心程序；代码3则用来计算高斯核内积，在构建非线性AWENSVM时要用到。需要说明的是，<strong>函数<code>awensvm</code>和函数<code>gaussian_kernel</code>在载入包后要能被用户调用，而<code>clipDCD_Main</code>则可以隐藏</strong>。</p>
+<p>一切就绪后，下面我们正式进入R包制作环节。</p>
+<h2 id="2-rstudio可视化制作">2 RStudio可视化制作</h2>
+<h3 id="21-建立r包项目">2.1 建立R包项目</h3>
+<p>基于RStudio，我们可以可视化的构建R包。首先，通过RStudio菜单栏的File &gt; New Project创建一个项目：</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-construct1.png" width="400"/>
+<p>在出现的上述界面中选择New Directory &gt; R package，得到R包创建初始化界面：</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-construct2.png" width="400"/>
+<p>在Package name下填上自己R包的名称，这里是AWENSVM；通过Add按钮添加R包所需的R函数代码，这里依次添加了上述的三个函数的R代码；接着选择将该项目（构建R包）放在哪个目录下，这里是电脑桌面；最后点击Create Project即可建立本次R包开发的项目。</p>
+<h3 id="22-更改包文件信息">2.2 更改包文件信息</h3>
+<p>点击Create Project之后，在桌面上就出现一个名为AWENSVM的文件夹，里面包含了下述文件/目录：</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-files.png" width="600"/>
+<p>为了顺利开发R包以及增强R包的使用性，我们需要对该目录的一些文档进行自定义修改，主要涉及<code>DESCRIPTION</code>文件、<code>NAMESPACE</code>文件、R文件夹和man文件夹。下面逐一介绍各自的作用和修改方式。</p>
+<p><code>DESCRIPTION</code>描述了所建R包的信息，我们可以在RStudio中打开并编辑它。如果要分享自己的R包，填上相关信息是必要且有意义的。</p>
+<pre><code class="language-R">Package: AWENSVM
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer &lt;yourself@somewhere.net&gt;
+...(其他内容省略)
+</code></pre>
+<p>上述的选项容易理解。我们选择其他几个重要的选项给予解释：一是<code>Imports</code>，它声明了保证本R包正常运行所必须安装的包；一是<code>Suggests</code>，它声明了本R包可以使用的包，但不是必需的；一是<code>LinkingTo</code>，它声明了本R包正常运行所必须的另一个包中的C或C++代码（本文不考虑含有C++代码的R包制作）。由于<code>awensvm</code>函数中的示例代码需要<code>ggplot2</code>和<code>	MASS</code>包但非必需，我们添加如下代码：</p>
+<pre><code class="language-R">Suggests: ggplot2, MASS
+</code></pre>
+<p><code>NAMESPACE</code>描述了R包需要导出供用户调用的函数名，第一行代码表示按照函数的字母名称进行调用。我要导出<code>awensvm</code>和<code>gaussian_kernel</code>，在下面用<code>export()</code>输出，编辑后保存文档即可。</p>
+<pre><code class="language-R">exportPattern(&quot;^[[:alpha:]]+&quot;)
+export(&quot;awensvm&quot;, &quot;gaussian_kernel&quot;)
+</code></pre>
+<p>R文件夹下放置了所需的R代码文件，也即是开始添加的三个函数的R代码。如果想为R包再加入R函数，直接将相应的R代码文件拖入其中即可。</p>
+<p>man文件夹放置了R包的帮助文档，后缀名为<code>.Rd</code>。刚创建时，man文件夹下为空。以创建<code>awensvm</code>函数帮助文档为例，首先打开R文件夹下<code>awensvm</code>的R代码，然后将光标放在函数名上，按快捷键<code>Ctrl+Shift+Alt+R</code>生成特殊的注释，根据<code>@key</code>录入相关信息即可。可以通过<code>@</code>添加新的内容，下表列举了一些常见的信息：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@param</td>
+<td>给函数中的变量添加描述</td>
+</tr>
+<tr>
+<td>@export</td>
+<td>描述函数输出值的信息</td>
+</tr>
+<tr>
+<td>@author</td>
+<td>函数代码的作者</td>
+</tr>
+<tr>
+<td>@reference</td>
+<td>参考文献信息</td>
+</tr>
+<tr>
+<td>@example</td>
+<td>函数的使用示例代码</td>
+</tr>
+</tbody>
+</table>
+<p>关于<code>awensvm</code>函数的注释如下所示，其中示例代码过长这里省略：</p>
+<pre><code class="language-R">#' @title Adaptive Weighted Elastic Net SVM
+#'
+#' @param x the data matrix
+#' @param y the label vector
+#' @param lam1 the nonnegative tuning parameter
+#' @param lam2 the nonnegative tuning parameter
+#' @param weightMat the weight matrix
+#' @param kernel kernel choice
+#' @param ... Gaussian kernel parameter
+#'
+#' @return w the normal vector
+#' @return b the intercept
+#' @return u the estimated Lagrangian multipliers
+#'
+#' @export
+#'
+#' @references \url{https://linkinghub.elsevier.com/retrieve/pii/S0950705119303764}
+#'
+awensvm &lt;- function(x, y, lam1, lam2, weightMat = &quot;identity&quot;, kernel = &quot;linear&quot;, ...){
+    # 函数主体(省略)
+    ...
+}
+</code></pre>
+<p>保存后，运行<code>devtools::document()</code>即可在man中生成<code>awensvm</code>函数的帮助文档<code>awensvm.Rd</code>。可以直接在RStudio中打开该<code>.Rd</code>文档</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-help-Rd.png" width="600"/>
+<p>然后点击Preview即可在RStudio中预览该文档</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-help.png" width="600"/>
+<p>这和我们通常使用<code>?函数名</code>查看函数帮助文档的界面相同。需要注意的是，每次修改描述注释后，都要重新运行<code>devtools::document()</code>才能刷新帮助文档。</p>
+<h3 id="23-生成r包">2.3 生成R包</h3>
+<p>在RStudio菜单栏中选择Build &gt; Check Package来检查R包是否可以成功编译。运行结束后，在工作目录生成AWENSVM.Rcheck文件夹，若其中的日志文件显示<code>*DONE</code>，则表示R包没有问题。此时已经可以在RStudio使用<code>library()</code>载入AWENSVM包，并用<code>?awensvm</code>查看说明文档。然而，此时AWENSVM包并没有真的安装在R的library目录下，我们下面介绍如何生成R包源文件并安装。</p>
+<p>在RStudio菜单栏中选择Build &gt; Build Source Package进行R包编译，成功后即在工作目录生成R包源文件</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-build.png" width="600"/>
+<p>使用如下命令进行安装测试</p>
+<pre><code class="language-R">install.packages(&quot;AWENSVM_0.1.0.tar.gz&quot;, repos = NULL, type = &quot;source&quot;)
+</code></pre>
+<p>出现下面的<code>*DONE</code>结果即表明成功安装所生成的R包，此时在R的library目录下可看到名为AWENSVM的文件夹。</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-install.png" width="600"/>
+<blockquote>
+<p>将生成的<code>.tar.gz</code>源文件分享给他人，即可按照上述的方式安装开发的R包。</p>
+</blockquote>
+<h2 id="3-packageskeleton制作">3 package.skeleton制作</h2>
+<p>R为程序包开发设有专门的<code>package.skeleton()</code>命令，其中常见的变量与释义如下所示：</p>
+<pre><code class="language-R">name: R包名称
+path: R包文件将要存放的位置
+code_files: 所需R代码的路径
+list: 所需R函数名
+</code></pre>
+<p>如果R包需要单个R代码，直接用<code>code_files </code>指明其所在目录即可；如果需要多个R函数，只要将各个函数<code>source()</code>进来，然后用<code>list</code>指明所需的函数名即可将对应的R代码纳入R包。这里AWENSVM的代码为</p>
+<pre><code class="language-R">&gt; package.skeleton(name = &quot;AWENSVM&quot;, 
++                  path = &quot;C:/Users/jiandan/Desktop&quot;,
++                  list = c(&quot;awensvm&quot;, &quot;gaussian_kernel&quot;))
+Creating directories ...
+Creating DESCRIPTION ...
+Creating NAMESPACE ...
+Creating Read-and-delete-me ...
+Saving functions and data ...
+Making help files ...
+Done.
+Further steps are described in 'C:/Users/jiandan/Desktop/AWENSVM/Read-and-delete-me'.
+</code></pre>
+<p>代码运行结束后会在工作目录中生成名为AWENSVM的文件夹，其中内容和RStudio生成的一致。不同的是，man文件夹下非空，自动生成了<code>awensvm</code>和<code>gaussian_kernel</code>的说明文档。上述<code>list</code>没有<code>clipDCD_Main</code>参数，因为其只需在R包内部调用，AWENSVM文件夹创建后直接将其R代码拖入R文件夹下即可。</p>
+<p>类似的，我们要对其中的相关文档进行编辑。此处可参照第2节的内容，故不赘述。</p>
+<p>修改完成后，我们切换到CMD，并将工作目录设置成AWENSVM文件夹所在的目录，此处即桌面。然后运行下面的命令进行R包的安装测试</p>
+<pre><code class="language-R">R CMD check AWENSVM
+</code></pre>
+<p>没有问题再运行下面的命令进行R包生成</p>
+<pre><code class="language-R">R CMD build AWENSVM
+</code></pre>
+<p>最后在桌面生成<code>.tar.gz</code>源文件，在R中安装即可</p>
+<pre><code class="language-R">install.packages(&quot;AWENSVM_1.0.tar.gz&quot;, repos = NULL, type = &quot;source&quot;)
+</code></pre>
+<h2 id="4-awensvm包">4 AWENSVM包</h2>
+<p>这个R包是实现我在2019年提出的AWENSVM的算法。AWENSVM是一个处理含有异常值的不平衡二分类问题的自适应加权SVM方法。为了说明方法的有效性，我在AWENSVM包中添加了一个示例代码。这里给出更为详细的实现过程与说明。</p>
+<p>首先，我们生成300个来自二维双峰正态分布的训练样本点</p>
+<pre><code class="language-R">library(ggplot2)
+library(MASS)
+
+set.seed(112)
+n &lt;- 300
+sig &lt;- diag(c(0.02, 0.06))
+xpos1 &lt;- mvrnorm(0.25*n, mu = c(0.4, 0.7), Sigma = sig)
+xpos2 &lt;- mvrnorm(0.25*n, mu = c(-0.3, 0.7), Sigma = sig)
+xneg1 &lt;- mvrnorm(0.25*n, mu = c(-0.7, 0.2), Sigma = sig)
+xneg2 &lt;- mvrnorm(0.25*n, mu = c(0.3, 0.2), Sigma = sig)
+xpos &lt;- rbind(xpos1, xpos2)
+xneg &lt;- rbind(xneg1, xneg2)
+x &lt;- rbind(xpos1, xpos2, xneg1, xneg2)
+y &lt;- rep(c(1,-1), c(0.5*n, 0.5*n))
+</code></pre>
+<p>然后，我们考虑线性核并用网格法选出最优参数，其中<code>weightMat = &quot;identity&quot;</code>表示对样本不加权</p>
+<pre><code class="language-R"># 构建参数网格
+tunseq &lt;- 2^seq(-8, 8, 2)
+awen_tuning &lt;- ParameterGrid(list(lam1 = tunseq, lam2 = tunseq))
+# CV选择最优参数
+# 最优值为 lam1=1, lam2=16
+OptPar_awen &lt;- cv_awensvm(x, y, tuning = ensvm_tuning)
+# 将最优参数带入到模型中计算
+awen_noweight &lt;- awensvm(x, y, lam1 = OptPar_awen[2], lam2 = [3], 
+                   weightMat = &quot;identity&quot;, kernel = &quot;linear&quot;)
+</code></pre>
+<p>查看最优模型的预测准确率有</p>
+<pre><code class="language-R">prey_noweight &lt;- sign(x%*%awen_noweight$w + awen_noweight$b)
+round(sum(diag(table(prey_noweight, y)))/n, 4)
+# [1] 0.8667
+</code></pre>
+<p>根据模型的计算结果，我们画出不加权模型的预测超平面示意图</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/noweighted.png" width="450"/>
+<p>接着，我们采用AWENSVM的加权思路对数据进行加权处理。为简便，我们仍然采用前面的最优参数进行模型训练，相关代码为</p>
+<pre><code class="language-R"># aenl_weight_transform是线性AWENSVM的权重计算函数
+# 参数k和g可以用网格法寻优，这里仅以2和0.5作示例
+tran_data &lt;- aenl_weight_transform(x, y, k = 2, g = 0.5)
+tx &lt;- as.matrix(tran_data$x)
+ty &lt;- as.matrix(tran_data$y)
+awen_weight &lt;- awensvm(tx, ty, lam1 = 1, lam2 = 16, weightMat =diag(tran_data$weight))
+</code></pre>
+<p>查看最优模型的预测准确率有</p>
+<pre><code class="language-R">prey_weight &lt;- sign(tx%*%awen_weight$w + awen_weight$b)
+round(sum(diag(table(prey_weight, ty)))/n, 4)
+# [1] 0.8733
+</code></pre>
+<p>根据模型的计算结果，我们画出不加权模型的预测超平面示意图</p>
+<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/weighted.png" width="450"/>
+<p>从预测准确率来看，加权模型的结果更好。从预测超平面示意图来看，加权模型的超平面稍偏下，表明受到上方异常数据点的吸引更小，这也表明了模型的有效性。</p>
+<h2 id="5-结语">5 结语</h2>
+<p>本文简单介绍了R包制作的核心流程，感兴趣的读者可以动手实践起来，毕竟R in action！当然，本文的内容非常粗浅，只涉及到了R代码的R包制作，没有涉及与C++代码的混合制作方式，这些内容会在后续的推文中与大家分享。读者可参考Hadley所著的《R Packages》（中文名《R包开发》）了解更全面的知识。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2021/04/rpackagemake1/" title="R包制作简易教程1" target="_blank" rel="external">https://qkai-stat.github.io/2021/04/rpackagemake1/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2021/04/rcpp-synopsis/" title="效率瓶颈突破：Rcpp简介"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2021/05/rpackagemake2/"
+                    title="R包制作简易教程2"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

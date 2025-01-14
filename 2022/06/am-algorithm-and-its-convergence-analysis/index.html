@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        交替最小化：凸优化下的收敛性分析 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对Beck（2015）的翻译。 1 问题的" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>交替最小化：凸优化下的收敛性分析 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="交替最小化：凸优化下的收敛性分析" />
+<meta property="og:description" content="交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对Beck（2015）的翻译。 1 问题的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" />
+<meta property="article:published_time" content="2022-06-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-25T00:00:00+00:00" />
+<meta itemprop="name" content="交替最小化：凸优化下的收敛性分析">
+<meta itemprop="description" content="交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对Beck（2015）的翻译。 1 问题的">
+<meta itemprop="datePublished" content="2022-06-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2022-06-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="6745">
+
+
+
+<meta itemprop="keywords" content="经典算法理论,优化算法," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="交替最小化：凸优化下的收敛性分析"/>
+<meta name="twitter:description" content="交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对Beck（2015）的翻译。 1 问题的"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2022/06/am-algorithm-and-its-convergence-analysis/"
+    >交替最小化：凸优化下的收敛性分析</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="article-date">
+  <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/"> 经典算法理论 </a>
+    <a class="article-tag-link" href="/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/"> 优化算法 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2022/06/am-algorithm-and-its-convergence-analysis/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 6745字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 14分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>交替最小化 (alternating minimization) 算法在很多领域中有着广泛的应用场景。本文主要讨论凸优化情形下AM算法的收敛性，内容来源于对<a href="https://doi.org/10.1137/13094829X">Beck（2015）</a>的翻译。</p>
+<h2 id="1-问题的引入与基本假设">1 问题的引入与基本假设</h2>
+<h3 id="11-问题的引入">1.1 问题的引入</h3>
+<p>在本文中，AM算法考虑如下的优化问题：</p>
+<p>$$
+\min_{y\in\mathbb{R}^{n_1}, z\in\mathbb{R}^{n_2}} {H(y, z) \equiv f(y, z) + g_1(y) + g_2(z)} \qquad (1)
+$$</p>
+<p>其中 $f, g_1, g_2$ 被假定满足如下的条件：</p>
+<p>【A】$g_1: \mathbb{R}^{n_1}\mapsto (\infty, \infty]$ 和 $g_2: \mathbb{R}^{n_2}\mapsto (\infty, \infty]$ 都是<a href="https://baike.baidu.com/item/%E9%97%AD%E5%87%BD%E6%95%B0/197360">闭函数</a>、真凸函数 (proper convex functions)，且在各自定义域内被假定为次可微的。</p>
+<p>【B】$f$ 是在 $\mathrm{dom}g_1\times \mathrm{dom}g_2$ 上连续、可导的凸函数。</p>
+<blockquote>
+<p>真函数 (proper functions)，是在 $[-\infty, +\infty] = \mathbb{R}\cup{\pm\infty}$ 上扩展定义的实值函数，满足：定义域非空集、在 $-\infty$ 处从不取值以及不恒等于 $+\infty$。</p>
+</blockquote>
+<p>针对优化问题 (1)，交替最小化 (alternating minimization，AM) 算法的一般流程如下所述：</p>
+<p><strong>第一步</strong>：初始化 $y_0\in \mathrm{dom}g_1, z_0\in \mathrm{dom}g_2$ 使得</p>
+<p>$$
+z_0 \in arg\min_{z\in\mathbb{R}^{n_2}} f(y_0, z) + g_2(z)
+$$</p>
+<p><strong>第二步</strong>：循环迭代以下问题 $(k=0, 1, 2, \ldots)$：</p>
+<p>$$
+\begin{split}
+y_{k+1} &amp;\in arg\min_{y\in\mathbb{R}^{n_1}} f(y, z_{k}) + g_1(y)\newline
+z_{k+1} &amp;\in arg\min_{z\in\mathbb{R}^{n_2}} f(y_{k}, z) + g_2(z)\newline
+\end{split}
+$$</p>
+<h3 id="12-基本假设">1.2 基本假设</h3>
+<p>下面给出建立问题（1）下AM算法的收敛性理论的一些基本假设。为记号方便，令 $x = (y, z)$ 为优化变量，则 $f(y, z)$ 可以记成 $f(x)$，$g_1(y)+g_2(z)$ 可以记成 $g(x)$。令 $\nabla_1 f(x)$ 为 $f(x)$ 关于 $y$ 的梯度，$\nabla_2 f(x)$ 为 $f(x)$ 关于 $z$ 的梯度。基于这些符号，我们假定如下条件成立：</p>
+<p>【C】$f$ 关于 $y$ 的梯度 $\nabla_1 f(x)$ 在 $\mathrm{dom}g_1$ 上是关于常数 $L_1\in (0, \infty)$ Lipschitz连续的，即</p>
+<p>$$
+\Vert \nabla_1 f(y + d_1, z) - \nabla_1 f(y, z)\Vert \leq L_1\Vert d_1\Vert
+$$</p>
+<p>对任意 $y\in \mathrm{dom}g_1, z\in \mathrm{dom}g_2$，$d_1\in \mathbb{R}^{n_1}$ 且 $y+d_1 \in \mathrm{dom}g_1$ 都成立。</p>
+<p>在某些情形中，我们也假设 $f$ 关于 $z$ 的梯度是Lipschitz连续的：</p>
+<p>【D】$f$ 关于 $z$ 的梯度 $\nabla_2 f(x)$ 在 $\mathrm{dom}g_2$ 上是关于常数 $L_2\in (0, \infty]$ Lipschitz连续的，即</p>
+<p>$$
+\Vert \nabla_2 f(y, z + d_2) - \nabla_2 f(y, z)\Vert \leq L_2\Vert d_2\Vert
+$$</p>
+<p>对任意 $y\in \mathrm{dom}g_1, z\in \mathrm{dom}g_2$，$d_2\in \mathbb{R}^{n_2}$ 且 $z+d_2 \in \mathrm{dom}g_2$ 都成立。</p>
+<p>在后续的收敛性分析中，我们总是假定【A】-【D】成立，且允许 $L_2$ 取 $\infty$——这意味着如非特别说明，目标函数对于优化变量的第二块 (即 $z$) 可以是非Lipschtiz连续的。</p>
+<p>当然，除了假设【A】-【D】外，为了保证优化问题（1）的良好定义，我们还始终默认如下的假设：</p>
+<p>【E】令问题（1）的最优解集非空，记为 $X ^ *$，对应的最优目标函数值记为 $H ^ *$。此外，对任意的 $\tilde{y}\in \mathrm{dom}g_1$ 和 $\tilde{z}\in \mathrm{dom}g_2$，问题</p>
+<p>$$
+\min_{z\in\mathbb{R}^{n_2}} f(\tilde{y}, z) + g_2(z), \quad \min_{y\in\mathbb{R}^{n_1}} f(y, \tilde{z}) + g_1(y)
+$$</p>
+<p>存在最小值。</p>
+<h2 id="2-预备知识">2 预备知识</h2>
+<p>为了方便后续进行收敛性分析，我们在此给出相关的一些数学背景知识，主要包括近端算子（proximal operator）和梯度映射（gradient mapping）。此外，我们还将给出两个与收敛性分析密切相关的结论，即块下降引理（block decent lemma）和充分下降性质（sufficient decrease property）。</p>
+<h3 id="21-近端算子">2.1 近端算子</h3>
+<p>对于一个给定的闭的、真扩展实值凸函数 $h: \mathbb{R}^n\mapsto (-\infty, \infty]$，其近端算子（proximal operator）定义为</p>
+<p>$$
+\text{prox}_h (x) = arg\min _{u} \left\lbrace h(u) + \frac12 \Vert u - x\Vert^2 \right\rbrace
+$$</p>
+<p>其中 $\Vert\cdot\Vert^2$ 是定义在 $\mathbb{R}^n$ 上的 $l_2$ 范数。</p>
+<blockquote>
+<p>根据近端算子的定义不难看出，$h$ 在点 $x$ 处的近端值是一个点（$\in\mathbb{R}^n$），即 $x$ 和 $h$ <strong>最小值处变量取值</strong>之间的折衷点。因此，称 $\text{prox}_h(x)$ 是 $x$ 相对于 $h$ 的近点。</p>
+</blockquote>
+<p>下面探讨近端算子和梯度之间的关系。根据定义，若$h$ 可微，则 $\text{prox}_h(x)$ 满足一阶微分条件，即</p>
+<p>$$
+\nabla h(u) + u - x = 0 \Rightarrow u \approx x - \lambda\nabla h(x)
+$$</p>
+<p>当 $\lambda$ 很小时成立。这表明，近端算子和梯度方法之间有密切的联系，其中 $\lambda$ 类似于梯度方法中的步长。近端算子的详细讨论参见<a href="https://doi.org/10.1561/2400000003">Parikh and Boyd（2014）</a>。</p>
+<p>一个重要且有用的识别近端算子的结论由以下引理给出：</p>
+<p>【<strong>引理1</strong>】令 $h: \mathbb{R}^n \mapsto (-\infty, \infty]$ 是一个闭的、真凸函数，再令 $M&gt;0$，则</p>
+<p>$$
+w = \text{prox}_{\frac 1M h}(x)
+$$</p>
+<p>当且仅当 $\forall u\in \text{dom}h$，满足</p>
+<p>$$
+h(u) \geq h(w) + M \langle x - w, u - w \rangle
+$$</p>
+<h3 id="22-梯度映射">2.2 梯度映射</h3>
+<p>另一个重要的概念是梯度映射（gradient mapping）。给定 $M&gt;0$，和问题（1）相关的近端-梯度（prox-grad）映射定义为</p>
+<p>$$
+T_M(x) = \text{prox}_{\frac1M g} \left( x - \frac1M \nabla f(x)\right)
+$$</p>
+<p>根据梯度方法，$x - \frac1M \nabla f(x)$ 是基于 $x$ 以步长 $\frac1M$ 得到的 $f$ 的下降点。根据近端算子，$T_M(x)$ 是基于 $x - \frac1M \nabla f(x)$ 得到的 $g$ 的下降点。所以，$T_M(x)$ 是基于 $x$ 得到的 $f$ 和 $g$ 同时下降的点。</p>
+<p>类似的，我们可以定义分别关于 $y$ 和 $z$ 的近端-梯度算子：</p>
+<p>$$
+\begin{split}
+T_M^1(x) &amp;= \text{prox} _{\frac 1M g_1} \left( y - \frac 1M \nabla _1 f(y,z)\right)\newline
+T_M^2(x) &amp;= \text{prox} _{\frac 1M g_2} \left( z - \frac 1M \nabla _2 f(y, z)\right)
+\end{split}
+$$</p>
+<p>显然，我们有</p>
+<p>$$
+T_M(x) = (T_M^1(x), T_M^2(x))
+$$</p>
+<p>现在，我们给出梯度映射的定义（对任意 $M&gt;0$）：</p>
+<p>$$
+G_M(x) = M(x - T_M(x)) = M\left(x - \text{prox}_{\frac1M g} \left( x - \frac1M \nabla f(x)\right) \right)
+$$</p>
+<p>它将 $x$ 映射成问题（1）目标函数的梯度。根据2.1中近端算子和梯度的关系，可知</p>
+<p>$$
+G_M(x) = M\left(x - \left(\left(x - \frac1M \nabla f(x)\right) -  \nabla g(x)\right)\right) = \nabla f(x) + \nabla g(x) = \nabla H(x)
+$$</p>
+<p>也即是问题（1）目标函数在 $x$ 处的梯度。</p>
+<p>类似的，我们定义关于 $y$ 和 $z$ 的偏梯度映射：</p>
+<p>$$
+\begin{split}
+G_M^1(x) &amp;= M\left(y - \text{prox} _{\frac1M g_1} \left( y - \frac1M \nabla f(y, z)\right) \right)\newline
+G_M^2(x) &amp;= M\left(z - \text{prox} _{\frac1M g_2} \left( z - \frac1M \nabla f(y, z)\right) \right)
+\end{split}
+$$</p>
+<p>显然，我们有</p>
+<p>$$
+G_M(x) = (G_M^1(x), G_M^2(x))
+$$</p>
+<p>梯度映射可以用来衡量解的最优性。注意到，$G_M(x)=0$ 对某个 $M&gt;0$ 成立当且仅当 $x$ 是问题（1）的最优解；$x$ 是问题（1）的最优解当且仅当 $G_{M_1}^1(x)=0$ 和 $G_{M_2}^2(x)=0$ 对某个 $M_1,M_2&gt;0$ 成立。此外，若 $G_M(x)=0$ 对某个 $M&gt;0$ 成立，则$G_M(x)=0$ 对所有 $M&gt;0$ 成立。如果我们移除 $f$ 凸的约束，那 $G_M(x)=0$ 就表明 $x$ 是平稳点（<a href="https://baike.baidu.com/item/%E9%A9%BB%E7%82%B9/10207453?fr=aladdin">stationary point</a>）。</p>
+<h3 id="23-块下降引理">2.3 块下降引理</h3>
+<p>根据性质【C】和【D】中描述的块-Lipschitz（block-Lipschitz）假设，我们可以给出如下块版本的下降引理（block decent lemma）：</p>
+<p>【<strong>引理2</strong>】（块下降引理）令$y\in \text{dom}g_1$ 和 $z\in \text{dom}g_2$，并令 $h\in \mathbb{R}^{n_1}$ 使得 $y+h\in \text{dom}g_1$，则对任意的 $M \geq L_1$有</p>
+<p>$$
+f(y+h, z) \leq f(y, z) + \langle \nabla_1 f(y, z), h \rangle + \frac M2 \Vert h\Vert^2
+$$</p>
+<p>以及，令$y\in \text{dom}g_1$ 和 $z\in \text{dom}g_2$，并令 $h\in \mathbb{R}^{n_2}$ 使得 $z+h\in \text{dom}g_2$，则若 $L_2&lt;\infty$，对任意的 $M \geq L_2$有</p>
+<p>$$
+f(y, z+h) \leq f(y, z) + \langle \nabla_2 f(y, z), h \rangle + \frac M2 \Vert h\Vert^2
+$$</p>
+<h3 id="24-充分下降性质">2.4 充分下降性质</h3>
+<p>下面，我们介绍一个重要的结论，即充分下降性质（sufficient decrease property），它和后续的收敛性分析密切相关。设 $s: \mathbb{R}^p\mapsto \mathbb{R}$ 是一个连续、可导且具有基于常数 $L$ 的Lipschtiz梯度的函数，$h: \mathbb{R}^p \mapsto (-\infty, \infty]$ 是一个闭的、真凸函数。根据<a href="https://doi.org/10.1017/CBO9780511804458.003">Beck和Teboulle（2011）</a>中的引理2.6，对 $S(x) = s(x) + h(x)$，有如下的充分下降性质：</p>
+<p>$$
+S(x) - S\left(\text{prox}_h\left(x - \frac1L \nabla s(x)\right)\right) \geq \frac{1}{2L}\left\Vert L\left(x - \text{prox}_h\left(x - \frac1L \nabla s(x)\right)\right) \right\Vert^2
+$$</p>
+<blockquote>
+<p>充分下降性质主要刻画了，当前点 $x$ 和基于 $x$ 利用近端算子找到的下降点 $\text{prox}_h\left(x - \frac1L \nabla s(x)\right)$ 的<strong>目标函数值的下降值</strong>与两点之间的欧氏距离的大小关系。</p>
+</blockquote>
+<p>注意到，$\forall z\in \text{dom}g_2$，$f(\cdot, z)$ 是一个连续、可导且具有基于常数 $L_1$ 的Lipschtiz梯度的函数，则结合偏梯度映射和充分下降性质，有</p>
+<p>$$
+H(y, z) - H(T_{L_1}^1(x), z) \geq \frac{1}{2L_1}\Vert G_{L_1}^1(y, z)\Vert^2 \qquad (2)
+$$</p>
+<p>若 $L_2&lt;\infty$，类似的，我们有</p>
+<p>$$
+H(y, z) - H(y, T_{L_2}^2(x)) \geq \frac{1}{2L_2}\Vert G_{L_2}^2(y, z)\Vert^2 \qquad (3)
+$$</p>
+<h2 id="3-收敛性分析">3 收敛性分析</h2>
+<p>令第 $k$ 次的迭代值为 $x_k = (y_k, z_k)$，“半次”迭代的结果记为</p>
+<p>$$
+x_{x+\frac12} = (y_{k+1}, z_k)
+$$</p>
+<p>根据AM算法，我们很容易得到</p>
+<p>$$
+H(x_0)\geq H(x_{\frac12})\geq H(x_1)\geq H(x_{\frac32})\geq \cdots
+$$</p>
+<p>这只是目标函数下降，具体的算法收敛性是怎样的，以下我们将从目标函数非凸和凸两种情形来展开分析讨论。</p>
+<h3 id="31-非凸情形">3.1 非凸情形</h3>
+<p>本小节讨论 $f$ 非凸的情形。根据2.3中的充分下降性质，有如下引理：</p>
+<p>【<strong>引理3</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则对任意 $k\geq0$ 成立着以下不等式：</p>
+<p>$$
+H(x_{k}) - H(x_{k+\frac12}) \geq \frac{1}{2L_1}\Vert G_{L_1}^1(x_k)\Vert^2 \qquad (4)
+$$</p>
+<p>此外，若 $L_2&lt;\infty$，则</p>
+<p>$$
+H(x_{k+\frac12}) - H(x_{k+1}) \geq \frac{1}{2L_2}\Vert G_{L_2}^2(x_{k+\frac12})\Vert^2
+$$</p>
+<p>【<strong>证明</strong>】将 $y = y_k$ 和 $z = z_k$ 带入到式（2）中得</p>
+<p>$$
+H(y_k, z_k) - H(T_{L_1}^1(x_k), z_k) \geq \frac{1}{2L_1}\Vert G_{L_1}^1(y_k, z_k)\Vert^2
+$$</p>
+<p>根据 $T_{L_1}^1$ 的定义，其是固定 $z=z_k$ 让 $H(y, z_k)$ 下降的点，那么必然有</p>
+<p>$$
+H(T_{L_1}^1(x_k), z_k) \geq H(y_{k+\frac12}, z_k)
+$$</p>
+<p>两者结合就可以得到引理2中的第一个结论。类似的，不难得到第二个结论。$\blacksquare$</p>
+<p>接着，我们给出非凸情形的主要收敛结论，即偏梯度的范数区域零的收敛速率。</p>
+<p>【<strong>定理1</strong>】（偏梯度映射的收敛速率）令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则对任意的 $n\geq1$ 有</p>
+<p>$$
+\min_{k=0,1,\ldots,n} \Vert G_{L_1}^1(x_k)\Vert \leq \frac{\sqrt{2L_1(H(x_0) - H^* )}}{\sqrt{n+1}}
+$$</p>
+<p>此外，此外，若 $L_2&lt;\infty$，则</p>
+<p>$$
+\min_{k=0,1,\ldots,n} \Vert G_{L_2}^2(x_k)\Vert \leq \frac{\sqrt{2L_2(H(x_0) - H^* )}}{\sqrt{n+1}}
+$$</p>
+<p>【<strong>证明</strong>】根据引理2，有</p>
+<p>$$
+H(x_k) - H(x_{k+1}) \geq H(H_{k}) - H(x_{k+\frac12}) \geq \frac{1}{2L_1} \Vert G_{L_1}^1(x_k)\Vert^2
+$$</p>
+<p>将不等式两侧从 $k=0, 1, \ldots, n$ 相加，得到</p>
+<p>$$
+H(x_0) - H(x_{n+1}) \geq \frac{1}{2L_1} \sum_{k=0}^n \Vert G_{L_1}^1(x_k)\Vert^2
+$$</p>
+<p>由于</p>
+<p>$$
+\sum_{k=0}^n \Vert G_{L_1}^1(x_k)\Vert^2 \geq (n+1) \min_{k=0,1,\ldots,n} \Vert G_{L_1}^1(x_k)\Vert^2
+$$</p>
+<p>以及 $H(x_{n+1}) \geq H^*$，可以推出</p>
+<p>$$
+\min_{k=0,1,\ldots,n} \Vert G_{L_1}^1(x_k)\Vert \leq \frac{\sqrt{2L_1(H(x_0) - H^* )}}{\sqrt{n+1}}
+$$</p>
+<p>类似的，我们也能推出第二个结论。$\blacksquare$</p>
+<blockquote>
+<p>根据定理1，AM算法得到的序列对应的梯度至少以 $O(1/\sqrt{n})$ 的速率趋于零，即收敛到平稳点。具体的收敛结论如引理4所述。</p>
+</blockquote>
+<p>【<strong>引理4</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则 ${x_k}$ 的<a href="https://baike.baidu.com/item/%E8%81%9A%E7%82%B9/90919?fr=aladdin">聚点</a>是问题（1）的平稳点（stationary point）。</p>
+<p>【<strong>证明</strong>】设 $\tilde{x}$ 是 ${x_k}$ 的聚点，则存在一个子序列 ${x_{k_n}}$ 收敛到 $\tilde{x}$。由于 $x_{k+1}$ 是固定 $y=y_{k+\frac12}$ 优化 $z$ 得到的，因此我们总是有 $G_{L_2}^2(x_{k_n})=0$。于是，根据 $G_{L_2}^2$ 的连续性，可推出 $G_{L_2}^2(\tilde{x})=0$。另一方面，由于 ${H(x_{\frac k2})}$ 是单调非增有下界，故存在极限，则 $H(x_k) - H(x_{k+\frac12})\rightarrow 0$，根据式（4），易知当 $n\rightarrow \infty$ 时 $G_{L_1}^1(x_{k_n})\rightarrow 0$。根据 $G_{L_1}^1$ 的连续性，可推出 $G_{L_1}^1(\tilde{x})=0$。综述，因为 $G_{L_1}^1(\tilde{x})=0$ 和 $G_{L_2}^2(\tilde{x})=0$，所以可知 $\tilde{x}$ 是平稳点。$\blacksquare$</p>
+<blockquote>
+<p>在证明的过程中要从子列的角度来，是因为序列 ${x_k}_{k\geq0}$ 并不是逐步逼近聚点 $\tilde{x}$的，那么后续用函数的连续性来推出聚点处的梯度为零就不可行。因此，根据聚点的定义，寻找收敛到聚点的子列，以此来论证就能够衔接上了。</p>
+</blockquote>
+<h3 id="32-凸情形">3.2 凸情形</h3>
+<p>现在，我们回到 $f$ 是凸函数的情形。我们主要的目的是证明函数序列的收敛速率。首先，我们给出如下具有启发性的引理：</p>
+<p>【<strong>引理5</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则对任意 $k \geq 0$ 有</p>
+<p>$$
+H(x_{k + \frac 12}) - H(x ^ *) \leq \Vert G_{L_1}^1(x_k) \Vert \cdot \Vert x_k - x ^ * \Vert
+$$</p>
+<p>此外，若 $L_2&lt;\infty$，则对任意 $k \geq 0$ 有</p>
+<p>$$
+H(x_{k + 1}) - H(x ^ *) \leq \Vert G_{L_2}^2(x_{x + \frac 12}) \Vert \cdot \Vert x_{x + \frac 12} - x ^ * \Vert
+$$</p>
+<p>【<strong>证明</strong>】注意到</p>
+<p>$$
+T_{L_1}(x_k) = ( T_{L_1}^1(x_k), T_{L_1}^2(x_k)) = \left(T_{L_1}^1(x_k), z_k - \frac{1}{L_1} G_{L_1}^2(x_k) \right) = (T_{L_1}^1(x_k), z_k)
+$$</p>
+<p>上述最后一个等式成立是因为AM算法的序列产生机制表明 $G_{M}^2(x_k) = 0$ 对任意 $M&gt;0, k = 0, 1, \ldots$ 都成立。基于此，结合块下降引理（引理2）有</p>
+<p>$$
+\begin{split}
+f(T_{L_1}(x_k)) - f(x ^ *) &amp;\leq f(x_k) + \langle \nabla_1 f(x_k), T_{L_1}^1(x_k) - y_k \rangle + \frac{L_1}{2} \Vert T_{L_1}^1(x_k) - y_k \Vert^2 - f(x ^ *)\newline
+&amp;= f(x_k) + \langle \nabla f(x_k), T_{L_1}(x_k) - x_k \rangle + \frac{L_1}{2} \Vert T_{L_1}^1(x_k) - y_k \Vert^2 - f(x ^ *)
+\end{split}
+$$</p>
+<p>由于 $f$ 是凸函数，则 $f(x_k) - f(x ^ *) \leq \langle \nabla f(x_k), x_k - x ^ * \rangle$，结合上式得</p>
+<p>$$
+f(T_{L_1}(x_k)) - f(x ^ *) \leq \langle \nabla f(x_k), T_{L_1}(x_k) - x ^ * \rangle + \frac{L_1}{2} \Vert T_{L_1}^1(x_k) - y _k \Vert^2 \qquad (5)
+$$</p>
+<p>另一方面，由于</p>
+<p>$$
+T_{L_1}(x_k) = \text{prox}_{\frac {1}{L_1} g} \left( x_k - \frac {1}{L_1} \nabla f(x_k)\right)
+$$</p>
+<p>根据引理1，令 $h = g$，$M = L_1$，$x = x_k - \frac {1}{L1} \nabla f(x_k)$，$w = T_{L_1}(x_k)$ 和 $u = x ^ *$，则</p>
+<p>$$
+g(x ^ *) \geq g(T_{L_1}(x_k)) + L_1 \left\langle x_k - \frac {1}{L1} \nabla f(x_k) - T_{L_1}(x_k), x ^ * - T_{L_1}(x_k) \right\rangle \qquad (6)
+$$</p>
+<p>由于 $H(x_{x + \frac 12}) \leq H(T_{L_1}(x_k))$，结合式（5）和式（6）可知</p>
+<p>$$
+\begin{split}
+H(x_{k + \frac 12}) - H(x ^ *) &amp;\leq H(T_{L_1}(x_k)) - H(x ^ *) = f(T_{L_1}(x_k)) + g(T_{L_1}(x_k)) - f(x ^ *) - g(x ^ *)\newline
+&amp;\leq \langle \nabla f(x_k), T_{L_1}(x_k) - x ^ * \rangle + \frac{L_1}{2} \Vert T_{L_1}^1(x_k) - y_k \Vert^2 + L_1 \left\langle x_k - \frac {1}{L1} \nabla f(x_k) - T_{L_1}(x_k), T_{L_1}(x_k) - x ^ * \right\rangle \newline
+&amp;= L_1 \left\langle x_k - T_{L_1}(x_k), T_{L_1}(x_k) - x ^ * \right\rangle + \frac{L_1}{2} \Vert T_{L_1}^1(x_k) - y_k \Vert^2 \newline
+&amp;= \left\langle G_{L_1}(x_k), T_{L_1}(x_k) - x ^ * \right\rangle + \frac{1}{2L_1} \Vert G_{L_1}^1(x_k) \Vert^2 \newline
+&amp;= -\frac{1}{L_1} \Vert G_{L_1}(x_k) \Vert^2 + \left\langle G_{L_1}(x_k), x_k - x ^ * \right\rangle + \frac{1}{2L_1} \Vert G_{L_1}^1(x_k) \Vert^2 \newline
+&amp;\leq \left\langle G_{L_1}(x_k), x_k - x ^ * \right\rangle \newline
+&amp;\leq \Vert G_{L_1}(x_k) \Vert \cdot \Vert x_k - x ^ * \Vert \newline
+&amp;= \Vert G_{L_1}^1(x_k) \Vert \cdot \Vert x_k - x ^ * \Vert
+\end{split}
+$$</p>
+<p>也就是引理5中得第一个结论。若 $L_2 &lt; \infty$，通过定义函数</p>
+<p>$$
+\tilde{f}(z, y) \equiv f(y, z)
+$$</p>
+<p>和初始点 $(z^0, y^1)$，我们按照上述分析可以得到引理中得第二个结论。$\blacksquare$</p>
+<blockquote>
+<p>引理5中得第二个结论要求 $L_2&lt;\infty$。然而，若函数 $z \mapsto f(y_{k+1}, z)$ 具有常数为 $M(y_{k+1})$ 的Lipschitz梯度，则准确的结论为
+$$ H(x_{k + 1}) - H(x ^ *) \leq \Vert G_{M(y_{k+1})}(x_{x + \frac 12}) \Vert \cdot \Vert x_{x + \frac 12} - x ^ * \Vert $$
+该结论对 $L_2 = \infty$ 同样成立。</p>
+</blockquote>
+<p>下面引入一些概念以便于后续的分析。假定水平集（level set）</p>
+<p>$$
+S = {x \in \text{dom}g_1 \times g_2: H(x) \leq H(x_0)}
+$$</p>
+<p>是紧集，且用 $R$ 记如下的“直径”：</p>
+<p>$$
+R = \max_{x\in \mathbb{R}^{n_1 \times n_2}} \max_{x ^ * \in X ^ *} {\Vert x - x ^ * \Vert: H(x) \leq H(x_0)}
+$$</p>
+<p>特别地，根据 ${H_{(\frac k2)}}_{k\geq0}$ 的单调性可知</p>
+<p>$$
+\Vert x_k - x ^ * \Vert, \Vert x_{k + \frac 12} - x ^ * \Vert \leq R, \quad k = 0, 1, \ldots \qquad (7)
+$$</p>
+<p>基于上述的符号，我们可以给出如下的AM算法产生的序列对应的函数值的递归不等式。</p>
+<p>【<strong>引理6</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则</p>
+<p>$$
+H(x_k) - H(x_{k+1}) \geq \frac{1}{2\min {L_1, L_2}R^2} (H(x_{k+1}) - H ^ *)^2 \qquad (8)
+$$</p>
+<p>对所有的 $k \geq 0$ 都成立。</p>
+<p>【<strong>证明</strong>】根据引理5和式（7）可得</p>
+<p>$$
+H(x_{k + \frac 12}) - H(x ^ *) \leq \Vert G_{L_1}^1(x_k) \Vert R
+$$</p>
+<p>再根据引理3，得</p>
+<p>$$
+\begin{split}
+H(x_k) - H(x_{k+1}) &amp;\geq H(x_k) - H(x_{k+\frac 12}) \newline
+&amp;\geq \frac{1}{2L_1}\Vert G_{L_1}^1(x_k)\Vert^2 \newline
+&amp;\geq \frac{(H(x_{k+\frac 12}) - H ^ *)^2}{2L_1 R^2} \newline
+&amp;\geq \frac{(H(x_{k+1}) - H ^ *)^2}{2L_1 R^2}
+\end{split}
+$$</p>
+<p>如果 $L_2 = \infty$，则式（8）必然成立；如果 $L_2 &lt; \infty$，则根据引理5和式（7）可得</p>
+<p>$$
+H(x_{k + 1}) - H(x ^ *) \leq \Vert G_{L_2}^2(x_{k+\frac 12}) \Vert R
+$$</p>
+<p>则</p>
+<p>$$
+H(x_k) - H(x_{k+1}) \geq H(x_{k+\frac 12}) - H(x_{k+1}) \geq \frac{1}{2L_2}\Vert G_{L_2}^2(x_{k+\frac 12}) \Vert \geq \frac{(H(x_{k+1}) - H ^ *)^2}{2L_2 R^2}
+$$</p>
+<p>也就证明了结论。$\blacksquare$</p>
+<p>接下来，我们证明AM算法产生的函数序列具有次线性收敛速率（sublinear rate of convergence）。为了得到该结论，我们还需要如下简单的引理：</p>
+<p>【<strong>引理7</strong>】令 ${A_k}_{k\geq 0}$ 是一个非负实数序列，满足</p>
+<p>$$
+A_k - A_{k+1} \geq \gamma A_{k+1}^2, \quad k = 0, 1, \ldots,
+$$</p>
+<p>和</p>
+<p>$$
+A_1 \leq \frac{1.5}{\gamma}, A_2 \leq \frac{1.5}{2\gamma}
+$$</p>
+<p>其中 $\gamma$ 是某个正数。那么，</p>
+<p>$$
+A_k \leq \frac{1.5}{\gamma}\frac {1}{k}, \quad k = 0, 1, \ldots,
+$$</p>
+<p>【<strong>证明</strong>】我们用归纳法来证明上述结论。假设对 $A_k, k \geq 3$ 成立以上结论，则</p>
+<p>$$
+\gamma A_{k+1}^2 + A_{k+1} \leq A_k \leq \frac{1.5}{\gamma}\frac {1}{k}
+$$</p>
+<p>根据二次函数的性质，易知</p>
+<p>$$
+A_{k+1} \leq \frac{-1 + \sqrt{1 + 4\cdot 1.5/k}}{2 \gamma} \leq \frac{1.5}{\gamma}\frac {1}{k+1}
+$$</p>
+<p>【<strong>定理2</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则对任意的 $k \geq 1$ 有</p>
+<p>$$
+H(x_k) - H ^ * \leq \frac{3\max {H(x_0) - H ^ *, \min {L_1, L_2}R^2}}{k} \qquad (9)
+$$</p>
+<p>【<strong>证明</strong>】令 $A_k = H(x_k) - H ^ *$ 和 $\tilde{\gamma} = \frac{1}{2\min{L_1, L_2}R^2}$，根据引理6得</p>
+<p>$$
+A_k - A_{k+1} \geq \tilde{\gamma} A_{k+1}^2
+$$</p>
+<p>显然</p>
+<p>$$
+\begin{split}
+A_1 &amp;= H(x_1) - H ^ * \leq H(x_0) - H ^ *\newline
+A_2 &amp;\leq H(x_0) - H ^ *
+\end{split}
+$$</p>
+<p>故令</p>
+<p>$$
+\gamma = \frac 12 \min \left\lbrace \frac{1}{H(x_0) - H ^ *}, \frac{1}{\min{L_1, L_2}R^2} \right\rbrace
+$$</p>
+<p>则有</p>
+<p>$$
+A_1 \leq \frac{1.5}{\gamma}, A_2 \leq \frac{1.5}{2\gamma}
+$$</p>
+<p>由于 $\tilde{\gamma}\leq \gamma$，可以得到</p>
+<p>$$
+A_k - A_{k+1} \geq \gamma A_{k+1}^2
+$$</p>
+<p>对所有的 $k \geq 1$ 都成立，则根据引理7对任意的 $k \geq 1$ 有</p>
+<p>$$
+A_k \leq \frac{1.5}{\gamma}\cdot \frac{1}{k}
+$$</p>
+<p>也即证明了定理的结论。$\blacksquare$</p>
+<blockquote>
+<p>定理2表明，AM算法的函数序列可以达到一个次线性收敛的速率。根据式（9），收敛效率依赖于块Lipschitz常数 $L_1, L_2$ 的最小值，而不是最大值或者全局块Lipschitz常数。这表明AM算法对于更加平滑的函数，也即是有较小的块Lipschitz常数，具有更好的表现。注意到，式（9）依赖于 $H(x_0) - H ^ *$，意味着函数的全局Lipschitz常数对收敛效率也有一个明显的影响，这显然是一个缺陷。然而，在后续的证明中可以看出，对 $H(x_0) - H ^ *$ 依赖很小，对给定收敛误差精度下所需的迭代次数的影响很小。为了得到这个结果，我们需要满足引理7不等式更深入、细致的分析结论，即如下的引理。</p>
+</blockquote>
+<p>【<strong>引理8</strong>】令 ${A_k}_{k\geq 0}$ 是一个非负实数序列，满足</p>
+<p>$$
+A_k - A_{k+1} \geq \gamma A_{k+1}^2, \quad k = 0, 1, \ldots,
+$$</p>
+<p>则对任意 $n \geq 2$ 有</p>
+<p>$$
+A_n \leq \max \left\lbrace \left( \frac 12 \right)^{(n-1)/2} A_0, \frac{4}{\gamma (n-1)} \right\rbrace
+$$</p>
+<p>此外，对任意的 $\epsilon &gt; 0$，若</p>
+<p>$$
+n \geq \max \left\lbrace \frac{2}{\ln (2)}(\ln (A_0) + \ln (1/\epsilon)), \frac {4}{\gamma \epsilon} \right\rbrace
+$$</p>
+<p>则 $A_n \leq \epsilon$。</p>
+<p>【<strong>证明</strong>】注意到，对任意的 $k\geq 0$ 有</p>
+<p>$$
+\frac{1}{A_{k+1}} - \frac{1}{A_{k}} = \frac{A_{k} - A_{k+1}}{A_{k}A_{k+1}} \geq \gamma\frac{A_{k+1}}{A_k}
+$$</p>
+<p>对每一个 $k$，有两种可能：</p>
+<ol>
+<li>$A_{k+1} \leq \frac 12 A_{k}$，</li>
+<li>$A_{k+1} &gt; \frac 12 A_{k}$。</li>
+</ol>
+<p>在第2种可能下，我们有</p>
+<p>$$
+\frac{1}{A_{k+1}} - \frac{1}{A_{k}} \geq \frac{\gamma}{2}
+$$</p>
+<p>现在假设 $n$ 是偶数。如果第2种可能发生了至少 $\frac 12$ 次，那么</p>
+<p>$$
+\frac{1}{A_n} \geq \frac{\gamma n}{4}
+$$</p>
+<p>即</p>
+<p>$$
+A_n \leq \frac{4}{\gamma n}
+$$</p>
+<p>另一方面，如果第1种可能发生了至少 $\frac 12$ 次，结合 $A_{k}$ 的单调递减性，那么</p>
+<p>$$
+A_n \leq \left( \frac 12\right)^{n/2} A_0
+$$</p>
+<p>因此，我们可以得到</p>
+<p>$$
+A_n \leq \max \left\lbrace \left( \frac 12\right)^{n/2} A_0, \frac{4}{\gamma n} \right\rbrace \qquad (10)
+$$</p>
+<p>如果 $n$ 是奇数，我们可以得到、</p>
+<p>$$
+A_n \leq A_{n-1} \leq \max \left\lbrace \left( \frac 12\right)^{(n-1)/2} A_0, \frac{4}{\gamma (n-1)} \right\rbrace \qquad (11)
+$$</p>
+<p>比较易知，式（10）的不等式右侧比式（11）不等式右侧小，故引理8的第一个结论成立。为了保证 $A_n \leq \epsilon$，只需要求</p>
+<p>$$
+\max \left\lbrace \left( \frac 12\right)^{(n-1)/2} A_0, \frac{4}{\gamma (n-1)} \right\rbrace \leq \epsilon
+$$</p>
+<p>即</p>
+<p>$$
+\left( \frac 12\right)^{(n-1)/2} A_0 \leq \epsilon, \frac{4}{\gamma (n-1)} \leq \epsilon
+$$</p>
+<p>即</p>
+<p>$$
+n \geq \frac{2}{\ln (2)} (\ln (A_0) + \ln (1/\epsilon)) + 1, n \geq \frac{4}{\gamma \epsilon} + 1
+$$</p>
+<p>因此，若</p>
+<p>$$
+n \geq \max \left\lbrace \frac{2}{\ln (2)} (\ln (A_0) + \ln (1/\epsilon)), \frac{4}{\gamma \epsilon} \right\rbrace + 1
+$$</p>
+<p>成立，则不等式 $A_n \leq \epsilon$ 成立。</p>
+<p>基于引理8，我们现在可以立马得到相较于定理2更加细致的收敛性结果，如定理3所述。</p>
+<p>【<strong>定理3</strong>】令 ${x_k}_{k\geq0}$ 是AM算法产生的序列，则对任意的 $k \geq 2$ 有</p>
+<p>$$
+H(x_k) - H ^ * \leq \max \left\lbrace \left( \frac 12\right)^{(k-1)/2} (H(x_0) - H ^ *), \frac{8\min {L_1, L_2}R^2}{\gamma (k-1)} \right\rbrace
+$$</p>
+<p>此外，要得到 $\epsilon$-最优解，需要的迭代次数至多为</p>
+<p>$$
+\max \left\lbrace \frac{2}{\ln (2)} (\ln (H(x_0) - H ^ *) + \ln (1/\epsilon)), \frac{8\min {L_1, L_2}R^2}{\epsilon} \right\rbrace + 2
+$$</p>
+<p>【<strong>证明</strong>】根据引理7，我们有</p>
+<p>$$
+A_{k} - A_{k+1} \geq \gamma A_{k+1}^2
+$$</p>
+<p>其中 $A_k = H(x_k) - H ^ *$ 和 $\gamma = \frac{1}{2\min {L_1, L_2}R^2}$。则根据引理8立即可得上述结论。</p>
+<blockquote>
+<p>根据定理3，由于 $H(x_0) - H ^ *$ 前是指数型系数，可知 $H(x_0) - H ^ *$ 对于收敛效率的影响很小，即全局Lipschitz常数的影响很小，主要还是块Lipschitz常数的最小值影响大。从 $\epsilon$-最优解的最大迭代次数也能看出，全局Lipschitz常数的影响很小，远没有块Lipschitz常数的最小值影响大。</p>
+</blockquote>
+<h2 id="4-结语">4 结语</h2>
+<p>本文主要讨论了凸优化框架下，两块（two-block）变量的交替最小化算法的收敛性。分析表明，在满足某些常见条件下，AM算法可以收敛到最优值，且达到次线性收敛速率。此外，收敛效率受块Lipschitz常数的最小值的影响较大；全局Lipschitz常数对收敛效率也有影响，但很小。总之，AM算法在统计学、机器学习等领域中应用广泛，了解它的收敛理论也很有必要。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" title="交替最小化：凸优化下的收敛性分析" target="_blank" rel="external">https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" title="LASSO的变量选择一致性之不可表示性条件"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/"
+                    title="高维情形下非凸惩罚SVM的参数一致性"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

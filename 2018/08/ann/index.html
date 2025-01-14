@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        人工神经网络 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="1 背景介绍 人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>人工神经网络 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="人工神经网络" />
+<meta property="og:description" content="1 背景介绍 人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2018/08/ann/" />
+<meta property="article:published_time" content="2018-08-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-08-05T00:00:00+00:00" />
+<meta itemprop="name" content="人工神经网络">
+<meta itemprop="description" content="1 背景介绍 人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回">
+<meta itemprop="datePublished" content="2018-08-05T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-05T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2521">
+
+
+
+<meta itemprop="keywords" content="机器学习," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="人工神经网络"/>
+<meta name="twitter:description" content="1 背景介绍 人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2018/08/ann/"
+    >人工神经网络</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2018/08/ann/" class="article-date">
+  <time datetime="2018-08-05 00:00:00 &#43;0000 UTC" itemprop="datePublished">2018-08-05</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/08/ann/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2521字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="1-背景介绍">1 背景介绍</h2>
+<p>人工神经网络其实是一种过旧的概念，早在20世纪80年代至90年代初期就已被广泛使用，但后来热度逐渐消退。近年来，人工神经网络强势回归，现在被认为是处理很多机器学习难题的最先进技术。追本溯源，当时人工神经网络热度消退的原因之一是其需要大量、繁复的运算。但是如今计算机的运算能力已经远超往日，故缺陷不再而优势凸显。</p>
+<p>本期主要的目标是用R实现人工神经网络算法，并用一个实际案例来检验效果。在本次案例分析中需要用到的R包为<code>neuralnet</code>，需要大家事先下载安装好。</p>
+<h2 id="2-神经网络的概念">2 神经网络的概念</h2>
+<p>这一节我们先一起来认识一下人工神经网络的概念。看完之后，大家对神经网络的工作原理和运作机制有一个整体的了解。</p>
+<h3 id="21-人工神经元">2.1 人工神经元</h3>
+<p>人工神经网络顾名思义，就是模拟人的神经网络运行机制来实现学习和处理信息的目的。要了解其本质必然要研究人体神经网络原理，那么研究其中的一个个体——神经元就理所应当了。下图是一个人体神经元的示意图。</p>
+<img src="http://jiandan94.gitee.io/md-figures/ANN/人体神经元.webp" width="300"/>
+<p>一般当人体接受到外界的信息后，这些信息将通过神经元的树突传入到神经细胞体，接着细胞体将对这些信息进行分析处理，例如加权，从而得到一个综合结果。如果综合值超过一个阈值，那么细胞体将会被激活从而输出一个对应的信号到达轴突。人工神经网络中人工神经元正是模仿了这种机制。</p>
+<img src="http://jiandan94.gitee.io/md-figures/ANN/人工神经元.webp" width="300"/>
+<p>从外界接受到的信号X包含若干个变量，他们分别按照一定的权重被吸收，然后在某种阈值机制（根据某个函数来确定，该函数叫激励函数）最终输出信号。这个结果可以用如下公式表示。</p>
+<p>$$
+y(x) = f\left(\sum_{i=1}^n w_i x_i\right)
+$$</p>
+<p>人工神经网络正是使用这种方式定义的神经元来构建复杂的数据模型。一般我们要把握人工神经网络以下几个概念：<strong>激励函数，拓扑结构，训练算法。</strong></p>
+<h3 id="22-激励函数">2.2 激励函数</h3>
+<p>激励函数可以理解成一个过程，包括对输入的总信号求和，以及计算其是否满足激活的阈值。如果满足，人工神经元即传递信号；否则，人工神经元不做任何操作。通常的激励函数形式如下图所示。</p>
+<img src="http://jiandan94.gitee.io/md-figures/ANN/激励函数.webp" width="600"/>
+<p>激励函数和具体的神经网络有关，对于某些特别的数据，激励函数的选择也是十分重要，不过一般我们可以选择高斯函数就可以了。</p>
+<h3 id="23-拓扑结构">2.3 拓扑结构</h3>
+<p>人工神经网络的强大能力来源于它的拓扑结构，而把握其拓扑结构可以抓住下面3个关键概念：</p>
+<ul>
+<li>层数</li>
+<li>网络中信息是否向后传播</li>
+<li>每一层的节点数</li>
+</ul>
+<p>对照上图，一般人工神经网络分为3层：输入层、隐藏层和输出层。输入层和输出层顾名思义不再赘述，我们简单说说隐藏层。回忆前面所说神经元的机制，输入信号直接按权重求和并计算激励函数值做判断，这个过程过于简单。<strong>隐藏层的意义在于，它使得整个分析处理的过程更加精细，同时也更加复杂。</strong></p>
+<p>神经网络中，一般信息的传播方向是从输入信号一个节点接一个节点直至传到输出层。这样的网络称为前馈网络。虽然听上去很简单但产生的能量是很大的。与之对应的是反馈神经网络，信号可以循环在两个方向传播。虽然这种方式更加贴近实际神经网络工作模式，但是实际用到的很少。</p>
+<p>可能不用我说大家也知道，网络中的节点数对最终的结果影响显著。<strong>但是不幸的是，并没有可信的规则来确定每一层的节点数。</strong> 我们可以根据具体问题、运算量等尝试选取。</p>
+<h3 id="24-误差向后传播">2.4 误差向后传播</h3>
+<p>前面一直没有讨论权重的选取，显然这深深影响人工神经网络的实际表现。实际中我们先随机赋予权重，然后采取一种误差向后传播的策略来调整权重，即</p>
+<ul>
+<li>在前向阶段中，神经元在从输入层到输出层的序列中被激活，沿途应用每一个神经元的权重和激励函数，一旦到达最后一层，就产生一个输出信号。</li>
+<li>在后向阶段中，由前向阶段产生的网络输出信号与训练数据中的真实目标值进行比较，网络的输出信号与真实目标值之间的差异产生的误差在网络中向后传播，从而来修正神经元之间的连接权重，并减少将来产生的误差。</li>
+</ul>
+<p>这里还有一个重要的问题就是，输入信号众多且关系复杂，如何调整具体一个信号的权重从而降低总的误差呢？这不在本文讨论之内。但是在R中直接调用相关包进行计算，所以这不是问题。</p>
+<h2 id="3-r人工神经网络实现">3 R人工神经网络实现</h2>
+<h3 id="31-数据搜集">3.1 数据搜集</h3>
+<p>经过前面的认真铺垫，终于进入到本期的主题——用R实现人工神经网络！本次使用的案例是研究某地公路客运量和公路货运量的预测，先使用<code>head()</code>函数查看数据的前几行：</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/ANN/%E5%85%AC%E8%B7%AF%E5%AE%A2%E8%BF%90%E9%87%8F%E4%B8%8E%E8%B4%A7%E8%BF%90%E9%87%8F%E6%95%B0%E6%8D%AE.webp" alt="公路客运量与货运量数据"></p>
+<p>可见该数据集一共有五个变量，按照上图从左到右分别是：人数（万人）、机动车数量（万辆）、公路面积（万平方公里）、公路客运量（万人）和公路货运量（万吨）。</p>
+<blockquote>
+<p>这里要提醒大家，神经网络的运行最好是将数据标准化到0附近。如果数据呈现正态，则直接使用R中<code>scale()</code>函数标准化即可；如果数据呈现严重偏态如均匀分布，则对其采用极大极小化处理即可。本案例中数据不满足要求，需做处理。</p>
+</blockquote>
+<p>我们采用极大极小化标准化方法——将每列数据转换成0-1之间。这里我们直接编写一个函数来完成这个操作。</p>
+<pre><code class="language-R">minmax &lt;- function(x){#R代码—极大极小标准化：  
+  for(i in 1:ncol(x)){    
+  x[,i] &lt;- (x[,i] - min(x[,i]))/(max(x[,i]) - min(x[,i]))  
+}  
+return(x)}
+</code></pre>
+<h3 id="32-neuralnet函数介绍">3.2 <code>neuralnet</code>函数介绍</h3>
+<p>接下来我们要了解<code>neuralnet</code>包中<code>neuralnet()</code>函数的使用方法。</p>
+<pre><code class="language-R">neuralnet(target~predictors, data, hidden)
+# target表示模型的输出变量
+# predictors表示输入变量，一般用一个R公式表示
+# data则是包含上面两者数据框
+# hidden则是隐藏层的神经元数目（默认为1）
+</code></pre>
+<h3 id="33-应用模型建模求解">3.3 应用模型建模求解</h3>
+<p>有了前面的介绍，这一步就显得水到渠成了，请看下面代码</p>
+<pre><code class="language-R">library(neuralnet)
+conv_road_data &lt;- minmax(road_data)# 分割数据集
+train_data &lt;- conv_road_data[1:18,]
+test_data &lt;- conv_road_data[19:20,]
+# 建立模型
+m_train &lt;- neuralnet(glkyl+glhyl~sqrs+sqjdcs+sqglmj, data = train_data,hidden = 6)
+plot(m_train)# 画出模型拓扑图
+</code></pre>
+<p>我们将数据集前18个作为训练，后2个用来预测。运行上述代码可以得到训练的神经网络模型的拓扑结构图。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/ANN/%E6%95%B0%E6%8D%AE%E6%8B%9F%E5%90%88%E6%88%90%E7%9A%84%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84.webp" alt="数据拟合成的拓扑结构"></p>
+<p>这显示了最终模型得到的权重信息。并且可以看到，本案例中神经网络一共迭代314次，总的误差为0.049404.</p>
+<p>接下我们使用<code>compute()</code>函数进行预测</p>
+<pre><code class="language-R">m_test &lt;- compute(m_train,test_data[,1:3])
+</code></pre>
+<p>那么我们怎么得到训练样本和预测样本的具体估计值呢？不管是<code>neuralnet()</code>函数还是<code>compute()</code>函数，它们的输出结果中<code>net.result</code>一项就是具体的估计值，因此可以从前面结果中获取。</p>
+<pre><code class="language-R">trian_estimate &lt;- matrix(unlist(m_train$net.result),ncol = 2)
+test_estimate &lt;- m_test$net.result
+</code></pre>
+<p>值得一提的是<code>m_train$net.result</code>得到的是一个列表，因此在这里我们将其去列表化转成了一个矩阵以便于后续分析。接下来不要忘记，我们是的数据都是标准化了的，所以要通过逆变换得到真实结果。</p>
+<p>最后我们可以画出真实值和估计值之间的对比图，观察具体的模型效果。</p>
+<p><img src="http://jiandan94.gitee.io/md-figures/ANN/%E6%8B%9F%E5%90%88%E7%BB%93%E6%9E%9C.webp" alt="拟合结果图"></p>
+<p>从最终的对比图来看，模型的效果还是不错的。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2018/08/ann/" title="人工神经网络" target="_blank" rel="external">https://qkai-stat.github.io/2018/08/ann/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2018/07/wordcloud-introduction/" title="R制作词云"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2018/08/qx/"
+                    title="七夕"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>

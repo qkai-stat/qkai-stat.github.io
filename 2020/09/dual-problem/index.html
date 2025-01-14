@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        对偶模型理论基础 - KAI&#39;s Blog
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
+  <title>对偶模型理论基础 - KAI&#39;s Blog</title>
+  
+  
+  <link rel="stylesheet" href="https://qkai-stat.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="对偶模型理论基础" />
+<meta property="og:description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://qkai-stat.github.io/2020/09/dual-problem/" />
+<meta property="article:published_time" content="2020-09-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-09-23T00:00:00+00:00" />
+<meta itemprop="name" content="对偶模型理论基础">
+<meta itemprop="description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex">
+<meta itemprop="datePublished" content="2020-09-23T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-09-23T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3092">
+
+
+
+<meta itemprop="keywords" content="机器学习,优化算法,凸优化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对偶模型理论基础"/>
+<meta name="twitter:description" content="凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《Convex"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="" target="_blank">
+            <img class="img-circle img-rotate" src="https://qkai-stat.github.io/qk.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>欢迎来到我的博客!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/09/scad/" class="title">非凸惩罚之SCAD简介</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-09-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-09-01</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/08/svm-with-non-convex-penalization/" class="title">高维情形下非凸惩罚SVM的参数一致性</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-08-28 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-08-28</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2022/06/am-algorithm-and-its-convergence-analysis/" class="title">交替最小化：凸优化下的收敛性分析</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2022-06-25 00:00:00 &#43;0000 UTC" itemprop="datePublished">2022-06-25</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/10/irrepresentable-condition/" class="title">LASSO的变量选择一致性之不可表示性条件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-10-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-10-10</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://qkai-stat.github.io/2021/09/zq2021/" class="title">中秋</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-09-21 00:00:00 &#43;0000 UTC" itemprop="datePublished">2021-09-21</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">5</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">8</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">18</span></li>
+            <li class="category-list-item"><a href="https://qkai-stat.github.io/categories/%E8%AF%97%E8%AF%8D%E6%AD%8C%E8%B5%8B/" class="category-list-link">诗词歌赋</a><span class="category-list-count">18</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">7</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" class="tag-list-link">优化算法</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" class="tag-list-link">凸优化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%8F%98%E9%87%8F%E9%80%89%E6%8B%A9/" class="tag-list-link">变量选择</a><span
+                    class="tag-list-count">4</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90/" class="tag-list-link">回归分析</a><span
+                    class="tag-list-count">6</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E5%A4%9A%E5%85%83%E7%BB%9F%E8%AE%A1/" class="tag-list-link">多元统计</a><span
+                    class="tag-list-count">10</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E5%AD%A6%E5%8F%B2/" class="tag-list-link">数学史</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-list-link">数据可视化</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%96%87%E6%9C%AC%E5%88%86%E6%9E%90/" class="tag-list-link">文本分析</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="tag-list-link">机器学习</a><span
+                    class="tag-list-count">9</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">5</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%BA/" class="tag-list-link">经典算法理论</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%99%8E%E6%BA%AA%E5%B2%81%E6%9C%88/" class="tag-list-link">虎溪岁月</a><span
+                    class="tag-list-count">17</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E8%AF%97%E6%96%87/" class="tag-list-link">诗文</a><span
+                    class="tag-list-count">18</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://qkai-stat.github.io/tags/%E9%AB%98%E7%BB%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">高维数据分析</a><span
+                    class="tag-list-count">4</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/09/dual-problem/"
+    >对偶模型理论基础</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://qkai-stat.github.io/2020/09/dual-problem/" class="article-date">
+  <time datetime="2020-09-23 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-09-23</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/%E7%AC%94%E8%AE%B0/"> 笔记 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"> 机器学习 </a>
+    <a class="article-tag-link" href="/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/"> 优化算法 </a>
+    <a class="article-tag-link" href="/tags/%E5%87%B8%E4%BC%98%E5%8C%96/"> 凸优化 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/09/dual-problem/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3092字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <blockquote>
+<p>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《<a href="https://book.douban.com/subject/1888111/">Convex Optimization</a>》这本书时的笔记。因此，这些博客的内容结构和书中第5、9-11章节的框架相似，我在这里只不过罗列了书中的一些要点和个人的一点思考。</p>
+</blockquote>
+<p>在很多优化问题中，如<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM模型</a>，我们常常将原问题的优化转换成对偶问题的优化。对偶问题有时可以简化求解，以及对模型有更多的认识。本文主要介绍有关对偶问题的一些概念。</p>
+<h2 id="1-原始问题">1 原始问题</h2>
+<p>我们考虑一般的优化问题</p>
+<p>$$
+\begin{split}
+\min &amp;\quad f_0(x)\newline
+s.t. &amp;\quad f_i(x) \leq 0,i = 1,\ldots,m\newline
+&amp;\quad h_i(x) = 0, i = 1,\ldots,p
+\end{split}
+$$</p>
+<p>通常我们利用<a href="https://jiandan94.gitee.io/2020/09/lagrangian-and-kkt/">拉格朗日乘子法</a>进行优化，也就是</p>
+<p>$$
+\mathcal{L}(x, {\mu}, {\lambda}) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p \mu_i h_i(x)
+$$</p>
+<p>现在我们来看下面的极大化问题</p>
+<p>$$
+\theta_P(x) = \max_{{\mu}, {\lambda}: \lambda_i \geq 0} \mathcal{L}(x, {\mu}, {\lambda})
+$$</p>
+<ul>
+<li>如果上式的 $x$ 满足原始的约束</li>
+</ul>
+<p>此时 $f_i(x) \leq 0, h_i(x) = 0$，由于是最大化，我们只要令所有的 $\lambda_i = 0$ 即可，换句话说</p>
+<p>$$
+\theta_P(x) = f(x)
+$$</p>
+<ul>
+<li>如果上式的 $x$ 不满足原始的约束</li>
+</ul>
+<p>此时存在某个 $f_i(x) &gt; 0$ 或者 $h_i(x) \neq 0$。以某个 $f_i(x) &gt; 0$ 为例：由于是最大化，我们只用令 $\alpha_i \rightarrow +\infty$ 即可，换句话说</p>
+<p>$$
+\theta_P(x) = +\infty
+$$</p>
+<p>若我们对 $\theta_P(x)$ 进行最小化，显然有</p>
+<p>$$
+\min_{x} \theta_P(x) = \min_{x} \max_{{\mu}, {\lambda}: \lambda_i \geq 0}  \mathcal{L}(x, {\mu}, {\lambda}) = \min_{x} f(x)
+$$</p>
+<p>即最小化 $\theta_P(x)$ 和原始优化问题等价，因此我们常用 $\min_{x}\theta_P(x)$ 表示原始问题。</p>
+<p>定义原问题的最优值为</p>
+<p>$$
+p^* = \min_{x} \theta_P(x)
+$$</p>
+<h2 id="2-对偶问题">2 对偶问题</h2>
+<p>定义关于拉格朗日乘子 ${\mu}, {\lambda}$ 的函数</p>
+<p>$$
+\theta_D ({\mu}, {\lambda}) = \min_{x}\mathcal{L}(x, {\mu}, {\lambda})
+$$</p>
+<p>对其进行最大化</p>
+<p>$$
+\max_{{\mu}, {\lambda}: \lambda_i \geq 0} \theta_D ({\mu}, {\lambda}) = \max_{{\mu}, {\lambda}: \lambda_i \geq 0} \min_{x} \mathcal{L}(x, {\mu}, {\lambda})
+$$</p>
+<p>这个优化问题的形式和原问题 $\min_{x}\theta_P(x)$ 的形式很类似，只是最大化和最小化的顺序不一样。我们称上面的优化问题为原始问题的对偶问题（dual problem）。</p>
+<p>定义对偶问题的最优值为</p>
+<p>$$
+d^* = \max_{{\mu}, {\lambda}: \lambda_i \geq 0} \theta_D({\mu}, {\lambda})
+$$</p>
+<h2 id="3-原始问题和对偶问题的关系">3 原始问题和对偶问题的关系</h2>
+<p>【<strong>定理</strong>】若原始问题和对偶问题都有最优解，则</p>
+<p>$$
+d^* = \max_{{\mu}, {\lambda}: \lambda_i \geq 0} \min_{x} \mathcal{L}(x, {\mu}, {\lambda}) \leq \min_{x} \max_{{\mu}, {\lambda}: \lambda_i \geq 0}  \mathcal{L}(x, {\mu}, {\lambda}) = p^*
+$$</p>
+<p>【<strong>证明</strong>】对于任意给定的 $x, {\mu}, {\lambda}$，根据原始问题和对偶问题的定义显然有</p>
+<p>$$
+\min_{x} \mathcal{L}(x, {\mu}, {\lambda}) \leq \mathcal{L}(x, {\mu}, {\lambda}) \leq \max_{{\mu}, {\lambda}: \lambda_i \geq 0}  \mathcal{L}(x, {\mu}, {\lambda})
+$$</p>
+<p>也即是</p>
+<p>$$
+\theta_D({\mu}, {\lambda}) \leq \theta_P(x)
+$$</p>
+<p>所以有</p>
+<p>$$
+d^* = \max_{{\mu}, {\lambda}: \lambda_i \geq 0} \theta_D({\mu}, {\lambda}) \leq \min_{x} \theta_P(x) = p^*
+$$</p>
+<p>就证明了结论。$\blacksquare$</p>
+<p>【<strong>推论</strong>】设 $x ^ *$ 和 ${\mu} ^ *, {\lambda} ^ *$ 分别是原始问题和对偶问题的可行解，如果 $d ^ * = p ^ *$，那么 $x ^ *$ 和 ${\mu} ^ * , {\lambda} ^ *$ 都是各自问题的最优解。</p>
+<p>从上面的定理可知，当 $d ^ * = p ^ *$ 时，我们才能用对偶问题求解原始问题（当然是在对偶问题更易求的时候）。那么，满足什么条件才能使得 $d ^ * = p ^ *$ 成立呢？我们有下面的定理。</p>
+<p>【<strong>定理</strong>】（强对偶定理）若原始问题是凸优化问题，即 $f_i(x)$​​ 是凸函数和 $h_i(x)$​​ 是仿射函数；且可行域<strong>内部</strong>至少存在一个点使得<strong>所有不等式约束严格成立且等式约束成立</strong>（Slater条件），则有 $d^* = p^*$​​成立。</p>
+<p>【<strong>证明</strong>】首先，我们将所证明的凸问题重述如下：
+$$
+\begin{split}
+\min &amp;\quad f_0(x)\newline
+s.t. &amp;\quad f_i(x) \leq 0,i = 1,\ldots,m\newline
+&amp;\quad Ax = 0
+\end{split}
+$$
+其中 $A\in\mathbb{R}^{p\times n}$ 是线性约束的系数矩阵， 即 $h_i(x)=a_i^Tx$，其中 $a_i$ 是 $A$ 的第 $i$ 行。为了简化证明，我们对后续证明做出如下的先决假设：</p>
+<ol>
+<li>凸问题的定义域 $\mathcal{D} = \bigcap_{i=0}^m f_i(x)\cap \bigcap_{i=1}^p h_i(x)$ 内点集不为空；</li>
+<li>$\textrm{rank}(A)=p$，即系数矩阵行满秩。</li>
+</ol>
+<blockquote>
+<p>关于上述两个条件不满足时的强对偶定理的证明，我还没查阅文献，尚待研究。</p>
+</blockquote>
+<p>第一步，我们定义如下两个集合：
+$$
+\begin{split}
+&amp;\mathcal{A}=\lbrace (u,v,t) | \exists x\in\mathcal{D}, f_i(x)\leq u_i, i=1,\ldots,m, h_i(x) = v_i, i=1,\ldots, p, f_0(x)\leq t\rbrace,\newline
+&amp;\mathcal{B}=\lbrace (0,0,s) \in \mathbb{R}^m\times \mathbb{R}^p\times \mathbb{R} | s &lt; p^ *\rbrace.
+\end{split}
+$$
+根据凸集的定义很容易证明集合 $\mathcal{A}$​ 是凸集，此处省略证明过程。</p>
+<p>根据集合 $\mathcal{A}$​​ 和 $\mathcal{B}$​​ 的定义，我们可知两者不相交。设点 $(u,v,t)\in \mathcal{A}\cap\mathcal{B}$​​，由于 $(u,v,t)\in \mathcal{B}$​​，我们有 $u=0$​​ 和 $v=0$​​ 以及 $t&lt;p^* $​​ 成立；又 $(u,v,t)\in \mathcal{A}$​​，则存在 $x\in \mathcal{D}$​​， 使得
+$$
+\begin{split}
+&amp;f_i(x) \leq 0,i = 1,\ldots,m\newline
+&amp;h_i(x) \leq 0,i = 1,\ldots,p\newline
+&amp;f_0(x) \leq t &lt; p^*
+\end{split}
+$$
+成立，这和 $p^ *$ 是凸优化问题的最优解矛盾。因此，集合 $\mathcal{A}$ 和 $\mathcal{B}$ 不相交。</p>
+<p>第二步，我们不加证明而给出下面的分离超平面定理：</p>
+<p>【<strong>定理</strong>】（分离超平面定理）假设 $C$ 和 $D$ 是两个不相交的集合，那么存在 $a\neq 0$ 和 $b$ 使得对所有的 $x\in C$ 有 $a^Tx \leq b$，对所有的 $x\in D$ 有 $a^T\geq b$​成立。</p>
+<p>第三步，对集合 $\mathcal{A}$ 和 $\mathcal{B}$ 应用分离超平面定理，则存在 $(\tilde{\lambda}, \tilde{\mu}, \nu)\neq 0$ 和 $\alpha$，使得
+$$
+\forall (u, v, t)\in \mathcal{A}\Rightarrow \tilde{\lambda}^Tu + \tilde{\mu}^Tv + \nu t \geq\alpha \qquad (1)
+$$</p>
+<p>和</p>
+<p>$$
+\forall (u, v, t)\in \mathcal{B}\Rightarrow \tilde{\lambda}^Tu + \tilde{\mu}^Tv + \nu t \leq\alpha \qquad (2)
+$$</p>
+<p>这样，我们可以推断出 $\tilde{\lambda}\succeq 0$​​​​ 和 $\nu &gt;0$​​​​ 成立。因为根据 $\mathcal{A}$​​​​ 的定义，$u$​​​​ 和 $t$​​​​ 可以取到无穷，那么 $\tilde{\lambda}^T u + \nu t$​​​​ 在 $\mathcal{A}$​​​​ 上就无下界，这和分离超平面的结果矛盾。根据（2）式，$\forall t&lt;p^ *$​​​​ 有 $\nu t\leq \alpha$​​​​，意味着 $\nu p^ *\leq \alpha$​​​​（可以用反证法证明）。结合式（1），$\forall x\in \mathcal{D}$​​​​，满足</p>
+<p>$$
+\sum_{i = 1}^m \tilde{\lambda}_if_i(x) + \tilde{\mu}^T(Ax - b) + \nu f_0(x) \geq \alpha \geq \nu p^ * \qquad (3)
+$$</p>
+<p>第四步，对式（3）进行分类讨论：如果 $\nu &gt; 0$​​，那么不等式（3）两侧同除以 $\nu$​​，再令</p>
+<p>$$
+\lambda = \tilde{\lambda}/\nu, \mu = \tilde{\mu}/\nu
+$$</p>
+<p>则可以得到</p>
+<p>$$
+\sum_{i = 1}^m \lambda_if_i(x) + \mu^T(Ax - b) + f_0(x) \geq p^ *
+$$</p>
+<p>上式对 $x$ 求极小得到 $\theta_D(\mu, \lambda) \geq p^ *$成立。根据弱对偶结论，我们有 $\theta_D(\mu, \lambda) \geq p^ * $成立。因此，我们可知</p>
+<p>$$
+d^ * = p^ *
+$$</p>
+<p>成立。这也就证明了强对偶定理的结论。</p>
+<p>如果 $\nu = 0$，根据式（1），$\forall x\in \mathcal{D}$ 有</p>
+<p>$$
+\sum_{i = 1}^m \tilde{\lambda}_if_i(x) + \tilde{\mu}^T(Ax - b) \geq 0 \qquad (4)
+$$</p>
+<p>这对满足Slater条件的点 $\tilde{x}$​ 也满足式（4），即</p>
+<p>$$
+\sum _{i = 1}^m \tilde{\lambda}_i f _i(\tilde{x}) + \tilde{\mu}^ T(A\tilde{x} - b)  = \sum _{i = 1}^m \tilde{\lambda}_i f_i(\tilde{x}) \geq 0
+$$</p>
+<p>由于 $f_i(\tilde{x})&lt;0, \tilde{\lambda}_i\geq 0, i = 1, \ldots, m$，则有 $\tilde{\lambda}_i = 0, i=1, \ldots, m$ 成立。根据分离超平面定理，$(\tilde{\lambda}, \tilde{\mu}, \nu)\neq 0$，则可知 $\tilde{\mu}\neq 0$ 成立，即表明对任意的 $x\in \mathcal{D}$​ 成立着</p>
+<p>$$
+\tilde{\mu}^T(Ax - b) \geq 0 \qquad (5)
+$$</p>
+<p>此时再看Slater点 $\tilde{x}$​​， 有</p>
+<p>$$
+\tilde{\mu}^T(A\tilde{x} - b)  = 0
+$$</p>
+<p>考虑到 $\tilde{x}$​ 是 $\mathcal{D}$​ 的内点，则必然存在一个 $\Delta x$​ 使得 $\tilde{x}+\Delta x\in \mathcal{D} $​​，且</p>
+<p>$$
+\tilde{\mu}^T(A(\tilde{x}+\Delta x) - b)  \leq 0
+$$</p>
+<blockquote>
+<p>这个可以办到。因为上式等于 $\tilde{\mu}^T A\Delta x \leq 0$​​​​，即 $(A^T\tilde{\mu})^T\Delta x \leq 0$​​​​， $\Delta x$​​​​ 在 $\tilde{x}$​​​​ 的邻域中取，总能取一个和 $A^T\tilde{\mu}$​​​​ 方向相反的向量，从而内积为非正。</p>
+</blockquote>
+<p>注意到，为零的情形只有在 $A^T\tilde{\mu} = 0$ 时成立，而矩阵 $A$ 行满秩，则 $A^T\tilde{\mu} = 0\Rightarrow \tilde{\mu}=0$，这和 $\tilde{\mu} \neq 0$ 矛盾。若排除为零的情形，由于 $\tilde{x}+\Delta x\in \mathcal{D}$，负的结果又和式（5）矛盾。总之，$\nu = 0$ 这种情况不成立。</p>
+<p>综述，我们证明了定理的结论。$\blacksquare$</p>
+<p>【<strong>定理</strong>】若原始问题中 $f_i(x)$ 是凸函数和 $h_i(x)$ 是仿射函数，且可行域中至少存在一个点使得某个不等式约束严格成立，则 $x^ *$ 和 ${\mu}^ *, {\lambda}^ *$ 分别是原始问题和对偶问题的最优解的充分必要条件是 $x^ *$ 和 ${\mu}^ *,  {\lambda}^ *$ 满足KKT条件：</p>
+<p>$$
+\begin{split}
+&amp;\nabla_x \mathcal{L}(x^ *, {\mu}^ *, {\lambda}^ * ) = 0\newline
+&amp;\nabla_{{\mu}} \mathcal{L}(x^ *, {\mu}^ *, 					{\lambda}^ * ) = 0\newline
+&amp;\nabla_{{\lambda}} \mathcal{L}(x^ * , {\mu}^ * , 				{\lambda}^ * ) = 0\newline
+&amp;\lambda_i^ * f_i(x^ *) = 0, i = 1, \ldots, m\newline
+&amp;f_i(x^ *) \leq 0, i = 1, \ldots, m\newline
+&amp;\lambda_i^ * \geq 0, i = 1, \ldots, m
+\end{split}
+$$</p>
+<p>特别指出，$\lambda_i^* f_i(x^*) = 0, i = 1, \ldots, m$ 称为KKT的对偶互补松弛条件。</p>
+<h2 id="4-kkt条件在svm中的应用">4 KKT条件在SVM中的应用</h2>
+<p>我们在<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM模型</a>的求解中涉及到拉格朗日乘子法和对偶模型，考虑硬间距SVM模型</p>
+<p>$$
+\begin{split}
+&amp;\min \frac12 \Vert w\Vert_2^2\newline
+&amp;y_i(w^Tx_i + b) \geq 1, i = 1,\ldots,n\newline
+\end{split}
+$$</p>
+<p>它的拉格朗日函数就是</p>
+<p>$$
+\mathcal{L}(w, b, \alpha) = \frac12 \Vert w\Vert_2^2 + \sum_{i=1}^n \alpha_i (1 - y_i(w^Tx_i + b)), \alpha_i \geq 0
+$$</p>
+<p>最终求得的超平面为</p>
+<p>$$
+f(x) = \sum_{i=1}^n \alpha_i x_i^Tx + b
+$$</p>
+<p>易知其只和 $\alpha_i &gt; 0$ 的样本点有关。另一方面，根据互补对偶条件</p>
+<p>$$
+\alpha_i(1 - y_i(w^Tx_i + b)) = 0, \quad i = 1, \ldots, n
+$$</p>
+<p>当 $\alpha_i &gt; 0$ 时有 $1 - y_i(w^Tx_i + b) = 0$，也即是这些影响平面构建的样本点恰处在临界平面上，即所谓的支持向量。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://qkai-stat.github.io/2020/09/dual-problem/" title="对偶模型理论基础" target="_blank" rel="external">https://qkai-stat.github.io/2020/09/dual-problem/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://qkai-stat.github.io/qk.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
+        <div>科研狗, 诗词, 书法, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://qkai-stat.github.io/2020/09/lagrangian-and-kkt/" title="拉格朗日乘子法和KKT条件"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://qkai-stat.github.io/2020/09/rkhs-and-kernel/"
+                    title="再生希尔伯特空间与核函数"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,wechat,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="mailto:qkai94@163.com" target="_blank" title="email" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-email"></i></a></li>
+    <li><a href="https://qkai-stat.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2012  -
+    2025
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://qkai-stat.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://qkai-stat.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/qkai-stat.github.io\/',
+            CONTENT_URL: 'https:\/\/qkai-stat.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://qkai-stat.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://code.bdstatic.com/npm/leancloud-storage@4.12.0/dist/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: true ,
+        notify: true ,
+        appId: 'q0CqEA1pk8v871a9wDu65DRr-gzGzoHsz',
+        appKey: 'dfeCUT7S3cFVvUxX8cG4VEWF',
+        placeholder: '欢迎留言【填写邮箱后才能接收回复通知】',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false ,
+        serverURLs: 'https:\/\/q0cqea1p.lc-cn-n1-shared.com'
+});
+</script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174149005-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+  </body>
+</html>
