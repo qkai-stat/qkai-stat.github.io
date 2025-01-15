@@ -356,7 +356,7 @@
       </div>
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
-      <p>变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">LASSO</a>后，基于正则化模型的变量选择研究日益壮大、独领风潮。LASSO采用 $l _1$ 惩罚，得益于 $l _1$ 罚项在零点的奇异性，LASSO可以同时实现系数稀疏化（变量选择）和系数估计。事实上，LASSO估计可以看成一个软阈值（soft thresholding）准则，即它将绝对值较小的系数估计直接压缩成零，而较大的系数估计则做了一个有偏估计。因此，虽然LASSO优点众多，但是不容忽视的是LASSO有对大系数低估的缺陷。本文介绍了<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>提出一种非凸罚项，称之为SCAD（smoothly clipped absolute deviation）罚项。与LASSO不同，SCAD非凸，其对应的正则化模型不仅能够同时实现变量选择和参数估计，还拥有更加好的统计性质，即Oracle性。</p>
+      <p>变量选择是高维统计建模中的重要内容。自1996年Tibshirani提出<a href="/2020/04/lasso-introduction/">LASSO</a>后，基于正则化模型的变量选择研究日益壮大、独领风潮。LASSO采用 $l _1$ 惩罚，得益于 $l _1$ 罚项在零点的奇异性，LASSO可以同时实现系数稀疏化（变量选择）和系数估计。事实上，LASSO估计可以看成一个软阈值（soft thresholding）准则，即它将绝对值较小的系数估计直接压缩成零，而较大的系数估计则做了一个有偏估计。因此，虽然LASSO优点众多，但是不容忽视的是LASSO有对大系数低估的缺陷。本文介绍了<a href="https://doi.org/10.1198/016214501753382273">Fan和Li（2001）</a>提出一种非凸罚项，称之为SCAD（smoothly clipped absolute deviation）罚项。与LASSO不同，SCAD非凸，其对应的正则化模型不仅能够同时实现变量选择和参数估计，还拥有更加好的统计性质，即Oracle性。</p>
 <h2 id="1-问题的引入">1 问题的引入</h2>
 <p>考虑线性模型</p>
 <p>$$
@@ -429,7 +429,7 @@ $$</p>
 <p>是有限的（暗示最大、最小特征根有限）且在 $\beta = \beta _0$ 处正定。</p>
 <p>【C3】存在包含真是参数 $\beta _0$ 的开集 $\omega$ 使得，$\forall \beta\in \omega$，对几乎所有的 $V$ 对应的密度函数 $f(V, \beta)$ 可以进行三阶求导。</p>
 <p>以上条件都是保证经典极大似然估计量渐近正态性的正则条件。</p>
-<p>基于以上表述，我们首先证明SCAD估计量具有 $\sqrt{n}$ 一致性，这是LASSO估计所不具有的性质（参见我关于<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节），具体结果如定理1所述。</p>
+<p>基于以上表述，我们首先证明SCAD估计量具有 $\sqrt{n}$ 一致性，这是LASSO估计所不具有的性质（参见我关于<a href="/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节），具体结果如定理1所述。</p>
 <p>【<strong>定理1</strong>】假设C1-C3满足。若 $\max\lbrace |p _{\lambda}''(|\beta _{j0}|):\beta _{j0}\neq 0|\rbrace$，则 $Q(\beta)$ 存在一个局部最大值点 $\hat{\beta}$ 满足 $\Vert \hat{\beta} - \beta _0\Vert = O _p(n^{-1/2} + a _n)$，其中 $a _n = \max\lbrace p _{\lambda}'(|\beta _{j0}|): \beta _{j0}\neq 0\rbrace$。</p>
 <p>【<strong>证明</strong>】令 $\alpha _n = n^{-1/2} + a _n$。为了证明定理1的结论，我们只需表明对任意给定的 $\epsilon &gt; 0$，存在一个大的常数 $C&gt;0$ 使得</p>
 <p>$$
@@ -452,7 +452,7 @@ $$</p>
 \sqrt{q} n \alpha _n a _n \Vert u\Vert + n\alpha^2 \max\lbrace |p _{\lambda}''(|\beta _{j0}|):\beta _{j0}\neq 0|\rbrace \Vert u\Vert
 $$</p>
 <p>当 $n\rightarrow \infty$ 时，这同样被第二项控制大小。因此，$D _n(u) &lt; 0, n\rightarrow \infty$，概率不等式（3）成立，即定理1的结论成立。$\blacksquare$</p>
-<p>结合SCAD罚项公式，当 $\lambda\rightarrow 0, n\rightarrow \infty$ 时，存在某个 $N&gt;0$，使得 $n &gt; N$ 时满足 $\lambda &lt; \min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$，我们始终有 $a _n = 0$。因此，SCAD估计量具有 $\sqrt{n}$ 一致性。当然，这里有个小问题，即 $\lambda$ 的衰减速率要快于 $\min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$ 的衰减速率，这在<a href="https://doi.org/10.1214/009053604000000256">Fan和Peng（2004）</a>中有细致的分析。对于LASSO而言，$a _n = \lambda$，这表明LASSO估计要想具有$\sqrt{n}$ 一致性，$\lambda$ 必须具有 ${n}^{-1/2}$ 的衰减速率。然而，这跟LASSO估计的变量选择一致性对 $\lambda$ 的要求相冲突（参见我关于<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节）。</p>
+<p>结合SCAD罚项公式，当 $\lambda\rightarrow 0, n\rightarrow \infty$ 时，存在某个 $N&gt;0$，使得 $n &gt; N$ 时满足 $\lambda &lt; \min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$，我们始终有 $a _n = 0$。因此，SCAD估计量具有 $\sqrt{n}$ 一致性。当然，这里有个小问题，即 $\lambda$ 的衰减速率要快于 $\min\lbrace|\beta _{j0}|:\beta _{j0}\neq 0\rbrace$ 的衰减速率，这在<a href="https://doi.org/10.1214/009053604000000256">Fan和Peng（2004）</a>中有细致的分析。对于LASSO而言，$a _n = \lambda$，这表明LASSO估计要想具有$\sqrt{n}$ 一致性，$\lambda$ 必须具有 ${n}^{-1/2}$ 的衰减速率。然而，这跟LASSO估计的变量选择一致性对 $\lambda$ 的要求相冲突（参见我关于<a href="/2021/10/irrepresentable-condition/">LASSO性质讨论的博客</a>，3.3.2小节）。</p>
 <p>SCAD估计量具有 $\sqrt{n}$ 速率的参数估计一致性，这并不能说明SCAD估计量具有稀疏性，我们用下面的引理1来阐明该结论。</p>
 <p>【<strong>引理1</strong>】假设C1-C3满足。若</p>
 <p>$$

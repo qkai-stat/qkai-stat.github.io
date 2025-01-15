@@ -384,13 +384,13 @@ has_devel()
 <h2 id="2-rstudio可视化制作">2 RStudio可视化制作</h2>
 <h3 id="21-建立r包项目">2.1 建立R包项目</h3>
 <p>基于RStudio，我们可以可视化的构建R包。首先，通过RStudio菜单栏的File &gt; New Project创建一个项目：</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-construct1.png" width="400"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/pkg-construct1.png" width="400"/>
 <p>在出现的上述界面中选择New Directory &gt; R package，得到R包创建初始化界面：</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-construct2.png" width="400"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/pkg-construct2.png" width="400"/>
 <p>在Package name下填上自己R包的名称，这里是AWENSVM；通过Add按钮添加R包所需的R函数代码，这里依次添加了上述的三个函数的R代码；接着选择将该项目（构建R包）放在哪个目录下，这里是电脑桌面；最后点击Create Project即可建立本次R包开发的项目。</p>
 <h3 id="22-更改包文件信息">2.2 更改包文件信息</h3>
 <p>点击Create Project之后，在桌面上就出现一个名为AWENSVM的文件夹，里面包含了下述文件/目录：</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/pkg-files.png" width="600"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/pkg-files.png" width="600"/>
 <p>为了顺利开发R包以及增强R包的使用性，我们需要对该目录的一些文档进行自定义修改，主要涉及<code>DESCRIPTION</code>文件、<code>NAMESPACE</code>文件、R文件夹和man文件夹。下面逐一介绍各自的作用和修改方式。</p>
 <p><code>DESCRIPTION</code>描述了所建R包的信息，我们可以在RStudio中打开并编辑它。如果要分享自己的R包，填上相关信息是必要且有意义的。</p>
 <pre><code class="language-R">Package: AWENSVM
@@ -465,19 +465,19 @@ awensvm &lt;- function(x, y, lam1, lam2, weightMat = &quot;identity&quot;, kerne
 }
 </code></pre>
 <p>保存后，运行<code>devtools::document()</code>即可在man中生成<code>awensvm</code>函数的帮助文档<code>awensvm.Rd</code>。可以直接在RStudio中打开该<code>.Rd</code>文档</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-help-Rd.png" width="600"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/awensvm-help-Rd.png" width="600"/>
 <p>然后点击Preview即可在RStudio中预览该文档</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-help.png" width="600"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/awensvm-help.png" width="600"/>
 <p>这和我们通常使用<code>?函数名</code>查看函数帮助文档的界面相同。需要注意的是，每次修改描述注释后，都要重新运行<code>devtools::document()</code>才能刷新帮助文档。</p>
 <h3 id="23-生成r包">2.3 生成R包</h3>
 <p>在RStudio菜单栏中选择Build &gt; Check Package来检查R包是否可以成功编译。运行结束后，在工作目录生成AWENSVM.Rcheck文件夹，若其中的日志文件显示<code>*DONE</code>，则表示R包没有问题。此时已经可以在RStudio使用<code>library()</code>载入AWENSVM包，并用<code>?awensvm</code>查看说明文档。然而，此时AWENSVM包并没有真的安装在R的library目录下，我们下面介绍如何生成R包源文件并安装。</p>
 <p>在RStudio菜单栏中选择Build &gt; Build Source Package进行R包编译，成功后即在工作目录生成R包源文件</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-build.png" width="600"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/awensvm-build.png" width="600"/>
 <p>使用如下命令进行安装测试</p>
 <pre><code class="language-R">install.packages(&quot;AWENSVM_0.1.0.tar.gz&quot;, repos = NULL, type = &quot;source&quot;)
 </code></pre>
 <p>出现下面的<code>*DONE</code>结果即表明成功安装所生成的R包，此时在R的library目录下可看到名为AWENSVM的文件夹。</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/awensvm-install.png" width="600"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/awensvm-install.png" width="600"/>
 <blockquote>
 <p>将生成的<code>.tar.gz</code>源文件分享给他人，即可按照上述的方式安装开发的R包。</p>
 </blockquote>
@@ -547,7 +547,7 @@ round(sum(diag(table(prey_noweight, y)))/n, 4)
 # [1] 0.8667
 </code></pre>
 <p>根据模型的计算结果，我们画出不加权模型的预测超平面示意图</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/noweighted.png" width="450"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/noweighted.png" width="450"/>
 <p>接着，我们采用AWENSVM的加权思路对数据进行加权处理。为简便，我们仍然采用前面的最优参数进行模型训练，相关代码为</p>
 <pre><code class="language-R"># aenl_weight_transform是线性AWENSVM的权重计算函数
 # 参数k和g可以用网格法寻优，这里仅以2和0.5作示例
@@ -562,7 +562,7 @@ round(sum(diag(table(prey_weight, ty)))/n, 4)
 # [1] 0.8733
 </code></pre>
 <p>根据模型的计算结果，我们画出不加权模型的预测超平面示意图</p>
-<img src= "http://jiandan94.gitee.io/md-figures/RpackageMake/weighted.png" width="450"/>
+<img src= "http://qkai-stat.github.io/md-figures/RpackageMake/weighted.png" width="450"/>
 <p>从预测准确率来看，加权模型的结果更好。从预测超平面示意图来看，加权模型的超平面稍偏下，表明受到上方异常数据点的吸引更小，这也表明了模型的有效性。</p>
 <h2 id="5-结语">5 结语</h2>
 <p>本文简单介绍了R包制作的核心流程，感兴趣的读者可以动手实践起来，毕竟R in action！当然，本文的内容非常粗浅，只涉及到了R代码的R包制作，没有涉及与C++代码的混合制作方式，这些内容会在后续的推文中与大家分享。读者可参考Hadley所著的《R Packages》（中文名《R包开发》）了解更全面的知识。</p>

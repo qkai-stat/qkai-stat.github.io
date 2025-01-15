@@ -453,7 +453,7 @@ op_funC$b # funC得到的截距估计
 # [1] -1.201495
 </code></pre>
 <p>从上述的运行结果来看，<code>funR</code>寻找最优参数耗时15.10秒，而用C++改良后的<code>funC</code>则只需4.93秒，速率提升较为明显。此外，我们也看到两者找到的最优参数、分类直线的法向量和截距项估计均相同——这是显然的，因为我们仅仅用C++重写了部分代码，相应的精度等设置并未改变，则结果自然与原始函数一致。</p>
-<img src="http://jiandan94.gitee.io/md-figures/rcpp/lsvm-classifier.png" width="400"/>
+<img src="http://qkai-stat.github.io/md-figures/rcpp/lsvm-classifier.png" width="400"/>
 <p>上述的数据和分类直线如上图所示。其中蓝色*表示正数据点，红色o表示负数据点，黑色实线为分类直线。</p>
 <h2 id="5-结语">5 结语</h2>
 <p>本文简单介绍了<code>Rcpp</code>程序包的功能，以及展示了使用<code>Rcpp</code>程序包后对原始R代码速率的提升幅度。关于<code>Rcpp</code>的详细使用方法，读者可以阅读<code>Rcpp</code>程序包开发者Dirk Eddelbuettel所著的《Rcpp：R与C++的无缝整合》（英文书名《Seamless R and C++ Integration with Rcpp》）。虽然C++在短时间内难以掌握，但是通过简单地学习一些C++命令和<code>Rcpp</code>程序包的使用方法，完全可以很快上手并优化手中的R代码。</p>

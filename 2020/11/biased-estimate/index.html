@@ -363,7 +363,7 @@ $$
 y = \beta_1 x_1 + \ldots + \beta_p x_p + \epsilon
 $$
 其中 $\beta_1,\ldots,\beta_p$ 为系数，也就是我们需要估计未知的<strong>非随机</strong>参数；$\epsilon$ 是<strong>随机扰动</strong>（搜集数据时会面临各种各样的误差，这些不确定性因素归结在一起就是随机扰动项）。从上述的模型中不难看出，<strong>虽然 $\beta$ 和 $x_i$ 都是非随机的，但是 $y$ 的求和式中含有随机扰动 $\epsilon$，则 $y$ 是随机的。</strong></p>
-<p>如果大家有统计理论基础，就知道估计上述的未知系数有很多成熟的方法（参见<a href="https://jiandan94.gitee.io/2019/08/forum-ols/">往期文章</a>）。我们以最小二乘为例，它给出的系数估计如下
+<p>如果大家有统计理论基础，就知道估计上述的未知系数有很多成熟的方法（参见<a href="/2019/08/forum-ols/">往期文章</a>）。我们以最小二乘为例，它给出的系数估计如下
 $$
 \hat{\beta}=(X^TX)^{-1}X^TY
 $$
@@ -477,7 +477,7 @@ $$
 $$
 \tilde{\beta} = \min \frac12\Vert Y-X\beta\Vert^2 + \lambda\sum_{i=1}^p\beta_i^2
 $$
-其中 $\lambda&gt;0$ 为模型的调节参数。这个形式和当前流行的lasso类罚函数模型非常相似，感兴趣的朋友可以参见之前关于<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">lasso模型</a>的文章。限于篇幅，就不展开介绍了。</p>
+其中 $\lambda&gt;0$ 为模型的调节参数。这个形式和当前流行的lasso类罚函数模型非常相似，感兴趣的朋友可以参见之前关于<a href="/2020/04/lasso-introduction/">lasso模型</a>的文章。限于篇幅，就不展开介绍了。</p>
 <p>从前面的分析可以看出，岭估计中的参数 $k$ 的选取十分重要。当 $k=0$ 时，这就是普通的最小二乘，显然不能处理复共线性的问题；当 $k$ 很大时，岭估计可以克服复共线性问题，但此时的偏差变得很大，这也不是我们所希望的。实际使用中，我们可以利用交叉验证（cross validation，CV）、广义交叉验证（generalized  cross  validation，GCV）等准则来选取岭参数。</p>
 <h2 id="5-一些说明">5 一些说明</h2>
 <p>第一，有偏和无偏不是专门为线性模型而设的概念。这里从线性模型的角度来谈有偏估计，一方面是希望可以帮助理解有偏估计的含义，另一方面是让大家可以看到这个概念在实际问题中的意义。此外，线性模型中发展建立起的有偏估计方法已然成了一门重要的统计理论，因此在线性模型的框架下谈有偏估计更加合适。</p>
@@ -514,14 +514,14 @@ hat_beta
 ## x3 -103.5417
 </code></pre>
 <p>三个系数估计同真实值 $(1,2,1)$ 差距十分明显，也即是MSE异常大。如果我们利用前面的模型再产生100个新的数据，用上述估计的系数来进行预测，结果如下图所示</p>
-<img src="http://jiandan94.gitee.io/md-figures/lm/ols-predict.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/lm/ols-predict.png" width="600"/>
 <p>可见，受到复共线性影响的最小二乘估计表现十分糟糕。</p>
 <p>我们使用R中的MASS程序包进行岭估计。载入程序包，我们设置 $[0,1]$ 之间等距100个点为模型岭参数的候选值，运行下面的代码训练岭模型</p>
 <pre><code class="language-R">data &lt;- data.frame(x1 = x1, x2 = x2, x3 = x3, y = y)
 ridge_fit &lt;- lm.ridge(y ~ ., lambda = seq(0, 1, length = 100), data, model = TRUE)
 </code></pre>
 <p>查看三个系数随岭参数增大的关系图（岭迹图）</p>
-<img src="http://jiandan94.gitee.io/md-figures/lm/ridge-plot.jpg" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/lm/ridge-plot.jpg" width="600"/>
 <p>可见随着岭参数的增大，系数估计趋于稳定。结合第5节第二点的说明，我们要尽量选择较小的岭参数，在克服复共线性问题的同时尽量减小偏差。直接铜鼓观察图像来选择岭参数十分困难，我们利用程序包自带的函数选择GCV准则下的最优岭参数以以及对应的岭估计</p>
 <pre><code class="language-R">ridge_fit$lambda[which.min(ridge_fit$GCV)]
 ## [1] 0.3131313
@@ -530,7 +530,7 @@ ridge_fit$coef[, which.min(ridge_fit$GCV)]
 ## 0.5302685 2.0396480 1.8136743 
 </code></pre>
 <p>这时的岭估计和真实的系数就十分接近了。我们把前面产生的100个新数据用岭估计的系数进行预测，结果如下图所示</p>
-<img src="http://jiandan94.gitee.io/md-figures/lm/ridge-predict.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/lm/ridge-predict.png" width="600"/>
 <p>可见预测结果和真实值的差距非常小！这也印证了有偏估计在实际问题中确实可以发挥巨大的威力！</p>
 <h2 id="7-结语">7 结语</h2>
 <p>本期我们主要介绍了线性模型中的有偏估计的概念，具体结合岭估计展示了有偏估计在克服复共线性问题时的威力。关于有偏估计的理论这里只是冰山一角，感兴趣的朋友可以查阅相关文献了解更多关于有偏估计的知识。欢迎在下方的评论区一起交流~~</p>

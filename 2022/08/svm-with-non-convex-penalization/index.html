@@ -356,7 +356,7 @@
       </div>
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
-      <p>传统的<a href="https://jiandan94.gitee.io/2020/09/svm/">支持向量机模型</a>（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失+罚项的结构，其中SVM采用的是hinge损失函数+$l_2$ 罚项。然而，$l_2$ 罚项没有稀疏能力，这使得传统SVM在层见迭出的高维数据分析中应用受限。随着统计（和优化）领域中<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">LASSO</a>等具有变量选择能力的罚项的研究发展，一些学者提出稀疏SVM并讨论了估计量的相关性质。本文主要介绍了中度高维（moderately high dimensions）下<strong>非凸惩罚线性SVM</strong>的变量选择一致性，主要内容来源于对<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>的翻译。</p>
+      <p>传统的<a href="/2020/09/svm/">支持向量机模型</a>（support vector machine，SVM）可以适用统计中的正则化模型框架，即损失+罚项的结构，其中SVM采用的是hinge损失函数+$l_2$ 罚项。然而，$l_2$ 罚项没有稀疏能力，这使得传统SVM在层见迭出的高维数据分析中应用受限。随着统计（和优化）领域中<a href="/2020/04/lasso-introduction/">LASSO</a>等具有变量选择能力的罚项的研究发展，一些学者提出稀疏SVM并讨论了估计量的相关性质。本文主要介绍了中度高维（moderately high dimensions）下<strong>非凸惩罚线性SVM</strong>的变量选择一致性，主要内容来源于对<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>的翻译。</p>
 <h2 id="1-问题的引入">1 问题的引入</h2>
 <p>考虑二分类问题，令 $\lbrace(X_i, Y_i)\rbrace_{i=1}^n$ 是从未知总体分布 $P(X, Y)$ 中随机抽取的样本，其中 $Y_i\in {-1, +1}$ 是标签，$X_i = (X_{i0}, X_{i1}, \ldots, X_{ip})^T = (1, (X_i^ *)^T)^T$ 是协变量。那么，传统的线性SVM（linear SVM）可以写成如下的优化问题：</p>
 <p>$$
@@ -390,11 +390,11 @@ $$</p>
 <p>其中 $\lambda_n$（通常简记为 $\lambda$）为调节参数（tuning parameter），$p_{{\lambda_n}}(\cdot)$ 是非凸罚项，满足以下两个假设：</p>
 <p>【假设1】对称函数 $p_{\lambda}(t)$ 在 $t\in [0, +\infty)$ 上是非减和凹的，且 $p_{\lambda}'(t)$ 在 $(0, \infty)$ 上连续且满足 $p_{\lambda}(0) = 0$。</p>
 <p>【假设2】存在 $a&gt;1$ 满足 $\lim_{t\rightarrow 0+}p_{\lambda}'(t) = \lambda$，$p_{\lambda}'(t) \geq \lambda - t/a$ 对 $0 &lt; t &lt; a\lambda$ 成立，且 $p_{\lambda_n}'(t) = 0$ 对 $t \geq a\lambda$ 成立。</p>
-<p>在后续的讨论中，我们主要考虑SCAD罚项（<a href="https://jiandan94.gitee.io/2022/09/scad">Fan and Li（2001）</a>）来进行相关理论分析，其他满足上述两个假设的非凸罚项，如MCP（<a href="https://doi.org/10.1214/09-AOS729">Zhang（2008）</a>），相关分析类似可参找原文<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>。SCAD罚项的表达式如下</p>
+<p>在后续的讨论中，我们主要考虑SCAD罚项（<a href="/2022/09/scad">Fan and Li（2001）</a>）来进行相关理论分析，其他满足上述两个假设的非凸罚项，如MCP（<a href="https://doi.org/10.1214/09-AOS729">Zhang（2008）</a>），相关分析类似可参找原文<a href="https://doi.org/10.1111/rssb.12100">Xiang等（2016）</a>。SCAD罚项的表达式如下</p>
 <p>$$
 p_{\lambda}(|\beta|) = \lambda |\beta| I(0\leq \beta&lt; \lambda) + \frac{a\lambda |\beta| - (\beta^2 + \lambda^2)/2}{a-1}I(\lambda \leq |\beta| \leq a\lambda) + \frac{(a+1)\lambda^2}{2}I(|\beta|&gt;a\lambda)
 $$</p>
-<p>其中 $I(\cdot)$ 是示性函数，$a &gt; 2$ 为某个既定参数，通常取 $a = 3.7$ （<a href="https://jiandan94.gitee.io/2022/09/scad">Fan and Li （2001）</a>）。</p>
+<p>其中 $I(\cdot)$ 是示性函数，$a &gt; 2$ 为某个既定参数，通常取 $a = 3.7$ （<a href="/2022/09/scad">Fan and Li （2001）</a>）。</p>
 <h2 id="2-若干记号与假设">2 若干记号与假设</h2>
 <p>为了后续的表述和证明方便，我们在本小节给出一些重要的记号和前提假设，后续的证明都是基于这些假设推导的。</p>
 <p>首先，我们给出总体hinge损失函数的梯度向量（gradient vector）和Hessian矩阵。令 $L(\beta_1) = \mathbb{E}\lbrace W(1 - YZ^T\beta_1)_+\rbrace$ 为只含有重要变量的线性加权hinge损失。定义 $S(\beta_1) = (S(\beta_1)_j)$ 是 $(q+1)$-维向量，即</p>
@@ -738,7 +738,7 @@ $$</p>
 <p>综上，也就证明了定理1的结论。$\blacksquare$</p>
 <p>定理1主要刻画了hinge损失函数在Oracle估计量处次梯度的行为特征。具体而言，在通常的设定下，依概率1满足，对应重要变量的次梯度为零；对应无关变量的次梯度离零不会很远。定理1对证明Oracle性质有重要的启发作用。</p>
 <h3 id="33-局部oracle性质">3.3 局部Oracle性质</h3>
-<p>在证明<a href="https://jiandan94.gitee.io/2021/10/irrepresentable-condition/">LASSO的变量选择一致性</a>时，我们先找到LASSO模型和估计之间联结的桥梁——KKT条件，再分析稀疏解对应的KKT条件成立的概率，最后论证LASSO的变量选择一致性。与之类似，我们证明非凸惩罚SVM的局部Oracle性质，也要找到类似KKT条件联结非凸惩罚SVM和估计之间的条件，再讨论其成立的概率。与LASSO不同，非凸惩罚SVM是非凸优化，我们在此要研究针对DC优化（difference convex programming）的充分局部最优性条件（sufficient local optimality condition），而不是KKT条件。</p>
+<p>在证明<a href="/2021/10/irrepresentable-condition/">LASSO的变量选择一致性</a>时，我们先找到LASSO模型和估计之间联结的桥梁——KKT条件，再分析稀疏解对应的KKT条件成立的概率，最后论证LASSO的变量选择一致性。与之类似，我们证明非凸惩罚SVM的局部Oracle性质，也要找到类似KKT条件联结非凸惩罚SVM和估计之间的条件，再讨论其成立的概率。与LASSO不同，非凸惩罚SVM是非凸优化，我们在此要研究针对DC优化（difference convex programming）的充分局部最优性条件（sufficient local optimality condition），而不是KKT条件。</p>
 <p>注意到，虽然非凸惩罚SVM（3）是非凸优化问题，但是它可以写成两个凸函数的差，即</p>
 <p>$$
 Q(\beta) = g(\beta) - h(\beta)

@@ -354,7 +354,7 @@
       </div>
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
-      <p>在运用<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM</a>处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space）的概念。这些听上去很高大上的名词，其基本含义并不是十分生涩。本文主要介绍再生核希尔伯特空间和核函数的相关内容。</p>
+      <p>在运用<a href="/2020/09/svm/">SVM</a>处理非线性可分数据时，我们会用到核函数进行转换。与之同时，我们也常常遇到再生核希尔伯特空间（Reproducing Kernel Hilbert Space）的概念。这些听上去很高大上的名词，其基本含义并不是十分生涩。本文主要介绍再生核希尔伯特空间和核函数的相关内容。</p>
 <h2 id="1-希尔伯特空间">1 希尔伯特空间</h2>
 <p>现代数学研究问题常常以集合为对象，而赋予了某种结构或规则的集合便称为空间。所谓结构或规则，它必须可以描述集合中元素之间的某种关系，这个关系你可以自定义，如代数运算、距离、内积等等。下面介绍一些具体的空间概念，这对理解希尔伯特空间有很大的帮助。</p>
 <h3 id="11-线性空间">1.1 线性空间</h3>
@@ -420,7 +420,7 @@ $$</p>
 $$</p>
 <p>但是范数的定义不满足上述的线性性，故而<strong>内积是比范数更具体的一个概念</strong>。内积将两个矢量与一个纯量连接起来，允许我们严格地谈论矢量的“夹角”和“长度”，并进一步谈论矢量的正交性。</p>
 <p>我们用一张图来描述线性空间、度量空间、赋范空间和内积空间的关系：</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/space-comparison.png" width = 600 /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/space-comparison.png" width = 600 /></p>
 <h3 id="15-欧几里得空间">1.5 欧几里得空间</h3>
 <p>欧式空间是定义了<strong>内积</strong>的<strong>有限维实线性空间</strong>。</p>
 <h3 id="16-希尔伯特空间">1.6 希尔伯特空间</h3>
@@ -554,7 +554,7 @@ $$
 $$</p>
 <h3 id="42-核技巧">4.2 核技巧</h3>
 <p>SVM的基本原理是从线性可分数据出发的，如果数据不可分直接用SVM建模显然不合理。为此，我们考虑<strong>将原始的原本映射到更高维度的空间</strong>中，使得在高维空间中的每个样本是线性可分的。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/kernel-transformation1.png" width = 600 /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/kernel-transformation1.png" width = 600 /></p>
 <p>【<strong>定理</strong>】如果原始空间是有限维的，则一定存在一个高维空间使样本线性可分。</p>
 <p>事实上，给定一个样本空间 $\mathcal{X}$ 后，将其变成线性可分的映射的具体形式一般很难确定。然而，我们可以借助核函数来定义这样的映射。显然，若核函数选的不合适，对应的映射空间不能将原始数据线性可能，那最终的SVM分类效果也不太好。尽管如此，比起确定映射的具体形式，选择核函数显得要容易多了。</p>
 <p>对于原始空间 $\mathcal{X}$ 的样本点 $x_1, \ldots, x_n \in R^p$，给定核函数 $\kappa(x, y)$，做映射
@@ -565,7 +565,7 @@ $$
 $$
 \phi(x)^T w + b = 0
 $$
-根据线性<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM的求解思路</a>，我们最后可以得到高维SVM的对偶模型为
+根据线性<a href="/2020/09/svm/">SVM的求解思路</a>，我们最后可以得到高维SVM的对偶模型为
 $$
 \begin{split}
 &amp; \min \frac12\alpha^TD K D\alpha - 1^T\alpha\newline

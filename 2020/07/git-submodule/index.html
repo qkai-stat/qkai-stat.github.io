@@ -365,16 +365,16 @@
 git clone git@gitee.com:jiandan94/main-repository.git
 </code></pre>
 <p>由于在创建仓库时我选择使用README初始化仓库，因此可以在本地看到仓库中有下面的文件</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/clone-main.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/clone-main.png" width="600"/>
 <p>下面，我们将创建的sub-module仓库以Submodule身份克隆到main-repository仓库中</p>
 <pre><code class="language-R">cd main-repository  # 进入到main-repository仓库根目录
 # git submodule add &lt;子仓库的url&gt; &lt;子仓库本地路径&gt;
 git submodule add git@gitee.com:jiandan94/sub-module.git submod
 </code></pre>
 <p>我将Submodule直接放在main-repository仓库的根目录下，执行上述命令后可见目录中文件变成</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/get-submodule.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/get-submodule.png" width="600"/>
 <p>多了一个<code>.gitmodules</code>文件和submod文件夹，其中sub-module仓库中的文件都存放在submod文件夹中。进入到main-repository仓库的<code>config</code>文件中，可见最后一行添加了Submodule的信息</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/submodule-info.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/submodule-info.png" width="600"/>
 <p>至此，我们成功的将一个仓库以Submodule身份引入主仓库。</p>
 <p>现在我们将main-repository仓库同步到远程仓库中</p>
 <pre><code class="language-R">git add .
@@ -382,11 +382,11 @@ git commit -m &quot;upload submodule&quot;
 git push -u origin master
 </code></pre>
 <p>这时去Gitee上查看main-repository仓库，发现多了<code>.gitmodules</code>文件和一个Submodule链接，点击链接可以跳转到我们在Gitee上创建的sub-module仓库。</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/gitee-main-submodule.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/gitee-main-submodule.png" width="600"/>
 <h2 id="3-克隆带有submodule的仓库">3 克隆带有Submodule的仓库</h2>
 <p>从上面可以看出，提交一个含有Submodule的仓库，不会将本地Submodule中的文件上传到main-repository仓库中，那么问题来了：克隆一个含有Submodule的远程仓库，会把Submodule仓库中的文件克隆下来么？</p>
 <p>我们不妨将本地的main-repository仓库文件夹删除掉，然后再次执行克隆命令得到</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/clone-mian-submodule.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/clone-mian-submodule.png" width="600"/>
 <p>然而，进入到submod文件夹中，发现是一个空文件夹！</p>
 <blockquote>
 <p>也就是说，直接克隆一个含有Submodule的仓库，是不会将Submodule对应的仓库中的文件克隆下来。</p>
@@ -402,7 +402,7 @@ git submodule update
 </code></pre>
 <p>相当于进入到submod文件夹中执行<code>git pull</code>，将文件拉到最新。</p>
 <p>不过，在本地的submod文件夹中做修改，直接进入到submod中进行<code>push</code>通常是不会成功的。例如我们在submod文件夹中新建一个sub-bb.md文件，然后<code>cd</code>到submod文件夹中进行同步，</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/submodule-commit.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/git/submodule-commit.png" width="600"/>
 <p>请求被拒绝了！仔细观察，不难发现，<strong>此时所在的位置不是<code>master</code>分支上！</strong></p>
 <p>原来，直接进入到submod文件夹<strong>可能</strong>不会切换到任何分支（branch）上，默认的Submodule的HEAD是出于游离状态的（detached）。因此，我们需要回到<code>master</code>分支上</p>
 <pre><code class="language-R">git checkout master

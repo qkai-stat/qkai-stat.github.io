@@ -358,9 +358,9 @@
 <h2 id="1-线性支持向量机">1 线性支持向量机</h2>
 <h3 id="11-硬间距支持向量机">1.1 硬间距支持向量机</h3>
 <p>我们先来看一种简单的情形。假设我们得到的分类数据是<strong>线性可分的</strong>，也就是我们可以构造数据变量的一个不含交互项的线性函数作为分类的决策函数便可以实现分类的目的。例如下图（a）所示，对得到的二元变量数据（黑点+1和白点-1所示），我们直接用一条直线（三维空间是平面，三维以上是超平面）便可以实现分类的目的。这种情形便是前述的线性可分数据。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/linear-case.png" width="300" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/linear-case.png" width="300" /></p>
 <p>显然，对于上述的线性可分数据，我们只要把直线稍微倾斜一点便可以得到一个新的分类直线。那么，对于线性可分数据，如何寻找一条最优的分类超平面呢？</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/hard-svm.png" width="300" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/hard-svm.png" width="300" /></p>
 <p>仔细观察图（a），对于不同的分类直线$l$，我们是始终可以将其向两类数据进行平移直至恰好接触数据点（直线$l_+$和直线$l_-$，如图（b）所示），显然分类直线$l$处在临界直线中间是合理的。我们自然希望得到的分类直线能够尽可能的将两类数据分开。换句话说，边界之间的$l_+$和直线$l_-$距离应当尽可能的大——当然，这是一种直觉上的判断，也是SVM理论的前提。</p>
 <blockquote>
 <p>如果你不认同这种直觉上的判断，那么…你可以静静的想一想看~</p>
@@ -410,7 +410,7 @@ $$</p>
 <h3 id="12-软间距支持向量机">1.2 软间距支持向量机</h3>
 <p>虽然硬间距SVM思想朴素，但是足以阐释SVM核心思想——最小化经验风险的同时最小化结构风险。尽管如此，硬间距SVM要求构建的分类超平面完全正确的分类所有训练数据，这显得非常严格。这样要求100%正确训练的模型容易产生过拟合，从而降低<a href="https://baike.baidu.com/item/%E6%B3%9B%E5%8C%96%E8%83%BD%E5%8A%9B/3323240?fr=aladdin">模型的泛化能力</a>。</p>
 <p>为了提升硬间距SVM的泛化能力以及扩大其应用场景，我们在训练SVM的过程中，<strong>允许数据被错误分类</strong>，这就得到了软间距（soft-margin）SVM，如图（c）所示。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/soft-svm.png" width="300" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/soft-svm.png" width="300" /></p>
 <p>从硬间距SVM的模型看出，不等式约束条件代表着分类超平面对数据的分类约束。我们允许数据被错误分类，也即是$y_i(w^Tx_i + b)$大于一个小于1的数即可。换句话说，存在$\xi_i\geq0$，满足
 $$
 y_i(w^Tx_i + b)\geq 1-\xi_i
@@ -452,7 +452,7 @@ $$
 $$
 L=e^T\alpha - \frac12\alpha^TDXX^TD\alpha
 $$
-结合约束条件可以得到SVM的<a href="https://jiandan94.gitee.io/2020/09/dual-problem/">对偶模型</a>为
+结合约束条件可以得到SVM的<a href="/2020/09/dual-problem/">对偶模型</a>为
 $$
 \begin{split}
 &amp; \min \frac12\alpha^TDXX^TD\alpha - e^T\alpha\newline
@@ -468,7 +468,7 @@ $$
 <blockquote>
 <p>那些$\alpha_i&gt;0$对应的训练数据$(x_i,y_i)$“支持”着最终的分类超平面的构建，因此被称为支持向量。这便是支持向量机名称的由来。</p>
 </blockquote>
-<p>另一方面，优化SVM的过程需要满足<a href="https://jiandan94.gitee.io/2020/09/lagrangian-and-kkt/">KKT条件</a>，其中之一为
+<p>另一方面，优化SVM的过程需要满足<a href="/2020/09/lagrangian-and-kkt/">KKT条件</a>，其中之一为
 $$
 \alpha_i(y_i(w^Tx_i+b)-1+\xi_i)=0
 $$
@@ -478,10 +478,10 @@ $$
 </blockquote>
 <h2 id="3-非线性支持向量机">3 非线性支持向量机</h2>
 <p>软间距SVM有一个很大的缺陷，即依赖于数据是线性可分的假设。实际上，很多问题中的数据是非线性可分的，如图（d）所示。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/nonlinear-case.png" width="300" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/nonlinear-case.png" width="300" /></p>
 <p>这种情形应当如何处理呢？</p>
 <p>Cortes和Vapnik采用了一种非常巧妙的方式。他们借助函数映射，将低维数据映射到高维空间中，使得原来不能线性可分的数据变得线性可分（这样的映射可以证明是始终存在的），如图（e）所示。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/kernel-transformation.png" width="500" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/kernel-transformation.png" width="500" /></p>
 <p>假设这种映射为
 $$
 x\in R^p\rightarrow \phi(x)\in \mathscr{F}
@@ -493,7 +493,7 @@ $$
 &amp; 0\leq \alpha \leq 1c
 \end{split}
 $$
-一般来说，求解出具体的映射函数形式非常困难（或者根本就无法求出），我们如何解决该问题呢？Cortes和Vapnik注意到，SVM模型优化的过程中始终是保内积运算的。因此，他们利用<a href="https://jiandan94.gitee.io/2020/09/rkhs-and-kernel/">空间映射和核函数</a>的对应关系，将高维空间的内积运算$\phi(X)\phi(X)^T$转换成核矩阵$K(X,X^T)$的计算，从而实现非线性SVM的优化！</p>
+一般来说，求解出具体的映射函数形式非常困难（或者根本就无法求出），我们如何解决该问题呢？Cortes和Vapnik注意到，SVM模型优化的过程中始终是保内积运算的。因此，他们利用<a href="/2020/09/rkhs-and-kernel/">空间映射和核函数</a>的对应关系，将高维空间的内积运算$\phi(X)\phi(X)^T$转换成核矩阵$K(X,X^T)$的计算，从而实现非线性SVM的优化！</p>
 <blockquote>
 <p>核函数是一种特殊的函数，它与某个映射$\phi$的内积运算对应。映射函数难以给出，但可以根据核函数的特征来给定某种形式的核函数。由于我们不知道具体的映射，因此给定核函数是一种可行且简便的尝试。</p>
 </blockquote>
@@ -515,9 +515,9 @@ $$
 library(e1071)
 </code></pre>
 <p>我们用R中的鸢尾花数据集建立SVM模型，该数据中包含三种鸢尾花（分别标记为setosa、versicolor和virginica）的花萼和花瓣数据，最早由1936年Fisher发表的一篇重要论文给出。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/head-iris.png" width="600" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/head-iris.png" width="600" /></p>
 <p>我们以花瓣的长度核宽度为变量做出数据的图像，可见setosa和另外两种花很好的区分开来。我们下面选择versicolor和virginica进行SVM建模。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/plot-iris.png" width="400" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/plot-iris.png" width="400" /></p>
 <p>e1071中求解SVM的函数为<code>ksvm</code>，它的基本用法如下</p>
 <pre><code class="language-R">svm(formula, data= NULL, subset, na.action = na.omit , scale= TRUE)  
 # formula为拟合的公式
@@ -545,7 +545,7 @@ Levels:
 </code></pre>
 <p>通过<code>summary</code>函数可以得到关于模型的相关信息。其中，<code>SVM-Type</code>项目说明本模型的类别为C-SVM（SVM发展至今已有很多类型的SVM，上述介绍的为最基本的C-SVM）；<code>SVM-Kernel</code>项说明本模型所使用的核函数为高斯内积函数且核函数；<code>cost</code>项目说明本模型确定的约束违反成本为1。而且我们还可以看到，模型找到了23个支持向量：第一类包含有12个支持向量，第二类包含有11个支持向量。</p>
 <p>当然，我们还可以利用程序包得到分类的示意图，可见模型还是训练的不错的。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/fit-svm.png" width="500" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/svm/fit-svm.png" width="500" /></p>
 <p>更加详细的使用方式，有兴趣的读者可以自行阅读相关文档进行实践。</p>
 <h2 id="5-结语">5 结语</h2>
 <p>本文我们主要介绍了经典支持向量机的基本概念核求解算法，并用一个简单的案例介绍R求解SVM的方式。支持向量机发展至今已有很多类型，但基本的思想是共同的。感兴趣的读者可以进一步阅读相关文献材料。</p>

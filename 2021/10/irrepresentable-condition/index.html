@@ -365,7 +365,7 @@ $$
 Y = X\beta^* + \epsilon \qquad (1)
 $$
 其中 $Y = (y_1, \ldots, y_n)^T$​​ 是 $n \times 1$​​ 的响应变量，$X = (X_1, \ldots, X_p) = (x_1^T; \ldots; x_n^T)$​​ 是 $n\times p$​​ 的设计矩阵，这里 $X_j$​​ 是第 $j$​​ 个变量，$ x_i $​​ 是第 $i$​​ 个样本。$\beta^  *  = (\beta_1^ * , \ldots, \beta_p^ * )^T$​​ 是回归系数。$\epsilon = (\epsilon_1, \ldots, \epsilon_n)^T$​​ 均值为0、方差为 $\sigma ^ 2$​​​ 的独立同分布的随机变量。</p>
-<p>由于实际问题中数据可能包含冗余变量，利用全部变量构建的模型将会存在解释性差的问题。对此，我们需要考虑变量选择，关于这个话题可参见我<a href="https://jiandan94.gitee.io/2020/04/lasso-introduction/">先前博客</a>的相关介绍。本文主要探讨的是经典的变量选择方法——LASSO——的统计性质，即<strong>变量选择一致性</strong>。</p>
+<p>由于实际问题中数据可能包含冗余变量，利用全部变量构建的模型将会存在解释性差的问题。对此，我们需要考虑变量选择，关于这个话题可参见我<a href="/2020/04/lasso-introduction/">先前博客</a>的相关介绍。本文主要探讨的是经典的变量选择方法——LASSO——的统计性质，即<strong>变量选择一致性</strong>。</p>
 <p>假设 $ \hat{\beta}^ * $ 是如下LASSO模型
 $$
 \begin{equation}
@@ -705,7 +705,7 @@ ols0 &lt;- function(){# 不同的p对应的零系数估计值的绝对均值
 }
 </code></pre>
 <p>以上 $p = (0, 0.1, 0.5, 0.9, 0.99, 0.999, 0.9999)^T$，我们对每个 $p$ 重复实验500次，将不同的  $p$  对应的OLS在零系数处估计的绝对均值（后四个系数估计的绝对均值）画出箱线图，如下所示：</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/lasso-introduction/ols0_est.png" width=400 /></p>
+<p><img src="https://qkai-stat.github.io/md-figures/lasso-introduction/ols0_est.png" width=400 /></p>
 <p>可见，随着误差在零点处的概率增大，OLS在零系数处估计逐渐趋于零，这几乎印证了上面的假设。不过，由于OLS没有LASSO可以保证系数严格压缩到零的条件，OLS估计实际无法（很难）得到严格零解。另一方面，误差项也不会集中分布在零点处。总之，OLS估计没有稀疏性。</p>
 <p>现在我们来讨论OLS估计的符号一致性。通常，我们对OLS估计的直观感受是，OLS没有稀疏性，但似乎对非零系数的符号估计地较准确。那么，OLS估计符号一致性具体怎样呢？不妨再次假设设计阵正交，根据不等式（5），若某个系数 $\hat{\beta}_j^{ols} (1)$ 满足符号一致的概率，则</p>
 <p>$$

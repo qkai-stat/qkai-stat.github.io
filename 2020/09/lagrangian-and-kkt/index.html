@@ -421,7 +421,7 @@ $$</p>
 \end{split}
 $$</p>
 <p>下面是该问题的一个示意图</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/equal-constraints.png" width="400" /></p>
+<p><img src="https://qkai-stat.github.io/md-figures/svm/equal-constraints.png" width="400" /></p>
 <p>显然点 $(1/2, 1/2)$ 是问题的最优解。分析目标函数和约束函数在该点的性质：目标函数的梯度</p>
 <p>$$
 \nabla f_0(x) = (2x_1, 2x_2)
@@ -461,7 +461,7 @@ $$</p>
 \end{split}
 $$</p>
 <p>下面是该问题的一个示意图</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/inequality-inner-case.png" width="400" /></p>
+<p><img src="https://qkai-stat.github.io/md-figures/svm/inequality-inner-case.png" width="400" /></p>
 <p>问题的最优解为 $x^* = (0,0)$ 落在可行域之中（不含边界），此时不等式约束失效（相当于没有加），我们直接通过目标函数的极值点得到最优解</p>
 <p>$$
 \nabla f_0(x^*) = 0
@@ -475,7 +475,7 @@ $$</p>
 \end{split}
 $$</p>
 <p>下面是该问题的一个示意图</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/svm/inequality-outer-case.png" width="400" /></p>
+<p><img src="https://qkai-stat.github.io/md-figures/svm/inequality-outer-case.png" width="400" /></p>
 <p>此时约束条件起作用。对于目标函数，我们知道其沿着自己的负梯度方向 $-\nabla f_0(x)$ 下降，在极小值处恰好落在可行域的边界上，此时等式约束 $f_1(x) = 0$ 起作用，那么由前面的论述立即知道极小值点满足</p>
 <p>$$
 \begin{split}
@@ -529,7 +529,7 @@ $$</p>
 $$
 \mathcal{L}(w, b, \alpha) = \frac12 \Vert w\Vert_2^2 + \sum_{i=1}^n \alpha_i (1 - y_i(w^Tx_i + b)), \alpha_i \geq 0
 $$</p>
-<p>最终求得的超平面（求解方法参看<a href="https://jiandan94.gitee.io/2020/09/svm/">这篇博客</a>）为</p>
+<p>最终求得的超平面（求解方法参看<a href="/2020/09/svm/">这篇博客</a>）为</p>
 <p>$$
 f(x) = \sum_{i=1}^n \alpha_i x_i^Tx + b
 $$</p>

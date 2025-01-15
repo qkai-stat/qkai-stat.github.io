@@ -355,8 +355,8 @@
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
       <h2 id="1-git的工作原理">1 Git的工作原理</h2>
-<p>关于Git的简单介绍可以参照我的<a href="https://jiandan94.gitee.io/2020/07/git-introduction/">这篇博客</a>。安装好Git之后，我们就要学会利用Git建立本地项目的代码仓库，以及同远程仓库进行同步。不过在学习搭建本地仓库之前，我们需要了解Git的工作原理，以便理解后续各段代码背后的含义。</p>
-<img src="http://jiandan94.gitee.io/md-figures/git/git基本原理.png" width="600"/>
+<p>关于Git的简单介绍可以参照我的<a href="/2020/07/git-introduction/">这篇博客</a>。安装好Git之后，我们就要学会利用Git建立本地项目的代码仓库，以及同远程仓库进行同步。不过在学习搭建本地仓库之前，我们需要了解Git的工作原理，以便理解后续各段代码背后的含义。</p>
+<img src="http://qkai-stat.github.io/md-figures/git/git基本原理.png" width="600"/>
 <p>如上图所示。假设我们在本地计算机上建立一个仓库（文件夹）以存放项目的各个文件。进入该文件夹，也即是进入工作目录（working space）。然而，你直接在工作目录里面增加一个文件，比如files文件，从Git的视角来看，这个文件此时还不属于本地仓库的内容——换句话说，Git此时还没有登记该文件的信息。通过命令</p>
 <pre><code class="language-R">$ git add files
 </code></pre>

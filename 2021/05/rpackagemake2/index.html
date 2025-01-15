@@ -357,7 +357,7 @@
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
       <p>在往期的博客中，我和大家分享了仅含有R代码的R包制作的简易教程。实际中，我们的函数文件可能既包含R代码又包含C++代码，那么此时的R包制作会有哪些异同呢？本期我们一起来学习含有C++代码的R包制作流程。</p>
 <h2 id="1-准备工作">1 准备工作</h2>
-<p>我们仍然默认大家已经安装了R和RStudio，配置R包开发的基础环境可以参考我往期的博客——<a href="https://jiandan94.gitee.io/2021/04/rpackagemake1/">R包制作简易教程1</a>。此外，我们还要准备好两件事。一是安装<code>Rcpp</code>程序包，它是R中辅助开发C++程序的重要R包，关于<code>Rcpp</code>程序包的介绍可参考我往期的博客——<a href="https://jiandan94.gitee.io/2021/04/rcpp-synopsis/">效率瓶颈突破：Rcpp简介</a>。二是安装Rtools套件，这是CRAN镜像网络为Windows系统下R开发C++代码提供的环境支持。Rtools套件需要单独下载进行安装，其官方下载地址为</p>
+<p>我们仍然默认大家已经安装了R和RStudio，配置R包开发的基础环境可以参考我往期的博客——<a href="/2021/04/rpackagemake1/">R包制作简易教程1</a>。此外，我们还要准备好两件事。一是安装<code>Rcpp</code>程序包，它是R中辅助开发C++程序的重要R包，关于<code>Rcpp</code>程序包的介绍可参考我往期的博客——<a href="/2021/04/rcpp-synopsis/">效率瓶颈突破：Rcpp简介</a>。二是安装Rtools套件，这是CRAN镜像网络为Windows系统下R开发C++代码提供的环境支持。Rtools套件需要单独下载进行安装，其官方下载地址为</p>
 <pre><code class="language-R">https://cran.r-project.org/bin/windows/Rtools/
 </code></pre>
 <p>根据自己的情况选择合适的版本即可。安装完毕后，需要将下面几个目录加入到系统的环境变量中，否则R检测不到相关程序就无法完成C++代码的编译：</p>
@@ -384,10 +384,10 @@ D:\rtools40\mingw64\bin
 <p>下面，我们正式介绍含有C++代码的R包制作方式。</p>
 <h2 id="2-rstudio可视化制作">2 RStudio可视化制作</h2>
 <p>首先我们还是来看RStudio中的可视化操作方式。与R代码的R包制作方式类似，我们通过RStudio菜单栏依次选择File &gt; New Project创建一个项目，然后选择New Directory &gt; R package，得到R包制作的初始界面：</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/RpackageMake/rpackagesetting-cpp.png" width="400" /></p>
+<p><img src="http://qkai-stat.github.io/md-figures/RpackageMake/rpackagesetting-cpp.png" width="400" /></p>
 <p>与R代码程序包不同的是，这里我们选择Package w/cpp，然后填上R包的名称，并通过Add按钮添加所需的函数代码。最后，我们把生成的R包文件夹的路径填成桌面，点击Create Project即可在桌面创建名为AWENSVMcpp的文件夹。</p>
-<p><img src="http://jiandan94.gitee.io/md-figures/RpackageMake/awensvmpackage-cpp.png" width="600" /></p>
-<p>与仅含R代码生成的目录不同之处在于，这里多了一个src文件夹，而src文件夹正是存放我们C++代码的文件夹。其他文件夹和文档的含义请读者阅读往期文章——<a href="https://jiandan94.gitee.io/2021/04/rpackagemake1/">R包制作简易教程1</a>。下面，我们重点介绍修改文件和仅含R代码时的不同之处。</p>
+<p><img src="http://qkai-stat.github.io/md-figures/RpackageMake/awensvmpackage-cpp.png" width="600" /></p>
+<p>与仅含R代码生成的目录不同之处在于，这里多了一个src文件夹，而src文件夹正是存放我们C++代码的文件夹。其他文件夹和文档的含义请读者阅读往期文章——<a href="/2021/04/rpackagemake1/">R包制作简易教程1</a>。下面，我们重点介绍修改文件和仅含R代码时的不同之处。</p>
 <p><code>DESCRIPTION</code>文档的修改。这里要注意多出的<code>Imports</code>和<code>LinkingTo</code>两个参数。由于R中C++代码的正常运行是基于Rcpp包的，所以我们要在<code>Imports</code>参数后添加Rcpp，后面括号的数字表示支持本R包所需Rcpp的最低版本——如果考虑到R包的适用性，可以适当降低版本号。此外，我这里的C++代码用到了RcppEigen包。因此，我们需要在<code>LinkingTo</code>参数后额外加上RcppEigen，表示链接到该包。</p>
 <pre><code class="language-R">Package: AWENSVMcpp
 Type: Package
@@ -412,7 +412,7 @@ useDynLib(AWENSVMcpp, .registration = TRUE)
 <p>其余的操作和R代码制作程序包相同，如光标放在需要说明的函数所在代码的函数名处使用<code>Ctrl+Shift+Alt+R</code>进行特殊的注释，再运行<code>devtools::document()</code>生成Rd说明文档等，这里不在赘述。</p>
 <p>最后，我们通过RStudio菜单栏中的Build &gt; Check Package来检查R包是否可以成功编译，通过RStudio菜单栏中的Build &gt; Build Source Package来生成可供他人安装的<code>.tar.gz</code>文件。</p>
 <h2 id="3-rcpppackageskeleton制作">3 Rcpp.package.skeleton制作</h2>
-<p><code>Rcpp</code>包提供了一个和R中<code>package.skeleton</code>类似的命令<code>Rcpp.package.skeleton</code>来制作含有C++代码的程序包。<code>Rcpp.package.skeleton</code>的使用方式和<code>package.skeleton</code>基本一致，读者可以参考<a href="https://jiandan94.gitee.io/2021/04/rpackagemake1/">R包制作简易教程1</a>中关于<code>package.skeleton</code>的介绍。由于生成的程序包文件夹和第2节中的一样，我们就不在赘述具体的制作方式了。</p>
+<p><code>Rcpp</code>包提供了一个和R中<code>package.skeleton</code>类似的命令<code>Rcpp.package.skeleton</code>来制作含有C++代码的程序包。<code>Rcpp.package.skeleton</code>的使用方式和<code>package.skeleton</code>基本一致，读者可以参考<a href="/2021/04/rpackagemake1/">R包制作简易教程1</a>中关于<code>package.skeleton</code>的介绍。由于生成的程序包文件夹和第2节中的一样，我们就不在赘述具体的制作方式了。</p>
 <h2 id="4-结语">4 结语</h2>
 <p>本期我们主要介绍了含有C++代码的R包制作简易教程，这部分的内容和仅含R代码的程序包制作方式类似。在实际应用中，制作含有C++代码的程序包有时不可避免。例如，我们希望通过C++编写函数的核心程序来减少时间成本。然而，如果我们打算进一步结合<code>foreach</code>来并行计算，就发现会报错。此时，通过编写程序包将我们的R代码和C++代码打包编译后再结合<code>foreach</code>并行就可以成功运行。</p>
 

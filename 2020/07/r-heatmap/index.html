@@ -357,7 +357,7 @@
       <blockquote>
 <p>热力图最初来源于网络，是以特殊高亮的形式显示访客热衷的页面区域和访客所在的地理区域的图示。在如今的大数据时代，热力图可是直接推动大数据发展的技术。</p>
 </blockquote>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/迁徙图.gif" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/迁徙图.gif" width="600"/>
 <p>本期我们将用R来实现绘制区域热力图。在实现过程中需要用到下面几个程序包，大家可以提前下载安装好。</p>
 <pre><code class="language-R">install.packages(mapdata)
 install.packages(maptools)
@@ -372,7 +372,7 @@ install.packages(mapproj)
 <pre><code class="language-R">china_map &lt;- rgdal::readOGR(&quot;geo_data//bou2_4p.shp&quot;)
 plot(china_map)
 </code></pre>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/mapdata地图.webp" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/mapdata地图.webp" width="600"/>
 <p>得到的地图较为扁平（左图），我们使用下面的命令进行调整使其显示正常（右图）。</p>
 <pre><code class="language-R"># 图像过于扁平，需要进行调整
 ggplot(china_map, aes(x = long, y = lat,group = group)) +
@@ -409,11 +409,11 @@ ggplot(china_data,aes(long,lat))+
   )##参数“HS”为换手率，基于该指标绘制热力图
 </code></pre>
 <p>就得到下面两张换手率和量比的全国各省热力图，通过颜色的深浅可以直观得看出各个省份地区之间的差异。</p>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/股票热力图.webp" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/股票热力图.webp" width="600"/>
 <h2 id="2-baidumap绘制热力图">2 baidumap绘制热力图</h2>
 <p>虽然<code>mapdata</code>可以绘制省级的热力图，但是其包含的而数据还是较少，这使得热力图的创建形式大打折扣。</p>
 <p>2011年1月10日，百度统计迎来了历史上最为重要的一次功能升级，全球第一款免费智能热力图功能正式上线。热力图可显性、直观地将网页流量数据分布通过不同颜色区块呈现，给中小网站网页优化与调整提供了有力的参考依据，方便合作网站提高用户体验。</p>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/百度地图开放平台.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/百度地图开放平台.png" width="600"/>
 <p>百度地图API是一套为开发者免费提供的基于百度地图的应用程序接口，提供基本地图搜索、位置搜索、周边搜索等功能。下面我们介绍使用R软件对接百度地图API来获取地图数据，从而进行热力图的绘制。</p>
 <p>这一部分的实现需要运用下面的软件包，大家在操作前先下载安装好。</p>
 <pre><code class="language-R">install.packages(baidumap)
@@ -454,9 +454,9 @@ map_out1 &lt;- remapC(cqu_data,
 plot(map_out1)
 </code></pre>
 <p>我在网上搜集了2018年自己的母校重庆大学在各个省份的计划招生人数，通过R软件利用<code>Remap</code>包画出各个省份向重庆迁徙的示意图，同时每个省份的颜色深浅按照招生人数来着色。</p>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/重大招生迁徙图.gif" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/重大招生迁徙图.gif" width="600"/>
 <p>可以看出，R最终调用web来打开图片，并且这张图片是动态的且与用户交互的。</p>
-<img src="http://jiandan94.gitee.io/md-figures/heatmap/房价热力图.png" width="600"/>
+<img src="http://qkai-stat.github.io/md-figures/heatmap/房价热力图.png" width="600"/>
 <p>大家可以通过<code>baidumap</code>获取地区数据，画出某个省份各个市的热力图。比如面这张我画的2018年1月份重庆市各个区县的平均房价热力图。</p>
 <h2 id="3-结束语">3 结束语</h2>
 <p>当然，<code>baidumap</code>只是提供更加庞大的地图数据，想要画出精美的热力图还要好好研究<code>Remap</code>包的使用方式，通过调整不通的参数从而提高图片的表现力。</p>

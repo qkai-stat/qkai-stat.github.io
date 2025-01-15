@@ -359,7 +359,7 @@
       <blockquote>
 <p>凸优化是优化问题的重要分支之一，也是研究机器学习的重要工具之一。本文和其他几篇以“凸优化”为主题的博客都是我在学习Boyd所著《<a href="https://book.douban.com/subject/1888111/">Convex Optimization</a>》这本书时的笔记。因此，这些博客的内容结构和书中第5、9-11章节的框架相似，我在这里只不过罗列了书中的一些要点和个人的一点思考。</p>
 </blockquote>
-<p>在很多优化问题中，如<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM模型</a>，我们常常将原问题的优化转换成对偶问题的优化。对偶问题有时可以简化求解，以及对模型有更多的认识。本文主要介绍有关对偶问题的一些概念。</p>
+<p>在很多优化问题中，如<a href="/2020/09/svm/">SVM模型</a>，我们常常将原问题的优化转换成对偶问题的优化。对偶问题有时可以简化求解，以及对模型有更多的认识。本文主要介绍有关对偶问题的一些概念。</p>
 <h2 id="1-原始问题">1 原始问题</h2>
 <p>我们考虑一般的优化问题</p>
 <p>$$
@@ -369,7 +369,7 @@ s.t. &amp;\quad f_i(x) \leq 0,i = 1,\ldots,m\newline
 &amp;\quad h_i(x) = 0, i = 1,\ldots,p
 \end{split}
 $$</p>
-<p>通常我们利用<a href="https://jiandan94.gitee.io/2020/09/lagrangian-and-kkt/">拉格朗日乘子法</a>进行优化，也就是</p>
+<p>通常我们利用<a href="/2020/09/lagrangian-and-kkt/">拉格朗日乘子法</a>进行优化，也就是</p>
 <p>$$
 \mathcal{L}(x, {\mu}, {\lambda}) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p \mu_i h_i(x)
 $$</p>
@@ -533,7 +533,7 @@ $$</p>
 $$</p>
 <p>特别指出，$\lambda_i^* f_i(x^*) = 0, i = 1, \ldots, m$ 称为KKT的对偶互补松弛条件。</p>
 <h2 id="4-kkt条件在svm中的应用">4 KKT条件在SVM中的应用</h2>
-<p>我们在<a href="https://jiandan94.gitee.io/2020/09/svm/">SVM模型</a>的求解中涉及到拉格朗日乘子法和对偶模型，考虑硬间距SVM模型</p>
+<p>我们在<a href="/2020/09/svm/">SVM模型</a>的求解中涉及到拉格朗日乘子法和对偶模型，考虑硬间距SVM模型</p>
 <p>$$
 \begin{split}
 &amp;\min \frac12 \Vert w\Vert_2^2\newline
